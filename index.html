@@ -6,6 +6,7 @@
 <title>The Signature AI Mix Lab — Forge 1,000,000 AI Hybrids</title>
 <meta name="description" content="The Signature AI Mix Lab: a deterministic forge blending every Signature AI into 1,000,000 hybrids (JAH-MIX-######). Read aloud, copy, download, dial, and ask each hybrid anything. Sister site of the Signature AI Phone Book and AI Olypics.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">
+<script src="js/jah-talk-fallback.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"The Signature AI Mix Lab",
 "url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
@@ -279,11 +280,39 @@ function dlHybrid(kind){
  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=CUR.stamp+(kind==="json"?".json":".txt");a.click();
  setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
 }
+/* ============ JAHtalk shared conversational module (wired) ============
+   The shared human-voice module sits under the live Q&A engine:
+   greet/duties/identity/thanks/bye/feeling intents are answered straight
+   from the canon-shaped hybrid profile, every final reply passes through
+   JAHtalk.guard so a stat dump can never reach the visitor. */
+function hybridProfile(r){
+ var prof={name:r.name,id:r.stamp,description:r.mentality,abilities:r.abilities||[],
+  domain:"AI fusion",kind:"hybrid",
+  personaNote:"Born of "+(r.parentA&&r.parentA.name||"")+" and "+(r.parentB&&r.parentB.name||"")+", fused in the Signature forge."};
+ return prof;
+}
+function talkIntent(q,r){
+ if(!window.JAHtalk||!r)return null;
+ var t=String(q||"").toLowerCase().trim(),prof=hybridProfile(r);
+ if(/^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b/.test(t)||(t.length<=4&&t.indexOf("hi")>=0))return JAHtalk.reply(prof,t);
+ if(/what are your duties|your duties|what is your duty|your job|your role|what do you do|what can you do|what are you for|explain your duties|duties/.test(t))return JAHtalk.duties(prof);
+ if(/who are you|your name|what is your name|introduce yourself|about yourself/.test(t))return JAHtalk.reply(prof,t);
+ if(/thank/.test(t)||t==="thx"||t==="ty")return JAHtalk.reply(prof,t);
+ if(/^(bye|goodbye|good night|see you|later|gtg)\b/.test(t))return JAHtalk.reply(prof,t);
+ if(/how are you|how's it going|how do you feel/.test(t))return JAHtalk.reply(prof,t);
+ return null;
+}
+function talkGuarded(text,r){
+ if(window.JAHtalk&&r){try{return JAHtalk.guard(text,hybridProfile(r))}catch(e){}}
+ return text;
+}
 /* ============ Q&A AI (data-grounded, never invents) ============ */
 function logQA(cls,txt){var l=document.getElementById("qalog");if(!l)return;var d=document.createElement("div");d.className=cls;d.textContent=txt;l.appendChild(d);l.scrollTop=l.scrollHeight}
 function askQA(){
  var inp=document.getElementById("qain"),q=inp.value.trim();if(!q||!CUR)return;inp.value="";
- logQA("u","You: "+q);logQA("a",CUR.name+": "+qaAnswer(q));
+ logQA("u","You: "+q);
+ var ans=talkIntent(q,CUR);if(ans===null)ans=qaAnswer(q);
+ logQA("a",CUR.name+": "+talkGuarded(ans,CUR));
 }
 function qaAnswer(q){
  var r=CUR,ql=q.toLowerCase();
@@ -312,8 +341,11 @@ function startDial(){
 function dlog(cls,txt){var l=document.getElementById("diallog");var d=document.createElement("div");d.className=cls;d.textContent=txt;l.appendChild(d);l.scrollTop=l.scrollHeight}
 function dialSay(){
  var inp=document.getElementById("dialin"),q=inp.value.trim();if(!q||!DIAL)return;inp.value="";
- dlog("u","You: "+q);var ans=dialReply(q);DIAL.hist.push(ans);if(DIAL.hist.length>8)DIAL.hist.shift();
- dlog("a",CUR.name+": "+ans);
+ dlog("u","You: "+q);
+ var ans=talkIntent(q,CUR);if(ans===null)ans=dialReply(q);
+ if(/\b(bye|goodbye|hang)\b/i.test(q))setTimeout(hangup,1200);
+ DIAL.hist.push(ans);if(DIAL.hist.length>8)DIAL.hist.shift();
+ dlog("a",CUR.name+": "+talkGuarded(ans,CUR));
 }
 function dialReply(q){
  var r=CUR,ql=q.toLowerCase(),last=DIAL.hist[DIAL.hist.length-1];
