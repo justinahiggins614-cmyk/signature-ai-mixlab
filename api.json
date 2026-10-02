@@ -2,11 +2,11 @@
  "site": "The Signature AI Mix Lab",
  "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
  "title_status": "provisional \u2014 pending Manon's confirmation",
- "generated_at": "2026-10-02T20:11:13.875003+00:00",
+ "generated_at": "2026-10-02T22:11:12.988043+00:00",
  "for_bots": "Deterministic AI hybrid forge. 1,000,000 hybrids (JAH-MIX-######), computed on demand from the hybrid number. Deep link: ?mix=JAH-MIX-######",
  "counts": {
-  "seeded_hybrids": 4000,
-  "forged_through": 4000,
+  "seeded_hybrids": 4900,
+  "forged_through": 5000,
   "goal": 1000000,
   "parent_ais": 260,
   "word_ai_slots": 100000
