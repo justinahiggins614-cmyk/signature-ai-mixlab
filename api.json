@@ -1,0 +1,26 @@
+{
+ "site": "The Signature AI Mix Lab",
+ "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
+ "title_status": "provisional \u2014 pending Manon's confirmation",
+ "generated_at": "2026-10-02T18:04:33.785029+00:00",
+ "for_bots": "Deterministic AI hybrid forge. 1,000,000 hybrids (JAH-MIX-######), computed on demand from the hybrid number. Deep link: ?mix=JAH-MIX-######",
+ "counts": {
+  "seeded_hybrids": 3000,
+  "forged_through": 3000,
+  "goal": 1000000,
+  "parent_ais": 260,
+  "word_ai_slots": 100000
+ },
+ "endpoints": {
+  "hybrid": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-000001",
+  "compact_index": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/data/index/mixes.idx.json.gz",
+  "chunks": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/data/mixes/mixes-c00001.jsonl.gz",
+  "sitemap": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/sitemap.xml",
+  "crosslinks_dict": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/data/xlinks/dict-ai-terms.json",
+  "crosslinks_wiki": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/data/xlinks/wiki-mix-articles.json"
+ },
+ "sister_sites": [
+  "https://justinahiggins614-cmyk.github.io/jah-ai-models/",
+  "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/"
+ ]
+}

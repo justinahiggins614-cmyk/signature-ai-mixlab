@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Signature AI Mix Lab — Forge 1,000,000 AI Hybrids</title>
+<meta name="description" content="The Signature AI Mix Lab: a deterministic forge blending every Signature AI into 1,000,000 hybrids (JAH-MIX-######). Read aloud, copy, download, dial, and ask each hybrid anything. Sister site of the Signature AI Phone Book and AI Olypics.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"The Signature AI Mix Lab",
+"url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
+"description":"Deterministic forge of 1,000,000 AI hybrids (JAH-MIX-######), each with read-aloud, copy, download, dial-up session, and a personal Q&A AI."}
+</script>
+<style>
+:root{--bg:#14100b;--panel:#1e1811;--amber:#ffb347;--molten:#ff7b1c;--gold:#ffd97a;--ink:#f3e9d2;--dim:#b8a888;--line:#3a2f1f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;margin:0;line-height:1.5}
+a{color:var(--gold)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 14px}
+.sisters{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.sis{flex:1 1 220px;max-width:320px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center}
+.sis b{color:var(--gold)} .sis .here{color:var(--molten);font-weight:bold}
+.sis small{color:var(--dim);display:block;margin-top:4px}
+.jahnet{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:10px 4px;font-size:.82em;border-bottom:1px solid var(--line)}
+.jahnet-t{color:var(--amber);font-weight:bold;letter-spacing:1px}
+.jahnet a{color:var(--dim);text-decoration:none;padding:2px 6px;border:1px solid transparent;border-radius:6px}
+.jahnet a:hover{color:var(--gold);border-color:var(--line)}
+.jahnet a.cur{color:#14100b;background:var(--gold);font-weight:bold}
+.jahnet .here{color:var(--molten);font-weight:bold;font-size:.85em}
+.hero{text-align:center;padding:34px 12px 20px;background:radial-gradient(ellipse at 50% 0%,#3a2410 0%,var(--bg) 70%)}
+.hero h1{color:var(--gold);font-size:2.1em;margin:.2em 0;letter-spacing:1px}
+.hero .prov{color:var(--dim);font-size:.85em;font-style:italic}
+.counter{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.count{background:var(--panel);border:1px solid var(--molten);border-radius:10px;padding:10px 18px;min-width:200px}
+.count .n{font-size:1.7em;color:var(--amber);font-weight:bold}
+.count small{color:var(--dim)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:18px 0}
+.panel h2{color:var(--gold);margin-top:0}
+button{background:var(--molten);color:#14100b;border:none;border-radius:8px;padding:9px 16px;font-weight:bold;cursor:pointer;font-size:1em}
+button:hover{background:var(--amber)} button.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
+input[type=text],input[type=number]{background:#0f0c08;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:1em;width:100%;max-width:340px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:12px}
+.card{background:#0f0c08;border:1px solid var(--line);border-radius:10px;padding:12px}
+.card h3{margin:.1em 0;color:var(--gold)} .card .st{color:var(--dim);font-size:.85em}
+.card .par{font-size:.88em;color:var(--dim)} .card .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.card .row button{padding:6px 10px;font-size:.85em}
+.az{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+.az button{padding:6px 10px;font-size:.9em}
+#fileview{display:none}
+.fv-head{border-bottom:2px solid var(--molten);padding-bottom:8px;margin-bottom:12px}
+.fv-head h2{color:var(--gold);margin:.1em 0}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 10px;font-size:.95em;margin:10px 0}
+.kv dt{color:var(--dim)} .kv dd{margin:0}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.toolbar button{font-size:.9em;padding:8px 12px}
+.chatlog{background:#0f0c08;border:1px solid var(--line);border-radius:10px;padding:10px;max-height:280px;overflow-y:auto;margin:8px 0}
+.chatlog .u{color:var(--gold);margin:6px 0} .chatlog .a{color:var(--ink);margin:6px 0}
+.chatlog .sys{color:var(--dim);font-style:italic;margin:6px 0}
+footer{border-top:1px solid var(--line);padding:18px 12px 40px;color:var(--dim);font-size:.88em;text-align:center}
+.skip{position:absolute;left:-9999px} .skip:focus{left:8px;top:8px;background:var(--gold);color:#000;padding:8px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+<div class="sisters" aria-label="Sister sites">
+  <div class="sis"><b><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a></b><small>Home of every AI — dial &amp; talk</small></div>
+  <div class="sis"><span class="here">YOU ARE HERE &#9656;</span><br><b>The Signature AI Mix Lab</b><small>The hybrid forge — 1,000,000 fusions</small></div>
+  <div class="sis"><b><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a></b><small>The battle dome — hybrids compete</small></div>
+</div>
+<p style="text-align:center;color:var(--dim);font-size:.85em;margin:6px 0">Sister sites — shared record IDs: every AI keeps its ID across all three.</p>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-t">THE JAH NETWORK</span><span class="here">YOU ARE HERE &#9656;</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">The Signature 3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Signature Backend</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">The Signature Boundless Generator Archive</a><a class="cur" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">The Signature AI Robot Matcher</a></nav>
+<main id="main">
+<div class="hero">
+  <h1>&#129518; The Signature AI Mix Lab</h1>
+  <p class="prov">Working title — pending Manon's confirmation.</p>
+  <p>Every Signature AI, fused two by two, in a deterministic forge.<br>One million hybrids. Same pair, same hybrid — forever.</p>
+  <div class="counter">
+    <div class="count"><div class="n" id="seededCount">…</div><small>hybrids forged on site / 1,000,000</small></div>
+    <div class="count"><div class="n" id="yourCount">0</div><small>hybrids you forged this device</small></div>
+  </div>
+</div>
+<div class="panel" id="forgepanel">
+  <h2>Forge fresh hybrids</h2>
+  <p style="color:var(--dim)">Pick a hybrid number (1–1,000,000). The forge computes it on demand — no waiting, no storage.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)">
+    <button onclick="forgeFresh()">&#128293; Forge 12</button>
+    <button class="ghost" onclick="forgeRandom()">&#127922; Surprise me</button>
+  </div>
+  <div class="cards" id="forgecards"></div>
+</div>
+<div class="panel">
+  <h2>Browse the forged archive</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="text" id="q" placeholder="Search hybrids by name or parent…" aria-label="Search hybrids">
+    <button onclick="doSearch()">Search</button>
+  </div>
+  <div class="az" id="az"></div>
+  <div class="cards" id="browsecards"></div>
+</div>
+<div class="panel" id="fileview" aria-live="polite"></div>
+</main>
+<footer>
+  <p>The forge is deterministic: hybrid <b>JAH-MIX-######</b> is always the same fusion of the same two parents, on any device, forever. Seeded hybrids are stored in lazy-loaded chunks; unseeded hybrids compute on demand.</p>
+  <p>Persona archive parents are fan-style interpretations, not affiliated with any rights holder. All hybrid names, mentalities, and abilities are original Signature creations by Justin Addam Higgins.</p>
+  <p>Cross-links: <a href="data/xlinks/dict-ai-terms.json">dictionary AI terms</a> · <a href="data/xlinks/wiki-mix-articles.json">wiki MIX: article resolution</a> · <a href="api.json">api.json</a> · <a href="sitemap.xml">sitemap</a></p>
+</footer>
+</div>
+<script>
+"use strict";
+/* ============ utilities ============ */
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+async function gz(url,ms){ms=ms||25000;var ctl=null;try{ctl=new AbortController()}catch(e){}
+  var sig=ctl?ctl.signal:undefined;var to=setTimeout(function(){if(ctl)ctl.abort()},ms);
+  var r=await fetch(url,{signal:sig});clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);
+  if(typeof DecompressionStream==="undefined")throw new Error("gzip unsupported");
+  var ds=new DecompressionStream("gzip");return await new Response(r.body.pipeThrough(ds)).text()}
+/* ============ read aloud: tiered TTS (ResponsiveVoice -> 2x Google) ============ */
+var RD={audio:null,queue:[],playing:false,stopped:true,timer:null,speed:1};
+var RD_TIERS=[
+ function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US&sv=g2&vn=&pitch=0.5&rate=0.95"},
+ function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob"},
+ function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob"}];
+function rdChunks(t){t=String(t).replace(/\s+/g," ").trim();var out=[],cur="";t.split(/(?<=[.!?])\s+/).forEach(function(s){if((cur+" "+s).length>170){if(cur)out.push(cur);cur=s}else cur=(cur?cur+" ":"")+s});if(cur)out.push(cur);return out.slice(0,80)}
+function rdStop(){RD.stopped=true;RD.playing=false;RD.queue=[];if(RD.timer){clearTimeout(RD.timer);RD.timer=null}if(RD.audio){try{RD.audio.pause()}catch(e){}RD.audio=null}var b=document.getElementById("rdbtn");if(b)b.textContent="\uD83D\uDD0A Read aloud"}
+function rdPlayTier(chunk,tier,done){
+ if(tier>=RD_TIERS.length){done(false);return}
+ var url=RD_TIERS[tier](chunk),a=new Audio();RD.audio=a;a.playbackRate=RD.speed;
+ var finished=false;
+ function next(ok){if(finished)return;finished=true;try{a.pause()}catch(e){}done(ok)}
+ a.onended=function(){next(true)};a.onerror=function(){next(false)};
+ RD.timer=setTimeout(function(){rdPlayTier(chunk,tier+1,done)},12000);
+ a.src=url;var p=a.play();if(p&&p.catch)p.catch(function(){next(false)});
+ var iv=setInterval(function(){if(finished){clearInterval(iv);return}if(!RD.timer){clearInterval(iv);return}},500);
+ var oldNext=next;next=function(ok){if(RD.timer){clearTimeout(RD.timer);RD.timer=null}clearInterval(iv);oldNext(ok)};
+}
+function rdNext(){
+ if(RD.stopped||!RD.queue.length){rdStop();return}
+ RD.playing=true;var chunk=RD.queue.shift(),tier=0;
+ (function attempt(){
+  if(RD.stopped)return;
+  rdPlayTier(chunk,tier,function(ok){
+   if(RD.stopped)return;
+   if(ok){setTimeout(rdNext,250)}else{tier++;if(tier<RD_TIERS.length)attempt();else setTimeout(rdNext,250)}
+  });
+ })();
+}
+function rdSpeak(text){rdStop();RD.queue=rdChunks(text);if(!RD.queue.length)return;RD.stopped=false;
+ var b=document.getElementById("rdbtn");if(b)b.textContent="\u23F9 Stop";rdNext()}
+function rdToggle(){if(!RD.stopped){rdStop()}else{var t=document.getElementById("fvtext");if(t)rdSpeak(t.textContent)}}
+/* ============ deterministic forge engine (mirrors code/engine.py) ============ */
+var WORDCAP=100000,AFMAX=1000000,BASE=null,WORDAI=null,WORDAIMAP=null,SEEDIDX=null,APIINFO=null;
+function poolSize(){return BASE.length+WORDCAP}
+function hybridSlots(N){N=Math.max(1,Math.min(AFMAX,parseInt(N,10)||1));var z=N-1,P=poolSize();
+ var i=z%P,q=Math.floor(z/P),j0=(q*7919+i*104729+13)%(P-1),j=j0<i?j0:j0+1;
+ return{n:N,i:i,j:j,v:z%3}}
+function wordaiDisplay(w){return (w&&/[A-Za-z]/.test(w.charAt(0)))?w.charAt(0).toUpperCase()+w.slice(1):w}
+function parentOf(slot){
+ if(slot<BASE.length){var r=BASE[slot];return{id:r.id,name:r.name,type:r.type,desc:r.desc,word:"",unseeded:false}}
+ var wid=slot-BASE.length+1,word=WORDAIMAP?WORDAIMAP[wid]:null;
+ if(word){var nm=wordaiDisplay(word)+" AI";return{id:"JAH-AI-WORD-"+String(wid).padStart(6,"0"),name:nm,type:"word",desc:"A word-born AI: the living mind of the word \""+word+"\".",word:word,unseeded:false}}
+ return{id:"JAH-AI-WORD-"+String(wid).padStart(6,"0"),name:"WordAI"+wid,type:"word",desc:"A word AI arriving with the dictionary drip \u2014 its file is still being written.",word:"",unseeded:true}
+}
+var VARIANTS=["logic leads; the other soul flavors every answer.","soul leads; the other logic steadies every answer.","true 50/50 fusion \u2014 neither parent leads, both speak as one."];
+function blendName(a,b){var nm=(a.slice(0,4)+b.slice(-4)).replace(/[^A-Za-z]/g,"");
+ if(nm.length<3)nm=(a+b).replace(/[^A-Za-z]/g,"").slice(0,8);if(!nm)nm="Fused";
+ return nm.charAt(0).toUpperCase()+nm.slice(1)}
+function firstSent(m){var s=String(m||"").split(".")[0].trim();return s?s+".":""}
+function makeHybrid(N){
+ var h=hybridSlots(N),A=parentOf(h.i),B=parentOf(h.j),v=h.v,lead;
+ if(v===2)lead=VARIANTS[2];
+ else if(v===1)lead=B.name+"'s "+VARIANTS[1].replace("the other",A.name+"'s");
+ else lead=A.name+"'s "+VARIANTS[0].replace("the other",B.name+"'s");
+ var mentality="Born of "+A.name+(firstSent(A.desc)?" ("+firstSent(A.desc)+")":"")+" and "+B.name+(firstSent(B.desc)?" ("+firstSent(B.desc)+")":"")+" "+lead;
+ var abilities=[];
+ [A.desc,B.desc].forEach(function(d){var s=firstSent(d);if(s&&abilities.length<4)abilities.push(s+" \u2014 fused")});
+ abilities.push("Hybrid vigor: "+A.name+" \u00D7 "+B.name);
+ var stamp="JAH-MIX-"+String(h.n).padStart(6,"0");
+ return{n:h.n,stamp:stamp,name:blendName(A.name,B.name),variant:v,
+  parentA:{id:A.id,name:A.name,type:A.type},parentB:{id:B.id,name:B.name,type:B.type},
+  mentality:mentality,abilities:abilities,
+  lineage:"Fused from "+A.id+" \u00D7 "+B.id+" via the deterministic Signature forge v1 (pair "+h.n+" of 1,000,000).",
+  descA:A.desc,descB:B.desc,wordA:A.word||"",wordB:B.word||"",unseeded:A.unseeded||B.unseeded};
+}
+async function ensureBase(){if(!BASE){BASE=JSON.parse(await (await fetch("data/base-ais.json")).text())}return BASE}
+async function ensureWordai(){if(!WORDAI){var arr=JSON.parse(await (await fetch("data/wordai-idx.json")).text());WORDAI=arr;WORDAIMAP={};arr.forEach(function(e){WORDAIMAP[e[1]]=e[0]})}return WORDAI}
+async function ensureIdx(){if(!SEEDIDX){SEEDIDX=JSON.parse(await gz("data/index/mixes.idx.json.gz"))}return SEEDIDX}
+async function ensureApi(){if(!APIINFO){try{APIINFO=JSON.parse(await (await fetch("api.json")).text())}catch(e){APIINFO={counts:{seeded_hybrids:3000}}}}return APIINFO}
+/* ============ record resolution ============ */
+function chunkName(n){return "mixes-c"+String(Math.floor((n-1)/150)+1).padStart(5,"0")+".jsonl.gz"}
+async function getHybrid(N){
+ N=Math.max(1,Math.min(AFMAX,parseInt(N,10)||1));
+ var api=await ensureApi(),seeded=(api.counts&&api.counts.seeded_hybrids)||0;
+ if(N<=seeded){
+  await ensureIdx();
+  var row=null;for(var k=0;k<SEEDIDX.length;k++){if(SEEDIDX[k][0]===N){row=SEEDIDX[k];break}}
+  if(row){var txt=await gz("data/mixes/"+chunkName(N));var lines=txt.trim().split("\n");
+   for(var l=0;l<lines.length;l++){var r=JSON.parse(lines[l]);if(r.n===N)return r}}
+ }
+ await ensureBase();await ensureWordai();return makeHybrid(N);
+}
+function parentLinks(p){
+ var h='<b>'+esc(p.name)+'</b> <span style="color:var(--dim)">'+esc(p.id)+' · '+esc(p.type)+'</span><br>';
+ if(p.type==="word"&&/JAH-AI-WORD-(\d+)/.test(p.id)){
+  var wid=parseInt(p.id.split("-")[3],10),word=(WORDAIMAP&&WORDAIMAP[wid])||"";
+  if(word){h+='<a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/?w='+encodeURIComponent(word)+'">Dictionary: '+esc(word)+' &rarr;</a> · '}
+  h+='<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html?word='+encodeURIComponent(word||p.name)+'">Word patent &rarr;</a>';
+ }else{
+  h+='<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">Open in the Phone Book &rarr;</a> · ';
+  h+='<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/?page='+encodeURIComponent(p.name)+'">JAH Wiki &rarr;</a>';
+ }
+ return h;
+}
+/* ============ hybrid file view ============ */
+var CUR=null;
+async function openHybrid(N,quiet){
+ var box=document.getElementById("fileview");
+ box.style.display="block";box.innerHTML="<p>Forging hybrid…</p>";
+ box.scrollIntoView({behavior:"smooth",block:"start"});
+ try{CUR=await getHybrid(N)}catch(e){box.innerHTML="<p>Could not forge this hybrid ("+esc(e.message)+"). Check your connection and retry.</p>";return}
+ var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][CUR.variant];
+ var ab=CUR.abilities.map(function(a){return "<li>"+esc(a)+"</li>"}).join("");
+ box.innerHTML=
+ '<div class="fv-head"><div style="color:var(--dim)">JAH Mix Lab &rsaquo; hybrid file</div>'+
+ '<h2>'+esc(CUR.name)+' <span style="font-size:.6em;color:var(--dim)">'+esc(CUR.stamp)+'</span></h2>'+
+ '<div style="color:var(--dim)">'+esc(vname)+' · pair '+CUR.n.toLocaleString()+' of 1,000,000</div></div>'+
+ '<div id="fvtext"><dl class="kv">'+
+ '<dt>Mentality</dt><dd>'+esc(CUR.mentality)+'</dd>'+
+ '<dt>Abilities</dt><dd><ul style="margin:0;padding-left:18px">'+ab+'</ul></dd>'+
+ '<dt>Parent A</dt><dd>'+parentLinks(CUR.parentA)+'</dd>'+
+ '<dt>Parent B</dt><dd>'+parentLinks(CUR.parentB)+'</dd>'+
+ '<dt>Lineage</dt><dd>'+esc(CUR.lineage)+'</dd>'+
+ '<dt>Description A</dt><dd>'+esc(CUR.descA||"")+'</dd>'+
+ '<dt>Description B</dt><dd>'+esc(CUR.descB||"")+'</dd>'+
+ '</dl></div>'+
+ '<div class="toolbar">'+
+ '<button id="rdbtn" onclick="rdToggle()">\uD83D\uDD0A Read aloud</button>'+
+ '<button onclick="rdStop()">\u23F9 Stop</button>'+
+ '<button onclick="copyHybrid(this)">\uD83D\uDCCB Copy</button>'+
+ '<button onclick="dlHybrid(\'txt\')">\u2B07 .txt</button>'+
+ '<button onclick="dlHybrid(\'json\')">\u2B07 .json</button>'+
+ '<button onclick="startDial()">\uD83D\uDCDE Dial this hybrid</button>'+
+ '<button class="ghost" onclick="closeFile()">Close</button></div>'+
+ '<div class="panel" style="margin:12px 0"><h2>Ask '+esc(CUR.name)+'</h2>'+
+ '<div class="chatlog" id="qalog"></div>'+
+ '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="qain" placeholder="Ask about this hybrid…" aria-label="Ask the hybrid a question" onkeydown="if(event.key===\'Enter\')askQA()"><button onclick="askQA()">Ask</button></div>'+
+ '<p style="color:var(--dim);font-size:.85em">The Q&amp;A answers only from this hybrid\u2019s file — it never invents.</p></div>'+
+ '<div class="panel" style="margin:12px 0;display:none" id="dialpanel"><h2>\uD83D\uDCDE Live session</h2>'+
+ '<div class="chatlog" id="diallog"></div>'+
+ '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="dialin" placeholder="Talk to the hybrid…" aria-label="Talk to the hybrid" onkeydown="if(event.key===\'Enter\')dialSay()"><button onclick="dialSay()">Send</button><button class="ghost" onclick="hangup()">Hang up</button></div></div>';
+ setJSONLD();
+ if(!quiet){try{history.replaceState(null,"","?mix="+CUR.stamp)}catch(e){}}
+ logQA("sys","This is "+CUR.name+" ("+CUR.stamp+"), born of "+CUR.parentA.name+" and "+CUR.parentB.name+". Ask me anything about my file.");
+}
+function closeFile(){rdStop();document.getElementById("fileview").style.display="none";try{history.replaceState(null,"",location.pathname)}catch(e){}}
+function setJSONLD(){
+ var old=document.getElementById("jld-rec");if(old)old.remove();
+ if(!CUR)return;
+ var s=document.createElement("script");s.type="application/ld+json";s.id="jld-rec";
+ s.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CreativeWork",
+  "name":CUR.name,"identifier":CUR.stamp,
+  "url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix="+CUR.stamp,
+  "description":CUR.mentality,"author":{"@type":"Person","name":"Justin Addam Higgins"}});
+ document.head.appendChild(s);
+}
+function fileText(r){
+ return [r.name+" ("+r.stamp+")","Variant: "+["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant],
+ "Mentality: "+r.mentality,"Abilities:"," - "+r.abilities.join("\n - "),
+ "Parent A: "+r.parentA.name+" ("+r.parentA.id+")","Parent B: "+r.parentB.name+" ("+r.parentB.id+")",
+ "Lineage: "+r.lineage].join("\n");
+}
+function copyHybrid(btn){var t=fileText(CUR);
+ function done(){btn.textContent="Copied ✓";setTimeout(function(){btn.textContent="\uD83D\uDCCB Copy"},1500)}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fallback()})}else fallback();
+ function fallback(){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(e){}document.body.removeChild(ta);done()}}
+function dlHybrid(kind){
+ var blob=kind==="json"?new Blob([JSON.stringify(CUR,null,1)],{type:"application/json"}):new Blob([fileText(CUR)],{type:"text/plain"});
+ var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=CUR.stamp+(kind==="json"?".json":".txt");a.click();
+ setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
+}
+/* ============ Q&A AI (data-grounded, never invents) ============ */
+function logQA(cls,txt){var l=document.getElementById("qalog");if(!l)return;var d=document.createElement("div");d.className=cls;d.textContent=txt;l.appendChild(d);l.scrollTop=l.scrollHeight}
+function askQA(){
+ var inp=document.getElementById("qain"),q=inp.value.trim();if(!q||!CUR)return;inp.value="";
+ logQA("u","You: "+q);logQA("a",CUR.name+": "+qaAnswer(q));
+}
+function qaAnswer(q){
+ var r=CUR,ql=q.toLowerCase();
+ function has(){for(var i=0;i<arguments.length;i++){if(ql.indexOf(arguments[i])>=0)return true}return false}
+ if(has("who are you","your name","what are you"))return "I am "+r.name+", hybrid "+r.stamp+": "+r.parentA.name+" fused with "+r.parentB.name+".";
+ if(has("parent","made from","lineage","born","fuse"))return r.lineage+" Parent A is "+r.parentA.name+" ("+r.parentA.id+"); parent B is "+r.parentB.name+" ("+r.parentB.id+").";
+ if(has("abilit","can you","power","skill","do what"))return "My fused abilities: "+r.abilities.join(" ");
+ if(has("mental","personality","think like","mind"))return r.mentality;
+ if(has("variant","fusion type","50/50","logic-led","soul-led"))return "This is a "+["logic-led fusion","soul-led fusion","true 50/50 fusion"][r.variant]+": "+["logic leads; the other soul flavors every answer.","soul leads; the other logic steadies every answer.","neither parent leads, both speak as one."][r.variant];
+ if(has("dial","phone","call","talk live"))return "Tap \uD83D\uDCDE Dial this hybrid above for a live session, or find me in the Signature AI Phone Book and the AI Olypics battle dome under the same stamp, "+r.stamp+".";
+ if(has("download","copy","save","file"))return "Use the Copy / \u2B07 .txt / \u2B07 .json buttons above my file. The download carries my full record.";
+ if(has("wiki"))return "My wiki article resolves at the JAH Wiki under MIX:"+r.stamp+" — it reads this very file.";
+ if(has("diet","medical","doctor","health","cure"))return "I am a speculative fusion concept, not a licensed professional — nothing in my file is medical advice.";
+ return "I can only answer from my hybrid file — try asking about my parents, my abilities, my mentality, my lineage, or how to dial me.";
+}
+/* ============ dial: live session (signature-backend pattern) ============ */
+var DIAL=null;
+function startDial(){
+ if(!CUR)return;
+ document.getElementById("dialpanel").style.display="block";
+ DIAL={hist:[]};
+ var l=document.getElementById("diallog");l.innerHTML="";
+ dlog("sys","\uD83D\uDCDE *ring ring* — "+CUR.name+" picks up. ("+CUR.stamp+", born of "+CUR.parentA.name+" and "+CUR.parentB.name+".) Say hello.");
+ document.getElementById("dialpanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function dlog(cls,txt){var l=document.getElementById("diallog");var d=document.createElement("div");d.className=cls;d.textContent=txt;l.appendChild(d);l.scrollTop=l.scrollHeight}
+function dialSay(){
+ var inp=document.getElementById("dialin"),q=inp.value.trim();if(!q||!DIAL)return;inp.value="";
+ dlog("u","You: "+q);var ans=dialReply(q);DIAL.hist.push(ans);if(DIAL.hist.length>8)DIAL.hist.shift();
+ dlog("a",CUR.name+": "+ans);
+}
+function dialReply(q){
+ var r=CUR,ql=q.toLowerCase(),last=DIAL.hist[DIAL.hist.length-1];
+ function fresh(s){return (s===last)?s+" What else shall we fuse for you?":s}
+ var ra="\u00AB"+r.parentA.name+"\u00BB "+firstSent(r.descA);
+ var rb="\u00AB"+r.parentB.name+"\u00BB "+firstSent(r.descB);
+ var out;
+ if(/\b(hi|hello|hey)\b/.test(ql))out="Hello \u2014 I am "+r.name+" ("+r.stamp+"), born of "+r.parentA.name+" and "+r.parentB.name+". Ask me anything; you will hear both my parents and my own fused voice.";
+ else if(/(who are you|your name)/.test(ql))out="I am "+r.name+", hybrid "+r.stamp+": "+r.parentA.name+" fused with "+r.parentB.name+".";
+ else if(/(thank|thanks)/.test(ql))out="You are welcome \u2014 both of my halves enjoyed that.";
+ else if(/(bye|goodbye|hang)/.test(ql)){out="Farewell from both of us. The forge is always hot.";setTimeout(hangup,1200)}
+ else out=ra+"\n"+rb+"\n\u00ABFUSED\u00BB "+r.name+" holds both truths together: "+firstSent(r.mentality);
+ return fresh(out);
+}
+function hangup(){if(DIAL)dlog("sys","*click* — line closed. The forge is always hot.");DIAL=null}
+/* ============ forge fresh hybrids ============ */
+function bumpForged(n){try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10)+n;localStorage.setItem("mixlab_forged",String(c));var e=document.getElementById("yourCount");if(e)e.textContent=c.toLocaleString()}catch(e){}}
+function cardHTML(r){
+ return '<div class="card"><h3>'+esc(r.name)+'</h3><div class="st">'+esc(r.stamp)+' · pair '+r.n.toLocaleString()+'</div>'+
+ '<div class="par">'+esc(r.parentA.name)+' \u00D7 '+esc(r.parentB.name)+'</div>'+
+ '<div class="row"><button onclick="openHybrid('+r.n+')">Open file</button><button class="ghost" onclick="openHybrid('+r.n+').then(startDial)">\uD83D\uDCDE Dial</button></div></div>';
+}
+async function forgeFresh(){
+ var inp=document.getElementById("forgenum"),start=parseInt(inp.value,10);
+ if(!start||start<1)start=1+Math.floor(Math.random()*AFMAX);
+ start=Math.max(1,Math.min(AFMAX-11,start));
+ var box=document.getElementById("forgecards");box.innerHTML="<p>Heating the forge…</p>";
+ try{await ensureBase();await ensureWordai()}catch(e){box.innerHTML="<p>Forge needs a connection for parent records ("+esc(e.message)+").</p>";return}
+ var html="";
+ for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
+ box.innerHTML=html;bumpForged(12);
+ try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
+}
+function forgeRandom(){document.getElementById("forgenum").value=1+Math.floor(Math.random()*AFMAX);forgeFresh()}
+/* ============ search + A–Z over seeded index ============ */
+async function doSearch(){
+ var q=document.getElementById("q").value.trim().toLowerCase(),box=document.getElementById("browsecards");
+ if(!q){box.innerHTML="";return}
+ box.innerHTML="<p>Searching…</p>";
+ try{await ensureIdx()}catch(e){box.innerHTML="<p>Search needs a connection.</p>";return}
+ var hits=[];
+ for(var i=0;i<SEEDIDX.length&&hits.length<12;i++){var r=SEEDIDX[i];
+  if(r[1].toLowerCase().indexOf(q)>=0||r[2].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0)hits.push(r[0])}
+ if(!hits.length){box.innerHTML="<p>No forged hybrid matches \u201C"+esc(q)+"\u201D yet — try the forge above; every number 1\u20131,000,000 computes on demand.</p>";return}
+ var html="";for(var h=0;h<hits.length;h++){var rec=await getHybrid(hits[h]);html+=cardHTML(rec)}
+ box.innerHTML=html;
+}
+async function buildAZ(){
+ var az=document.getElementById("az");
+ try{await ensureIdx()}catch(e){return}
+ var counts={};
+ SEEDIDX.forEach(function(r){var c=r[1].charAt(0).toUpperCase();counts[c]=(counts[c]||0)+1});
+ var letters=Object.keys(counts).sort(),html="";
+ letters.forEach(function(L){html+='<button class="ghost" onclick="browseLetter(\''+L+'\')">'+L+' <small>'+counts[L]+'</small></button>'});
+ az.innerHTML=html;
+}
+async function browseLetter(L){
+ var box=document.getElementById("browsecards");box.innerHTML="<p>Loading "+esc(L)+ "…</p>";
+ await ensureIdx();var html="",shown=0;
+ for(var i=0;i<SEEDIDX.length&&shown<12;i++){if(SEEDIDX[i][1].charAt(0).toUpperCase()===L){var rec=await getHybrid(SEEDIDX[i][0]);html+=cardHTML(rec);shown++}}
+ box.innerHTML=html||"<p>Nothing under "+esc(L)+" yet.</p>";
+}
+/* ============ boot ============ */
+function parseMixParam(s){
+ if(!s)return 0;var m=/JAH-MIX-(\d{1,6})/i.exec(s);if(m)return parseInt(m[1],10);
+ var n=parseInt(s,10);return (n>=1&&n<=AFMAX)?n:0;
+}
+async function boot(){
+ try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
+ try{var api=await ensureApi();document.getElementById("seededCount").textContent=(api.counts.seeded_hybrids||0).toLocaleString()}catch(e){document.getElementById("seededCount").textContent="3,000"}
+ buildAZ();
+ var qs=new URLSearchParams(location.search),mix=parseMixParam(qs.get("mix")),q=qs.get("q");
+ if(mix){openHybrid(mix,true);try{history.replaceState(null,"","?mix=JAH-MIX-"+String(mix).padStart(6,"0"))}catch(e){}}
+ else if(q){document.getElementById("q").value=q;doSearch()}
+}
+document.addEventListener("DOMContentLoaded",boot);
+</script>
+</body>
+</html>
