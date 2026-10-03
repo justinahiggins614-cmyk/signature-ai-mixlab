@@ -1,18 +1,18 @@
 {
- "site": "The Signature AI Mix Lab",
  "site_id": "SIGNATURE-AI-MIXLAB",
+ "site": "The Signature AI Mix Lab",
  "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
  "title_status": "provisional \u2014 pending Manon's confirmation",
- "generated_at": "2026-10-03T15:43:24.777787+00:00",
- "manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/mixlab-manifest.json",
- "for_bots": "Deterministic AI hybrid forge. 1,000,000 hybrids (JAH-MIX-######), computed on demand from the hybrid number. Seeded archive: 13000 hybrids. Deep link: ?mix=JAH-MIX-######",
+ "generated_at": "2026-10-03T15:36:54.835769+00:00",
+ "purpose": "Deterministic AI hybrid forge: two parent AIs -> one JAH-MIX hybrid record.",
  "counts": {
   "seeded_hybrids": 13000,
   "forged_through": 13000,
   "goal": 1000000,
   "parent_ais": 260,
   "word_ai_slots": 100000,
-  "word_ai_populated": 27800
+  "word_ai_populated": 27800,
+  "word_ai_pending": 72200
  },
  "versions": {
   "manifest": "1.0",
@@ -31,7 +31,6 @@
   "canon_verified": true,
   "note": "Generator v1 pool is pinned: new phone-book AIs do NOT enter the v1 pool (would break 'same pair, same hybrid'). Pending additions (eligible for a future generator v2): JAH-AI-DOM-244..253."
  },
- "fictionality": "Persona parents are fan-style interpretations, not affiliated with any rights holder. All hybrid names, mentalities, and abilities are original Signature creations by Justin Addam Higgins.",
  "determinism": {
   "spec": "mix-determinism/1",
   "spec_doc": "docs/deterministic-spec.md",
@@ -39,6 +38,7 @@
   "hash_algorithm": "SHA-256",
   "rule": "Same pair, same hybrid \u2014 forever. Generator v1 pinned."
  },
+ "fictionality": "Persona parents are fan-style interpretations, not affiliated with any rights holder. All hybrid names, mentalities, and abilities are original Signature creations by Justin Addam Higgins.",
  "endpoints": {
   "hybrid": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-000001",
   "manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/mixlab-manifest.json",
@@ -52,6 +52,21 @@
   "llms": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/llms.txt",
   "ai_manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/ai-manifest.json"
  },
+ "lookup": {
+  "exact_id": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-000001",
+  "index": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/data/index/mixes.idx.json.gz",
+  "manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/mixlab-manifest.json"
+ },
+ "schemas": {
+  "hybrid": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/schema/hybrid.schema.json",
+  "manifest": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/schema/manifest.schema.json",
+  "search_result": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/schema/search-result.schema.json"
+ },
+ "answer_rules": [
+  "ARCHIVE RECORD vs GENERATED EXPLANATION vs NOT FOUND vs NOT VERIFIED",
+  "never invent hybrids, parents, or competition results",
+  "preserve the fictionality disclosure"
+ ],
  "sister_sites": [
   "https://justinahiggins614-cmyk.github.io/jah-ai-models/",
   "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/"

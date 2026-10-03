@@ -1,43 +1,52 @@
 #!/usr/bin/env python3
-"""Build api.json for the Mix Lab."""
-import json, os, datetime
+"""Build api.json for the Mix Lab — counts ALWAYS derived from mixlab-manifest.json.
+
+Never hand-edit counts: the manifest is the single authority.
+"""
+import json
+import os
+import datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 BASE = "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/"
 
-def build(total_seeded, forged_through):
+
+def build(total_seeded=None, forged_through=None):
+    import build_manifest
+    manifest = build_manifest.build()
+    c = manifest["counts"]
     api = {
-        "site": "The Signature AI Mix Lab",
+        "site": manifest["site"],
+        "site_id": manifest["site_id"],
         "site_url": BASE,
-        "title_status": "provisional — pending Manon's confirmation",
-        "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "for_bots": "Deterministic AI hybrid forge. 1,000,000 hybrids (JAH-MIX-######), computed on demand from the hybrid number. Deep link: ?mix=JAH-MIX-######",
+        "title_status": manifest["title_status"],
+        "generated_at": manifest["generated_at"],
+        "manifest": BASE + "mixlab-manifest.json",
+        "for_bots": ("Deterministic AI hybrid forge. 1,000,000 hybrids "
+                     "(JAH-MIX-######), computed on demand from the hybrid "
+                     "number. Seeded archive: %d hybrids. "
+                     "Deep link: ?mix=JAH-MIX-######" % c["seeded_hybrids"]),
         "counts": {
-            "seeded_hybrids": total_seeded,
-            "forged_through": forged_through,
-            "goal": 1000000,
-            "parent_ais": 260,
-            "word_ai_slots": 100000,
+            "seeded_hybrids": c["seeded_hybrids"],
+            "forged_through": c["forged_through"],
+            "goal": c["goal"],
+            "parent_ais": c["parent_ais"],
+            "word_ai_slots": c["word_ai_slots"],
+            "word_ai_populated": c["word_ai_populated"],
         },
-        "endpoints": {
-            "hybrid": BASE + "?mix=JAH-MIX-000001",
-            "compact_index": BASE + "data/index/mixes.idx.json.gz",
-            "chunks": BASE + "data/mixes/mixes-c00001.jsonl.gz",
-            "sitemap": BASE + "sitemap.xml",
-            "catalog_feed": BASE + "mix-lab-catalog.json",
-            "static_index": BASE + "mixes.html",
-            "crosslinks_dict": BASE + "data/xlinks/dict-ai-terms.json",
-            "crosslinks_wiki": BASE + "data/xlinks/wiki-mix-articles.json",
-        },
-        "sister_sites": [
-            "https://justinahiggins614-cmyk.github.io/jah-ai-models/",
-            "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/",
-        ],
+        "versions": manifest["versions"],
+        "parent_pool": manifest["parent_pool"],
+        "fictionality": manifest["fictionality"],
+        "determinism": manifest["determinism"],
+        "endpoints": manifest["endpoints"],
+        "sister_sites": manifest["sister_sites"],
     }
     with open(os.path.join(ROOT, "api.json"), "w") as f:
         json.dump(api, f, indent=1)
-    print("api.json: %d seeded" % total_seeded)
+    print("api.json: %d seeded (from manifest)" % c["seeded_hybrids"])
+    return api
+
 
 if __name__ == "__main__":
-    build(0, 0)
+    build()

@@ -124,3 +124,130 @@ def slim(rec):
         "descA": rec["parents_detail"]["A"]["desc"],
         "descB": rec["parents_detail"]["B"]["desc"],
     }
+
+# ============================================================================
+# FORMAL DETERMINISTIC SPEC — "Same pair, same hybrid — forever" (mix-determinism/1)
+# ============================================================================
+# Generator version 1 pins EVERYTHING below. A generator version bump (v2, ...)
+# is required for any change to: parent pool, slot math, name blending, variant
+# rules, or text templates. Old versions remain reproducible forever.
+GENERATOR_VERSION = "1"
+RECORD_SCHEMA_VERSION = "1"          # Hybrid Record Standard v1
+SEED_ALGORITHM = "identity"          # the hybrid number N IS the seed
+HASH_ALGORITHM = "SHA-256"
+ENCODING = "UTF-8"
+CHARSET_RULE = "NFC text; hybrid names restricted to [A-Za-z] by blend_name()"
+# Parent pool snapshot pinned by generator v1 (verified vs phone-book canon):
+PARENT_POOL = {
+    "count": 260,
+    "system": 11,                    # JAH-AI-SIG-001..011
+    "persona": 6,                   # JAH-AI-PER-001..006
+    "domain": 243,                  # JAH-AI-DOM-001..243
+    "wordcap": 100000,              # JAH-AI-WORD-000001..100000 slots
+    "snapshot_date": "2026-10-03",
+    "canon_source": "jah-ai-models/ai-catalog.json",
+}
+PARENT_ORDER_RULE = ("positional: parentA=slot(i), parentB=slot(j); "
+                     "i=z%P, j=j0 or j0+1 (j!=i guaranteed); ordering is part of "
+                     "the deterministic transform, NOT commutative")
+NORMALIZED_PAIR = ("hybrid number N (1..1000000), canonical ID JAH-MIX-%06d; "
+                   "slot math: z=N-1, P=100260, i=z%P, q=z//P, "
+                   "j0=(q*7919+i*104729+13)%(P-1), j=j0 if j0<i else j0+1, "
+                   "variant v=z%3")
+STATUSES = ("ARCHIVED",             # seeded: stored in data/mixes chunks
+            "COMPUTED-ON-DEMAND",   # N > seeded: computed live, nothing stored
+            "NOT-YET-SEEDED",       # reserved label for pipeline states
+            "INVALID")              # N outside 1..1000000
+
+
+def formal_seed(N, variant):
+    """The formal forge seed. Matches the page's seedOf() output."""
+    return "MIX-%06d-V%d-FORGE1" % (int(N), int(variant))
+
+
+def seed_hash(seed):
+    import hashlib
+    return hashlib.sha256(seed.encode("utf-8")).hexdigest()
+
+
+def canonical_json(obj):
+    """Canonical serialization for hashing: sorted keys, compact, UTF-8."""
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=False).encode("utf-8")
+
+
+def content_hash(full_record):
+    import hashlib
+    return hashlib.sha256(canonical_json(full_record)).hexdigest()
+
+
+def _word_of(parent, wbyid):
+    """The dictionary word behind a word-AI parent, else ''.
+
+    Derived deterministically from the parent ID via the word-AI index,
+    so Python and the page's JS compute the same hashed core.
+    """
+    if not isinstance(parent, dict) or parent.get("type") != "word":
+        return ""
+    m = re.fullmatch(r"JAH-AI-WORD-(\d+)", parent.get("id", "") or "")
+    if not m or not wbyid:
+        return ""
+    return wbyid.get(int(m.group(1)), "")
+
+
+def full_record(rec, status="ARCHIVED", created=None, olypics_status="not-entered",
+                wbyid=None):
+    """Expand a slim seeded/on-demand hybrid into the Hybrid Record Standard v1.
+
+    Never mutates stored chunks: computed on read, deterministic from the record.
+    wbyid: {word_id_int: word} — derives WORD-AI-A/B for word parents.
+    """
+    seed = formal_seed(rec["n"], rec["variant"])
+    # descriptions live top-level on slim chunk records, inside parents_detail
+    # on raw make_hybrid() output — accept both shapes.
+    pd = rec.get("parents_detail") or {}
+    descA = rec.get("descA") or pd.get("A", {}).get("desc", "")
+    descB = rec.get("descB") or pd.get("B", {}).get("desc", "")
+    core = {
+        "JAH-MIX-ID": rec["stamp"],
+        "MIX-VERSION": RECORD_SCHEMA_VERSION,
+        "STATUS": status,
+        "PARENT-A-ID": rec["parentA"]["id"],
+        "PARENT-A-NAME": rec["parentA"]["name"],
+        "PARENT-A-TYPE": rec["parentA"]["type"],
+        "PARENT-B-ID": rec["parentB"]["id"],
+        "PARENT-B-NAME": rec["parentB"]["name"],
+        "PARENT-B-TYPE": rec["parentB"]["type"],
+        "PARENT-ORDER-RULE": PARENT_ORDER_RULE,
+        "NORMALIZED-PARENT-PAIR": "N=%d i/j slots via mix-determinism/1" % rec["n"],
+        "SEED": seed,
+        "SEED-ALGORITHM": SEED_ALGORITHM,
+        "GENERATOR-VERSION": GENERATOR_VERSION,
+        "HYBRID-NAME": rec["name"],
+        "HYBRID-TYPE": ["Logic-led fusion", "Soul-led fusion",
+                        "True 50/50 fusion"][rec["variant"]],
+        "PERSONA": "Signature hybrid AI persona (generated interpretation, not a real AI product)",
+        "MENTALITY": rec["mentality"],
+        "ABILITIES": rec["abilities"],
+        "DESCRIPTION-A": descA,
+        "DESCRIPTION-B": descB,
+        "PARENT-LINEAGE": rec["lineage"],
+        "FICTIONALITY": ("Persona parents are fan-style interpretations, not affiliated "
+                         "with any rights holder. Hybrid names, mentalities and abilities "
+                         "are original Signature creations by Justin Addam Higgins."),
+        "CONTENT-STATUS": "GENERATED",
+        "VALIDATION-STATUS": "schema-valid",
+        "PROVENANCE": ("Deterministic Signature forge v1; phone-book canon "
+                       "jah-ai-models/ai-catalog.json"),
+        "OLYPICS-STATUS": olypics_status,
+        "WORD-AI-A": _word_of(rec.get("parentA"), wbyid),
+        "WORD-AI-B": _word_of(rec.get("parentB"), wbyid),
+        "UNSEEDED-PARENT": bool(rec.get("unseeded", False)),
+        "CREATED": created,
+        "CANONICAL-URL": ("https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/"
+                          "?mix=" + rec["stamp"]),
+    }
+    core["CONTENT-HASH"] = content_hash(
+        {k: v for k, v in core.items()
+         if k not in ("CONTENT-HASH", "STATUS")})
+    return core

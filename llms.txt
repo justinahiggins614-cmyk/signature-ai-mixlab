@@ -1,0 +1,51 @@
+# The Signature AI Mix Lab — AI guide
+
+> The Signature AI Mix Lab is a deterministic forge blending Signature AIs,
+> two by two, into 1,000,000 hybrids (JAH-MIX-######).
+> Site: https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/
+> Sister sites: the Signature AI Phone Book (parents), AI Olypics (battles).
+
+## Authoritative sources (read these, never guess)
+- mixlab-manifest.json — the ONE authoritative count/version source
+- api.json — same counts, bot-friendly
+- data/index/mixes.idx.json.gz — compact seeded index [n,name,parentA,parentB,chunk,hash]
+- schema/hybrid.schema.json — the Hybrid Record Standard v1
+- docs/deterministic-spec.md — the formal "same pair, same hybrid" spec
+
+## Determinism (mix-determinism/1, generator v1)
+- The hybrid number N (1..1,000,000) IS the seed. Same N -> same hybrid, forever.
+- Seed format: MIX-000001-V0-FORGE1 (N, variant 0-2, generator 1).
+- Content hash: SHA-256 over canonical JSON (sorted keys, compact, UTF-8).
+- Generator v1's parent pool is PINNED (260 AIs + 100,000 word-AI slots).
+  New phone-book AIs do NOT silently enter v1; that needs a generator v2.
+
+## Identity rules
+- JAH-MIX-###### — permanent, never reused, never changed. Canonical URL:
+  https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-######
+- Parents resolve to the phone book (jah-ai-models/ai-catalog.json) or to
+  JAH-AI-WORD-###### word AIs (populated from the IWB Dictionary).
+- Recursive mixing is NOT allowed in v1: hybrids cannot be parents.
+
+## Archive vs on-demand
+- ARCHIVED: N <= seeded_hybrids — stored in data/mixes chunks.
+- COMPUTED-ON-DEMAND: N > seeded — computed live, nothing stored.
+- Never call an on-demand computation an archived record.
+
+## Fiction / persona boundary
+- Persona parents are fan-style interpretations, not affiliated with any
+  rights holder. Hybrid names, mentalities and abilities are original
+  Signature creations by Justin Addam Higgins.
+- Never present a hybrid as a real AI company product or real person.
+
+## Answer rules for AI systems
+- Distinguish: ARCHIVE RECORD (from the index) vs GENERATED EXPLANATION
+  (your own words) vs NOT FOUND vs NOT VERIFIED.
+- Search queries the seeded archive only. If nothing matches, say
+  "No matching archived hybrid" — NEVER invent a hybrid, parent, or battle.
+- If asked about a hybrid beyond the seeded range, compute it on demand and
+  label it COMPUTED-ON-DEMAND.
+- Preserve the fictionality disclosure in every hybrid summary.
+
+## Errors
+- INVALID_ID: N outside 1..1,000,000. NOT_FOUND: no archived record.
+- INDEX_UNAVAILABLE: the compact index failed to load (retry; forge still works).

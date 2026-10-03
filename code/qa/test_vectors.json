@@ -1,0 +1,68 @@
+{
+ "1": {
+  "stamp": "JAH-MIX-000001",
+  "name": "DeteIS",
+  "variant": 0,
+  "parentA_id": "JAH-AI-SIG-001",
+  "parentB_id": "JAH-AI-PER-004",
+  "seed": "MIX-000001-V0-FORGE1",
+  "content_hash": "4c95cbac040bc954e8f51f741b416e6deaf21362004c9238335316f84badb54c",
+  "generator_version": "1",
+  "record_schema": "1"
+ },
+ "2": {
+  "stamp": "JAH-MIX-000002",
+  "name": "ProbcAI",
+  "variant": 1,
+  "parentA_id": "JAH-AI-SIG-002",
+  "parentB_id": "JAH-AI-WORD-004225",
+  "seed": "MIX-000002-V1-FORGE1",
+  "content_hash": "cfce5b8ee1e2b0ec68e37258b77baf23f3a6e671cb6a0203cf871f21bf2a64f5",
+  "generator_version": "1",
+  "record_schema": "1"
+ },
+ "6500": {
+  "stamp": "JAH-MIX-006500",
+  "name": "Arto",
+  "variant": 1,
+  "parentA_id": "JAH-AI-WORD-006240",
+  "parentB_id": "JAH-AI-WORD-075434",
+  "seed": "MIX-006500-V1-FORGE1",
+  "content_hash": "4892cafa9e48744831718618233d2c63a92f7d5ac136f90a844a96ab6314f6c9",
+  "generator_version": "1",
+  "record_schema": "1"
+ },
+ "13000": {
+  "stamp": "JAH-MIX-013000",
+  "name": "Byss",
+  "variant": 0,
+  "parentA_id": "JAH-AI-WORD-012740",
+  "parentB_id": "JAH-AI-WORD-055324",
+  "seed": "MIX-013000-V0-FORGE1",
+  "content_hash": "a9137eb95702389c325223cf3e123433b6786c0b36c0fcfae76f04f5f6e4eccf",
+  "generator_version": "1",
+  "record_schema": "1"
+ },
+ "13001": {
+  "stamp": "JAH-MIX-013001",
+  "name": "Byss",
+  "variant": 1,
+  "parentA_id": "JAH-AI-WORD-012741",
+  "parentB_id": "JAH-AI-WORD-059794",
+  "seed": "MIX-013001-V1-FORGE1",
+  "content_hash": "f7ed0ffdb11454e9ec683823562cf47ffd5836871f7975e6e7aaf1efcb3bc069",
+  "generator_version": "1",
+  "record_schema": "1"
+ },
+ "1000000": {
+  "stamp": "JAH-MIX-1000000",
+  "name": "Word",
+  "variant": 0,
+  "parentA_id": "JAH-AI-WORD-097400",
+  "parentB_id": "JAH-AI-WORD-079069",
+  "seed": "MIX-1000000-V0-FORGE1",
+  "content_hash": "e55afec5b26e9d21d1967efb8feda5cd6e14bd483baaed2b0b5dd20cb1f4d720",
+  "generator_version": "1",
+  "record_schema": "1"
+ }
+}

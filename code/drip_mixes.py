@@ -10,10 +10,78 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 DATA = os.path.join(ROOT, "data")
 sys.path.insert(0, HERE)
-from engine import load_base, load_wordai, make_hybrid, slim
+from engine import load_base, load_wordai, make_hybrid, slim, full_record
 
 CHUNK = 150
 GUARD = 800 * 1024 * 1024
+
+
+def build_index(mixes_dir=None, data_dir=None):
+    """Rebuild the compact index from chunks.
+
+    Rows: [n, name, parentA_id, parentB_id, chunk_n, content_hash].
+    The content hash is over the canonical full record (ARCHIVED status).
+    Readers using r[0..4] are unaffected by the appended hash column.
+    """
+    from engine import full_record as _fr, load_wordai as _lw
+    mixes_dir = mixes_dir or os.path.join(DATA, "mixes")
+    data_dir = data_dir or DATA
+    wbyid = {wid: w for w, wid in _lw()}
+    idx = []
+    for cn in sorted(os.listdir(mixes_dir)):
+        if not cn.endswith(".jsonl.gz"):
+            continue
+        chunk_n = int(cn[7:12])
+        with gzip.open(os.path.join(mixes_dir, cn), "rt") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                r = json.loads(line)
+                full = _fr(r, status="ARCHIVED", wbyid=wbyid)
+                idx.append([r["n"], r["name"], r["parentA"]["id"],
+                            r["parentB"]["id"], chunk_n, full["CONTENT-HASH"]])
+    idx.sort(key=lambda r: r[0])
+    os.makedirs(os.path.join(data_dir, "index"), exist_ok=True)
+    with gzip.open(os.path.join(data_dir, "index", "mixes.idx.json.gz"),
+                   "wt") as f:
+        json.dump(idx, f)
+    return idx
+
+
+def rebuild_derived(idx, checks_passed=None, last_build=None):
+    """Rebuild everything derived from the index: sitemap, manifest, api, catalog."""
+    import build_sitemap
+    import build_manifest
+    import build_api
+    import build_catalog
+    build_sitemap.build(idx)
+    manifest = build_manifest.build(checks_passed=checks_passed,
+                                    last_build=last_build)
+    build_api.build()
+    build_catalog.build(idx)
+    return manifest
+
+
+def run_gates():
+    """Run all build gates. Returns True iff everything passes."""
+    import subprocess
+    qa_dir = os.path.join(HERE, "qa")
+    gates = [
+        [sys.executable, os.path.join(qa_dir, "test_determinism.py")],
+        [sys.executable, os.path.join(qa_dir, "check_build.py")],
+        [sys.executable, os.path.join(HERE, "coherence_check.py")],
+    ]
+    ok = True
+    for cmd in gates:
+        name = os.path.basename(cmd[-1])
+        p = subprocess.run(cmd, capture_output=True, text=True)
+        print("--- gate %s: %s" % (name, "PASS" if p.returncode == 0 else "FAIL"))
+        if p.returncode != 0:
+            ok = False
+            print(p.stdout[-2000:])
+            print(p.stderr[-2000:])
+    return ok
 
 def state_path(): return os.path.join(DATA, "state.json")
 def get_state():
@@ -79,26 +147,16 @@ def main():
         write_chunk_merged(mixes_dir, cn, lines)
     st["next_index"] = end
     json.dump(st, open(state_path(), "w"))
-    # compact index: [n, name, parentA_id, parentB_id, chunk_n]
-    idx = []
-    for cn in sorted(os.listdir(mixes_dir)):
-        if not cn.endswith(".jsonl.gz"):
-            continue
-        chunk_n = int(cn[7:12])
-        with gzip.open(os.path.join(mixes_dir, cn), "rt") as f:
-            for line in f:
-                r = json.loads(line)
-                idx.append([r["n"], r["name"], r["parentA"]["id"], r["parentB"]["id"], chunk_n])
-    idx.sort(key=lambda r: r[0])
-    os.makedirs(os.path.join(DATA, "index"), exist_ok=True)
-    with gzip.open(os.path.join(DATA, "index", "mixes.idx.json.gz"), "wt") as f:
-        json.dump(idx, f)
-    # sitemap + api + catalog feed (Site #18 diagnostic: never let these go stale)
-    sys.path.insert(0, HERE)
-    import build_sitemap, build_api, build_catalog
-    build_sitemap.build(idx)
-    build_api.build(len(idx), st["next_index"] - 1)
-    build_catalog.build(idx)
+    # compact index: [n, name, parentA_id, parentB_id, chunk_n, content_hash]
+    idx = build_index()
+    # sitemap + manifest + api + catalog feed (never let these go stale)
+    rebuild_derived(idx, checks_passed=None)
+    # gates on the fresh tree: fail the build (no push) if anything disagrees
+    if not run_gates():
+        print("MIXLAB DRIP: gates failed — NOT pushing. Fix and re-run.")
+        sys.exit(1)
+    # stamp the passing run into the manifest + api
+    rebuild_derived(idx, checks_passed=True)
     size = dir_size_bytes(DATA)
     print("MIXLAB DRIP: +%d hybrids (%d-%d), %d chunks, %d total seeded, data %.1fMB %s" % (
         args.n, start, end - 1, len(buf), len(idx), size / 1048576,

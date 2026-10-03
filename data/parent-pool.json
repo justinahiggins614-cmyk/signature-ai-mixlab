@@ -1,0 +1,23 @@
+{
+ "count": 260,
+ "snapshot_date": "2026-10-03",
+ "canon_source": "jah-ai-models/ai-catalog.json",
+ "canon_verified": true,
+ "types": {
+  "system": 11,
+  "persona": 6,
+  "domain": 243
+ },
+ "pending_generator_v2": [
+  "JAH-AI-DOM-244",
+  "JAH-AI-DOM-245",
+  "JAH-AI-DOM-246",
+  "JAH-AI-DOM-247",
+  "JAH-AI-DOM-248",
+  "JAH-AI-DOM-249",
+  "JAH-AI-DOM-250",
+  "JAH-AI-DOM-251",
+  "JAH-AI-DOM-252",
+  "JAH-AI-DOM-253"
+ ]
+}
