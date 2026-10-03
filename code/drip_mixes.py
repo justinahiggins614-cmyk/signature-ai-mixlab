@@ -55,11 +55,14 @@ def rebuild_derived(idx, checks_passed=None, last_build=None):
     import build_manifest
     import build_api
     import build_catalog
+    import stamp_counts
     build_sitemap.build(idx)
     manifest = build_manifest.build(checks_passed=checks_passed,
                                     last_build=last_build)
     build_api.build()
     build_catalog.build(idx)
+    # keep the page's initial count chip truthful (JS overwrites it live)
+    stamp_counts.stamp()
     return manifest
 
 

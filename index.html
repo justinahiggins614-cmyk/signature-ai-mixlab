@@ -105,6 +105,19 @@ button:disabled{opacity:.45;cursor:wait}
 .reclbl{font-size:10.5px;letter-spacing:.22em;color:var(--dim);margin-right:8px}
 .recbadge{display:inline-block;border:2px solid var(--gold);background:#2a1f0e;color:var(--gold);border-radius:10px;padding:3px 12px;font-size:12px;font-weight:bold;letter-spacing:.06em;margin:3px 6px 3px 0}
 .recbadge.mini{font-size:10px;padding:1px 8px;border-width:1px;margin:0 0 6px}
+/* USABILITY: stored vs on-demand is visually unmistakable — gold = stored in the archive, blue = computed on demand */
+.recbadge.archived{border-color:var(--gold);background:#2a1f0e;color:var(--gold)}
+.recbadge.ondemand{border-color:#7ad4ff;background:#0e2233;color:#aee6ff}
+.badgelegend{font-size:.85em;color:var(--dim);margin:8px 0;text-align:center}
+.badgelegend .recbadge{margin:0 4px 0 0}
+/* FIRST-TIME USER GUIDE: spotlight tour (theme-neutral; never traps content — Esc/Skip/arrows) */
+#tourscrim{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:200;display:none}
+#tourcard{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:201;background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:14px 16px;max-width:560px;width:calc(100% - 28px);display:none;text-align:left;max-height:70vh;overflow-y:auto}
+#tourcard h2{color:var(--gold);margin:.1em 0 .4em;font-size:1.12em}
+#tourcard p{margin:.35em 0;font-size:.93em}
+#tourcard .tbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#tourcard .tbtns button{min-height:44px;min-width:90px}
+.tour-hl{outline:3px solid var(--gold)!important;outline-offset:3px}
 .provline{font-size:.85em;color:var(--dim);margin:8px 0}
 .provline b{color:var(--amber);font-weight:normal}
 .recbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;align-items:center}
@@ -139,13 +152,15 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <h1>&#129518; The Signature AI Mix Lab</h1>
   <p>Every Signature AI, fused two by two, in a deterministic forge.<br>One million hybrids. Same pair, same hybrid — forever.</p>
   <p style="color:var(--dim);font-size:.92em;max-width:720px;margin:0 auto 6px">Two ways the forge works: <b style="color:var(--gold)">generated on demand</b> — type any hybrid number 1–1,000,000 and the forge computes it instantly, nothing stored; <b style="color:var(--gold)">stored in the archive</b> — hybrids already forged and saved below for browsing, searching, talking, and downloading.</p>
+  <p class="badgelegend"><span class="recbadge archived mini">ARCHIVED</span> = stored in the archive · <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live in your browser — nothing stored, identical every time</p>
   <details class="mstats" open><summary>Site statistics</summary>
   <div class="counter">
-    <div class="count"><div class="n" id="seededCount">…</div><small>hybrids stored in the archive / 1,000,000</small></div>
+    <div class="count"><div class="n" id="seededCount">17,000</div><small>hybrids stored in the archive / 1,000,000</small></div>
     <div class="count"><div class="n" id="yourCount">0</div><small>hybrids forged on this device (device-local)</small><br><button class="ghost" style="font-size:.75em;padding:2px 10px;margin-top:4px" onclick="resetForged()" title="Reset this device's forge counter">reset</button></div>
   </div>
   <div id="statverified" style="color:var(--dim);font-size:.8em;text-align:center;margin-top:4px"></div>
   </details>
+  <div style="text-align:center;margin:6px 0"><button class="ghost" onclick="startTour(true)" style="font-size:.9em">❓ First-time guide — take the 1-minute tour</button></div>
 </div>
 <div class="panel" id="forgepanel">
   <h2>Forge fresh hybrids</h2>
@@ -163,7 +178,8 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   </div></details>
   <details class="facc" open><summary>&#9314; Output</summary>
   <div id="forgemeta" style="margin-top:8px;color:var(--dim);font-size:.9em"></div>
-  <div class="cards" id="forgecards" style="margin-top:8px"></div></details>
+  <div class="cards" id="forgecards" style="margin-top:8px"></div>
+  <p class="badgelegend" style="text-align:left"><span class="recbadge archived mini">ARCHIVED</span> = stored in the archive · <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live — identical every time</p></details>
 </div>
 <div class="panel" id="comparepanel">
   <h2>Compare two hybrids</h2>
@@ -196,12 +212,39 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <div class="cards" id="browsecards"></div>
 </div>
 <div class="panel" id="fileview" aria-live="polite"></div>
+<details class="facc guide" id="guidepanel">
+<summary>❓ First-time user guide — what everything does</summary>
+<div style="margin-top:8px;font-size:.93em">
+<p><b>Forge fresh hybrids.</b> Type a hybrid number (1–1,000,000) and tap <b>Forge</b> — the forge computes 12 hybrids on demand, live in your browser, nothing stored. <b>Surprise me</b> draws a random dozen. <b>⟳ Regenerate</b> re-forges the same pairs to prove determinism: same pair, same hybrid, every time.</p>
+<p><b>Stored vs on demand.</b> <span class="recbadge archived mini">ARCHIVED</span> = the hybrid is stored in the archive (the count at the top of this page, growing with every drip). <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live in your browser — identical every time, nothing stored.</p>
+<p><b>Hybrid file (Open file).</b> The full record: mentality, abilities, both parents with links, lineage, forge seed, and a SHA-256 content hash with a <b>Verify Record</b> button. <b>⚠ Report record problem</b> builds a copy-ready report.</p>
+<p><b>Ask &amp; dial.</b> <b>Ask</b> answers from the hybrid's file only — it never invents. <b>📞 Dial this hybrid</b> opens a live session with the hybrid in its fused voice.</p>
+<p><b>Compare two hybrids.</b> Two numbers, side by side: parents, variant, seed, mentality.</p>
+<p><b>Browse the forged archive.</b> Search stored hybrids by name or parent; filter pills: All, Logic-led, Soul-led, 50/50, Word-AI parent, System × Persona. The A–Z bar jumps by first letter. Typing a JAH-MIX-###### ID jumps straight to it.</p>
+<p><b>Copy, download, share.</b> Copy the record text, download <b>.txt</b> or <b>.json</b>, or <b>Share</b> a link like <code>?mix=JAH-MIX-000042</code> — the link opens the same hybrid on any device, and survives a refresh.</p>
+<p><b>Read aloud.</b> The 🔊 button reads any hybrid file with tiered audio failover.</p>
+<p><b>Site statistics.</b> The top counter shows hybrids stored in the archive (live from the manifest); the second counts hybrids forged on this device only — <b>reset</b> clears it.</p>
+<p><button class="ghost" onclick="startTour(true)">▶ Replay the 1-minute guided tour</button></p>
+</div>
+</details>
 </main>
 <footer>
   <p>The forge is deterministic: hybrid <b>JAH-MIX-######</b> is always the same fusion of the same two parents, on any device, forever. Seeded hybrids are stored in lazy-loaded chunks; unseeded hybrids compute on demand.</p>
   <p>Persona archive parents are fan-style interpretations, not affiliated with any rights holder. All hybrid names, mentalities, and abilities are original Signature creations by Justin Addam Higgins.</p>
   <p>Cross-links: <a href="data/xlinks/dict-ai-terms.json">dictionary AI terms</a> · <a href="data/xlinks/wiki-mix-articles.json">wiki MIX: article resolution</a> · <a href="api.json">api.json</a> · <a href="mix-lab-catalog.json">catalog feed</a> · <a href="mixes.html">static index</a> · <a href="sitemap.xml">sitemap</a></p>
 </footer>
+</div>
+<!-- FIRST-TIME USER GUIDE: spotlight tour overlay (never traps content) -->
+<div id="tourscrim" aria-hidden="true"></div>
+<div id="tourcard" role="dialog" aria-labelledby="tourtitle" style="display:none">
+  <h2 id="tourtitle"></h2>
+  <div id="tourbody"></div>
+  <div class="tbtns">
+    <button id="tourback" onclick="tourBack()">← Back</button>
+    <button id="tournext" onclick="tourNext()">Next →</button>
+    <button class="ghost" id="tourskip" onclick="tourSkip()">Skip tour</button>
+  </div>
+  <p style="color:var(--dim);font-size:.8em">Tip: arrow keys move, Esc skips. Replay anytime with the ❓ First-time guide button.</p>
 </div>
 <script>
 "use strict";
@@ -388,11 +431,12 @@ function modalOpen(panel){var s=document.getElementById("scrim");if(s)s.style.di
 function modalClose(panel){var s=document.getElementById("scrim");if(s)s.style.display="none";if(panel&&panel.classList)panel.classList.remove("modal-open");document.body.style.overflow="";}
 /* FIX-03: collapse stat tickers on small screens */
 function collapseStatsMobile(){try{if(window.innerWidth<768){var d=document.querySelector("details.mstats");if(d)d.removeAttribute("open");}}catch(e){}}
-/* record-status badge: ARCHIVED vs COMPUTED-ON-DEMAND — never confuse the two */
+/* record-status badge: ARCHIVED (stored) vs COMPUTED ON DEMAND — visually
+   distinct classes, never confused */
 function statusBadge(){
  var s=(CUR&&CUR._status)||"";
- if(s.indexOf("ARCHIVED")===0)return '<span class="recbadge">ARCHIVED</span>';
- return '<span class="recbadge">COMPUTED-ON-DEMAND</span>';
+ if(s.indexOf("ARCHIVED")===0)return '<span class="recbadge archived">ARCHIVED</span>';
+ return '<span class="recbadge ondemand">COMPUTED ON DEMAND</span>';
 }
 async function fillHash(){
  var el=document.getElementById("fvhash");if(!el||!CUR)return;
@@ -622,9 +666,15 @@ function parentLinkHTML(p){
  }
  return '<a href="'+url+'" target="_blank" rel="noopener">'+esc(p.name)+'</a> <span style="color:var(--dim)">'+esc(p.id)+'</span>';
 }
+/* card badge: stored vs on-demand, unmistakable at a glance */
+function cardBadge(r){
+ var a=(r&&r._status||"").indexOf("ARCHIVED")===0;
+ return a?'<span class="recbadge mini archived">ARCHIVED</span>'
+          :'<span class="recbadge mini ondemand">COMPUTED ON DEMAND</span>';
+}
 function cardHTML(r){
  var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
- return '<div class="card"><span class="recbadge mini">GENERATED</span><h3>'+esc(r.name)+'</h3>'+
+ return '<div class="card">'+cardBadge(r)+'<h3>'+esc(r.name)+'</h3>'+
  '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · pair '+r.n.toLocaleString()+' of 1,000,000</div>'+
  '<div class="par">Parent A: '+parentLinkHTML(r.parentA)+'<br>Parent B: '+parentLinkHTML(r.parentB)+'</div>'+
  '<div class="par" style="margin-top:4px">Forge seed: <code>'+esc(seedOf(r))+'</code> · '+esc(vname)+'</div>'+
@@ -676,14 +726,18 @@ async function forgeBatch(start,count,srcLabel){
  forgeStep("Heating the forge…");
  box.innerHTML="";
  try{await ensureBase();await ensureWordai()}catch(e){forgeStep("Forge needs a connection for parent records ("+e.message+").");if(b1)b1.disabled=false;if(b2)b2.disabled=false;return}
+ var seeded=0;try{var api=await ensureApi();seeded=(api.counts&&api.counts.seeded_hybrids)||0}catch(e2){}
  forgeStep("Fusing "+count+" pairs…");
  var html="";
- for(var k=0;k<count;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
+ for(var k=0;k<count;k++){try{var r=makeHybrid(start+k);r._status=(start+k<=seeded)?"ARCHIVED":"COMPUTED-ON-DEMAND";html+=cardHTML(r)}catch(e){}}
  await new Promise(function(r){setTimeout(r,350)});
  box.innerHTML=html;bumpForged(count);LASTFORGE=start;
  try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
  var meta=document.getElementById("forgemeta");
- if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+count-1).toLocaleString()+' · '+esc(srcLabel)+' · <button class="ghost" onclick="forgeRegen()">⟳ Regenerate (same pairs)</button> <span id="regenmsg" style="color:var(--amber)"></span>';
+ var inArchive=(seeded>0&&start+count-1<=seeded);
+ if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+count-1).toLocaleString()+' · '+esc(srcLabel)+
+  (inArchive?' · <span class="recbadge mini archived">ARCHIVED</span> stored in the archive':' · <span class="recbadge mini ondemand">COMPUTED ON DEMAND</span>')+
+  ' · <button class="ghost" onclick="forgeRegen()">⟳ Regenerate (same pairs)</button> <span id="regenmsg" style="color:var(--amber)"></span>';
  if(tick)tick.innerHTML="✓ "+count+" hybrids forged — pair "+start.toLocaleString()+" to "+(start+count-1).toLocaleString();
  if(b1)b1.disabled=false;if(b2)b2.disabled=false;
 }
@@ -711,8 +765,9 @@ async function forgeRegen(){
  var box=document.getElementById("forgecards"),msg=document.getElementById("regenmsg");
  forgeStep("Regenerating the same 12 pairs…");
  await ensureBase();await ensureWordai();
+ var seeded=0;try{var rapi=await ensureApi();seeded=(rapi.counts&&rapi.counts.seeded_hybrids)||0}catch(e2){}
  var before=box.innerHTML,html="";
- for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(LASTFORGE+k))}catch(e){}}
+ for(var k=0;k<12;k++){try{var rr=makeHybrid(LASTFORGE+k);rr._status=(LASTFORGE+k<=seeded)?"ARCHIVED":"COMPUTED-ON-DEMAND";html+=cardHTML(rr)}catch(e){}}
  await new Promise(function(r){setTimeout(r,350)});
  box.innerHTML=html;
  if(msg)msg.textContent=(html===before)?"✓ Identical output — same pair, same hybrid, every time.":"(output differed — report this)";
@@ -722,9 +777,9 @@ async function forgeRegen(){
 function cmpNum(id){var v=document.getElementById(id).value.trim();if(!/^\d+$/.test(v))return 0;var n=parseInt(v,10);return(n>=1&&n<=AFMAX)?n:0}
 function cmpCard(r){
  var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
- var st=(r._status||"").indexOf("ARCHIVED")===0?"ARCHIVED":"COMPUTED-ON-DEMAND";
+ var stA=(r._status||"").indexOf("ARCHIVED")===0;
  return '<div class="card"><h3>'+esc(r.name)+'</h3>'+
- '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · '+esc(st)+'</div>'+
+ '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · '+(stA?'<span class="recbadge mini archived">ARCHIVED</span>':'<span class="recbadge mini ondemand">COMPUTED ON DEMAND</span>')+'</div>'+
  '<div class="par">Parent A: '+esc(r.parentA.name)+' <span style="color:var(--dim)">'+esc(r.parentA.id)+'</span><br>'+
  'Parent B: '+esc(r.parentB.name)+' <span style="color:var(--dim)">'+esc(r.parentB.id)+'</span></div>'+
  '<div class="par" style="margin-top:4px">'+esc(vname)+' · forge seed <code>'+esc(seedOf(r))+'</code></div>'+
@@ -813,7 +868,7 @@ function forgeAccordion(){
 }
 /* ============ boot ============ */
 function parseMixParam(s){
- if(!s)return 0;var m=/JAH-MIX-(\d{1,6})/i.exec(s);if(m)return parseInt(m[1],10);
+ if(!s)return 0;var m=/^JAH-MIX-(\d{1,6})$/i.exec(s);if(m)return parseInt(m[1],10);
  var n=parseInt(s,10);return (n>=1&&n<=AFMAX)?n:0;
 }
 /* counts: live from the manifest, cached copy labeled when offline, retry when unreachable */
@@ -844,6 +899,8 @@ async function boot(){
  var qs=new URLSearchParams(location.search),mix=parseMixParam(qs.get("mix")),q=qs.get("q");
  if(mix){openHybrid(mix,true);try{history.replaceState(null,"","?mix=JAH-MIX-"+String(mix).padStart(6,"0"))}catch(e){}}
  else if(q){document.getElementById("q").value=q;doSearch()}
+ /* first-time user guide: 1-minute spotlight tour, once per device */
+ try{if(typeof startTour==="function")startTour(false)}catch(e){}
 }
 document.addEventListener("DOMContentLoaded",boot);
 </script>
@@ -878,6 +935,66 @@ if(typeof openHybrid==='function' && !openHybrid._jahWrapped){
 }
 document.addEventListener('click',function(e){ var t=e.target&&e.target.closest?e.target.closest('[data-record],[data-spec],[data-patent],[data-id]'):null; if(t){ var rid=t.getAttribute('data-record')||t.getAttribute('data-spec')||t.getAttribute('data-patent')||t.getAttribute('data-id'); if(rid) lsSet('jah-lastrec:'+location.pathname,rid); } },true);
 window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) return; var rid=lsGet('jah-lastrec:'+location.pathname); if(!rid) return; setTimeout(function(){ var el=document.querySelector('[data-record="'+rid+'"],[data-spec="'+rid+'"],[data-patent="'+rid+'"],[data-id="'+rid+'"]'); if(!el){ var cards=document.querySelectorAll('.card'); for(var i=0;i<cards.length;i++){ if(cards[i].textContent.indexOf(rid)>=0){ el=cards[i]; break; } } } if(el){ try{el.scrollIntoView({block:'center'});}catch(e){} } },400); });
+})();
+</script>
+<script>
+/* FIRST-TIME USER GUIDE: 1-minute spotlight tour (localStorage jah-tour-seen-mixlab).
+   Start/Skip on step 1, Next/Back after, Esc/arrows keyboard, touch-sized
+   buttons, scrim-click dismisses — never blocks content. Theme untouched. */
+(function(){
+'use strict';
+var KEY='jah-tour-seen-mixlab',I=-1,HL=null;
+var STEPS=[
+ {sel:'.hero h1',t:'Welcome to the Mix Lab',
+  what:'The Signature AI Mix Lab — the hybrid forge.',
+  does:'Fuses any two Signature AIs into a brand-new hybrid AI. 1,000,000 possible hybrids, and the same number always makes the same hybrid — forever.',
+  how:'This 1-minute tour walks each part. Use Next (or the → key), Back (or ←), or Skip (or Esc) anytime. Replay later with the ❓ First-time guide button.'},
+ {sel:'#forgenum',t:'The hybrid number',
+  what:'The hybrid number box.',
+  does:'Picks exactly which of the 1,000,000 hybrids you get — every number is a different fusion of two AIs.',
+  how:'Type any whole number from 1 to 1,000,000, then tap Forge. 0, numbers past a million, and letters are rejected with a plain message.'},
+ {sel:'#forgebtn',t:'Forge',
+  what:'The Forge button — and Surprise me beside it.',
+  does:'Computes 12 hybrids on demand. Nothing is stored: the forge calculates them live in your browser.',
+  how:'Tap Forge for your number, or Surprise me for a random dozen. Watch the badges: ARCHIVED means stored in the archive, COMPUTED ON DEMAND means forged live.'},
+ {sel:'#forgecards',t:'Parents',
+  what:'The parent lines on each hybrid card.',
+  does:'Shows the two real AIs that were fused — every parent resolves to a real Signature AI from the Phone Book, or a word-born AI.',
+  how:'Tap a parent name to open that AI in the Phone Book or its dictionary word. Open file shows the full record.'},
+ {sel:'#comparepanel',t:'Compare',
+  what:'Compare two hybrids.',
+  does:'Puts any two hybrids side by side — parents, variant, seed, mentality.',
+  how:'Type two hybrid numbers and tap Compare.'},
+ {sel:'#q',t:'Archive search',
+  what:'The archive search box.',
+  does:'Searches the stored hybrids (the ARCHIVED ones) by name or parent, with filter pills for fusion style and parent type.',
+  how:'Type a name or parent, pick a filter, tap Search. The A–Z bar jumps by first letter. Anything not stored can still be forged above by number.'},
+ {sel:'#forgepanel',t:'Talk & download',
+  what:'Open file — talk, dial, download.',
+  does:'Every hybrid has a full file: ask it questions, dial it for a live session, copy or download its record, share its link.',
+  how:'Tap Open file on any card, then use Ask, Dial this hybrid, Copy, .txt/.json, and Share in the file view.'}
+];
+function el(id){return document.getElementById(id)}
+function clearHL(){if(HL){try{HL.classList.remove('tour-hl')}catch(e){}HL=null}}
+function show(i){
+ I=i;var s=STEPS[i];if(!s){end(true);return}
+ clearHL();
+ var t=null;try{t=document.querySelector(s.sel)}catch(e){}
+ if(t){try{t.scrollIntoView({behavior:'smooth',block:'center'})}catch(e2){}try{t.classList.add('tour-hl')}catch(e3){}HL=t}
+ el('tourtitle').textContent='Step '+(i+1)+' of '+STEPS.length+': '+s.t;
+ el('tourbody').innerHTML='<p><b>WHAT</b> — '+s.what+'</p><p><b>WHAT IT DOES</b> — '+s.does+'</p><p><b>HOW</b> — '+s.how+'</p>';
+ el('tourback').style.display=i>0?'':'none';
+ el('tournext').textContent=(i===STEPS.length-1)?'Finish ✓':'Next →';
+ el('tourscrim').style.display='block';el('tourcard').style.display='block';
+ try{el('tournext').focus()}catch(e){}
+}
+function end(mark){try{if(mark)localStorage.setItem(KEY,'1')}catch(e){}clearHL();I=-1;var c=el('tourcard'),s=el('tourscrim');if(c)c.style.display='none';if(s)s.style.display='none'}
+window.startTour=function(force){if(!force){try{if(localStorage.getItem(KEY))return}catch(e){}}show(0)};
+window.tourNext=function(){if(I<STEPS.length-1)show(I+1);else end(true)};
+window.tourBack=function(){if(I>0)show(I-1)};
+window.tourSkip=function(){end(true)};
+document.addEventListener('keydown',function(e){if(I<0)return;if(e.key==='Escape')window.tourSkip();else if(e.key==='ArrowRight')window.tourNext();else if(e.key==='ArrowLeft')window.tourBack()});
+var ts=el('tourscrim');if(ts)ts.onclick=function(){window.tourSkip()};
 })();
 </script>
 </body>
