@@ -4,10 +4,10 @@
  "site": "The Signature AI Mix Lab",
  "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
  "title_status": "provisional \u2014 pending Manon's confirmation",
- "generated_at": "2026-10-03T18:11:29.397360+00:00",
+ "generated_at": "2026-10-03T20:11:32.672608+00:00",
  "counts": {
-  "seeded_hybrids": 15000,
-  "forged_through": 15000,
+  "seeded_hybrids": 16000,
+  "forged_through": 16000,
   "goal": 1000000,
   "parent_ais": 260,
   "word_ai_slots": 100000,
@@ -32,8 +32,8 @@
   "note": "Generator v1 pool is pinned: new phone-book AIs do NOT enter the v1 pool (would break 'same pair, same hybrid'). Pending additions (eligible for a future generator v2): JAH-AI-DOM-244..253."
  },
  "index": {
-  "rows": 15000,
-  "sha256": "178666d013b0168ba4003a33c9c808fceaac010e7386579ab2220cd38d64aaec",
+  "rows": 16000,
+  "sha256": "96e9afd2bc1392ecfda328d0d1063bb8a6f4d1df4a74d69c81af58fd7afe8071",
   "path": "data/index/mixes.idx.json.gz"
  },
  "chunks": [
@@ -936,6 +936,69 @@
    "schema_version": "1",
    "sha256": "a303a636352ba15de126749162269334d819ccc4a6781f37f98c67ce069ca062",
    "generated": "2026-10-03T18:11:17.645969+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00101",
+   "first_n": 15001,
+   "last_n": 15150,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "97b289fd659fac114f2035a5f30cff0e0709fda4316c033b190c4258c69959ab",
+   "generated": "2026-10-03T20:11:24.750594+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00102",
+   "first_n": 15151,
+   "last_n": 15300,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "1660b20c844e8ab0057d120bb46cd3d94648d2f3946217a8d33ca4977dffd3cc",
+   "generated": "2026-10-03T20:11:24.759865+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00103",
+   "first_n": 15301,
+   "last_n": 15450,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "5ef238f0437ebfef7081cf5395e67289ae89973d1d2fa0609e57b53fb4ba49d6",
+   "generated": "2026-10-03T20:11:24.775676+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00104",
+   "first_n": 15451,
+   "last_n": 15600,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "5dbe721ca43a16a6c8d5f2523ece98ba849819efde02c5d662b8f5d22844f1dc",
+   "generated": "2026-10-03T20:11:24.785881+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00105",
+   "first_n": 15601,
+   "last_n": 15750,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "7202fcf6530691e7028b4e20dc5bee2aabc24201c444ff066af81ee7e482bb9f",
+   "generated": "2026-10-03T20:11:24.798622+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00106",
+   "first_n": 15751,
+   "last_n": 15900,
+   "record_count": 150,
+   "schema_version": "1",
+   "sha256": "d01816173ea8a3f1a47342991c6f0c44389fe8686106fa0201c8869bd94c11b4",
+   "generated": "2026-10-03T20:11:24.816400+00:00"
+  },
+  {
+   "chunk_id": "mixes-c00107",
+   "first_n": 15901,
+   "last_n": 16000,
+   "record_count": 100,
+   "schema_version": "1",
+   "sha256": "9582de4d795080c8b2acaa87480a0c3795fd687bef5265237db9a0754062f017",
+   "generated": "2026-10-03T20:11:24.822403+00:00"
   }
  ],
  "sitemaps": [
@@ -944,10 +1007,11 @@
   "sitemap-mixes-3.xml",
   "sitemap-mixes-4.xml",
   "sitemap-mixes-5.xml",
-  "sitemap-mixes-6.xml"
+  "sitemap-mixes-6.xml",
+  "sitemap-mixes-7.xml"
  ],
  "integrity": {
-  "chunk_total": 15000,
+  "chunk_total": 16000,
   "duplicate_ids": 0,
   "missing_ids": [],
   "missing_count": 0,
@@ -979,7 +1043,7 @@
   "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/"
  ],
  "health": {
-  "last_build": "2026-10-03T18:11:29.397360+00:00",
+  "last_build": "2026-10-03T20:11:32.672608+00:00",
   "checks_passed": null,
   "status": "unknown"
  }
