@@ -95,6 +95,9 @@ runSrc("WORDAIMAP=" + JSON.stringify(wmap) + ";WORDAI=true;", "wordaimap");
 const idx = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(ROOT, "data", "index", "mixes.idx.json.gz"))).toString());
 runSrc("SEEDIDX=" + JSON.stringify(idx) + ";", "seedidx");
 runSrc("APIINFO=" + JSON.stringify({ counts: { seeded_hybrids: idx.length }, _live: true }) + ";", "apiinfo");
+const SEEDN = idx.length;
+const MANIFEST = JSON.parse(fs.readFileSync(path.join(ROOT, "mixlab-manifest.json"), "utf8"));
+const SEEDSTR = MANIFEST.counts.seeded_hybrids.toLocaleString("en-US");
 
 const S = (src) => vm.runInContext(src, sandbox);
 
@@ -126,7 +129,7 @@ async function main() {
   ok("parseMixParam: garbage -> 0", S("parseMixParam('nope')") === 0);
 
   /* ===== 4. determinism: same number twice (item 14) ===== */
-  for (const N of [1, 1000, 424242, 1000000, 16000, 16001]) {
+  for (const N of [1, 1000, 424242, 1000000, SEEDN, SEEDN + 1]) {
     const a = JSON.stringify(S(`makeHybrid(${N})`));
     const b = JSON.stringify(S(`makeHybrid(${N})`));
     ok(`determinism: makeHybrid(${N}) byte-identical twice`, a === b);
@@ -165,10 +168,10 @@ print(json.dumps(out))`;
   const g1 = await S("getHybrid(1)");
   ok("getHybrid(1): ARCHIVED status", String(g1._status).indexOf("ARCHIVED") === 0, g1._status);
   ok("getHybrid(1): archive hash stamped", typeof g1._hash === "string" && g1._hash.length === 64);
-  const gMax = await S("getHybrid(16000)");
-  ok("getHybrid(16000): ARCHIVED (last seeded)", String(gMax._status).indexOf("ARCHIVED") === 0);
-  const gNext = await S("getHybrid(16001)");
-  ok("getHybrid(16001): COMPUTED-ON-DEMAND", gNext._status === "COMPUTED-ON-DEMAND");
+  const gMax = await S(`getHybrid(${SEEDN})`);
+  ok(`getHybrid(${SEEDN}): ARCHIVED (last seeded)`, String(gMax._status).indexOf("ARCHIVED") === 0);
+  const gNext = await S(`getHybrid(${SEEDN + 1})`);
+  ok(`getHybrid(${SEEDN + 1}): COMPUTED-ON-DEMAND`, gNext._status === "COMPUTED-ON-DEMAND");
   const gM = await S("getHybrid(1000000)");
   ok("getHybrid(1000000): COMPUTED-ON-DEMAND", gM._status === "COMPUTED-ON-DEMAND");
 
@@ -178,8 +181,9 @@ print(json.dumps(out))`;
     const N = +ns, rec = await S(`getHybrid(${N})`);
     sandbox.CUR = rec;
     const hh = await S("recordHash(CUR)");
-    ok(`content hash: N=${N} JS recompute == archive hash == vector`,
-      hh === rec._hash && hh === vectors[ns].content_hash, hh + " vs " + rec._hash);
+    const archived = N <= SEEDN;
+    ok(`content hash: N=${N} JS recompute == vector${archived ? " == archive hash" : " (unseeded, no archive hash)"}`,
+      hh === vectors[ns].content_hash && (!archived || hh === rec._hash), hh + " vs " + rec._hash);
   }
 
   /* ===== 8. forge batch: Surprise-me range (item 9) ===== */
@@ -187,7 +191,7 @@ print(json.dumps(out))`;
     await S("forgeRandom()");
     await new Promise(r => setTimeout(r, 600)); /* forgeRandom fires forgeBatch un-awaited */
     const lf = S("LASTFORGE");
-    ok(`forgeRandom #${k + 1}: start in seeded range 1..15988`, lf >= 1 && lf <= 15988, lf);
+    ok(`forgeRandom #${k + 1}: start in seeded range 1..${SEEDN - 12}`, lf >= 1 && lf <= SEEDN - 12, lf);
   }
 
   /* ===== 9. forgeBatch full path (item 10) ===== */
@@ -274,7 +278,7 @@ print(json.dumps(out))`;
 
   /* ===== 13. parent resolution vs phone-book canon (item 15) ===== */
   const catalog = JSON.parse(fs.readFileSync("/home/hatch/workspace/jah-ai-models/ai-catalog.json", "utf8"));
-  const canonIds = new Set((catalog.records || []).map(r => r.id));
+  const canonIds = new Set((catalog.records || []).map(r => r.ID));
   const base = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "base-ais.json"), "utf8"));
   const missing = base.filter(b => !canonIds.has(b.id));
   ok("parent pool: all 260 base AIs resolve in phone-book canon", missing.length === 0, missing.map(m => m.id).slice(0, 5).join(","));
@@ -286,7 +290,7 @@ print(json.dumps(out))`;
 
   /* ===== 14. counts surface (item 2) ===== */
   await S("refreshCounts()");
-  ok("refreshCounts: seeded count reads 16,000", els["seededCount"].textContent === "16,000", els["seededCount"].textContent);
+  ok(`refreshCounts: seeded count reads ${SEEDSTR}`, els["seededCount"].textContent === SEEDSTR, els["seededCount"].textContent);
   ok("refreshCounts: live label", /live from the manifest/.test(els["statverified"].textContent));
   runSrc("APIINFO={counts:{seeded_hybrids:0},_live:false,_unavailable:true};", "apifail");
   await S("refreshCounts()");
@@ -313,8 +317,8 @@ print(json.dumps(out))`;
   ok("guide panel present in raw HTML", /id="guidepanel"/.test(html) && /id="tourcard"/.test(html));
 
   /* ===== 17. stamped initial count in raw HTML (universal loading pattern) ===== */
-  ok("raw HTML boots seededCount with real number, not bare …",
-    /id="seededCount">16,000</.test(html), (html.match(/id="seededCount">[^<]*/)||["?"])[0]);
+  ok(`raw HTML boots seededCount with real number (${SEEDSTR}), not bare …`,
+    html.includes(`id="seededCount">${SEEDSTR}<`), (html.match(/id="seededCount">[^<]*/)||["?"])[0]);
 
   /* ===== 18. chunk naming (stored archive integrity) ===== */
   ok("chunkName(1)", S("chunkName(1)") === "mixes-c00001.jsonl.gz");
