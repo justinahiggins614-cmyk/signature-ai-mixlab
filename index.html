@@ -106,11 +106,11 @@ button:disabled{opacity:.45;cursor:wait}
 <main id="main">
 <div class="hero">
   <h1>&#129518; The Signature AI Mix Lab</h1>
-  <p class="prov">Working title — pending Manon's confirmation.</p>
   <p>Every Signature AI, fused two by two, in a deterministic forge.<br>One million hybrids. Same pair, same hybrid — forever.</p>
+  <p style="color:var(--dim);font-size:.92em;max-width:720px;margin:0 auto 6px">Two ways the forge works: <b style="color:var(--gold)">generated on demand</b> — type any hybrid number 1–1,000,000 and the forge computes it instantly, nothing stored; <b style="color:var(--gold)">stored in the archive</b> — hybrids already forged and saved below for browsing, searching, talking, and downloading.</p>
   <details class="mstats" open><summary>Site statistics</summary>
   <div class="counter">
-    <div class="count"><div class="n" id="seededCount">…</div><small>hybrids forged on site / 1,000,000</small></div>
+    <div class="count"><div class="n" id="seededCount">…</div><small>hybrids stored in the archive / 1,000,000</small></div>
     <div class="count"><div class="n" id="yourCount">0</div><small>hybrids you forged this device</small></div>
   </div>
   </details>
@@ -129,6 +129,7 @@ button:disabled{opacity:.45;cursor:wait}
     <div class="tick" id="forgetick" style="display:none" aria-live="polite"></div>
   </div></details>
   <details class="facc" open><summary>&#9314; Output</summary>
+  <div id="forgemeta" style="margin-top:8px;color:var(--dim);font-size:.9em"></div>
   <div class="cards" id="forgecards" style="margin-top:8px"></div></details>
 </div>
 <div class="panel">
@@ -434,10 +435,33 @@ function dialReply(q){
 function hangup(){if(DIAL)dlog("sys","*click* — line closed. The forge is always hot.");DIAL=null}
 /* ============ forge fresh hybrids ============ */
 function bumpForged(n){try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10)+n;localStorage.setItem("mixlab_forged",String(c));var e=document.getElementById("yourCount");if(e)e.textContent=c.toLocaleString()}catch(e){}}
+/* FIX-18 follow-up: rich forge-result cards — parents, permanent ID, seed, talk/download/share */
+function seedOf(r){return "MIX-"+r.n+"-V"+r.variant+"-E1"}
+function parentLinkHTML(p){
+ var url="https://justinahiggins614-cmyk.github.io/jah-ai-models/";
+ if(p.type==="word"&&/^JAH-AI-WORD-(\d+)$/.test(p.id)){
+  var wid=parseInt(p.id.split("-")[3],10),word=(typeof WORDAIMAP!=="undefined"&&WORDAIMAP)?WORDAIMAP[wid]:"";
+  if(word)url="https://justinahiggins614-cmyk.github.io/jah-dictionary/?w="+encodeURIComponent(word);
+ }
+ return '<a href="'+url+'" target="_blank" rel="noopener">'+esc(p.name)+'</a> <span style="color:var(--dim)">'+esc(p.id)+'</span>';
+}
 function cardHTML(r){
- return '<div class="card"><h3>'+esc(r.name)+'</h3><div class="st">'+esc(r.stamp)+' · pair '+r.n.toLocaleString()+'</div>'+
- '<div class="par">'+esc(r.parentA.name)+' \u00D7 '+esc(r.parentB.name)+'</div>'+
- '<div class="row"><button onclick="openHybrid('+r.n+')">Open file</button><button class="ghost" onclick="openHybrid('+r.n+').then(startDial)">\uD83D\uDCDE Dial</button></div></div>';
+ var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
+ return '<div class="card"><h3>'+esc(r.name)+'</h3>'+
+ '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · pair '+r.n.toLocaleString()+' of 1,000,000</div>'+
+ '<div class="par">Parent A: '+parentLinkHTML(r.parentA)+'<br>Parent B: '+parentLinkHTML(r.parentB)+'</div>'+
+ '<div class="par" style="margin-top:4px">Forge seed: <code>'+esc(seedOf(r))+'</code> · '+esc(vname)+'</div>'+
+ '<div class="row"><button onclick="openHybrid('+r.n+')">Open file</button>'+
+ '<button class="ghost" onclick="talkTo('+r.n+')">\uD83D\uDCAC Talk</button>'+
+ '<button class="ghost" onclick="dlForge('+r.n+')">\u2B07 .txt</button>'+
+ '<button class="ghost" onclick="shareHybrid(this,'+r.n+')">Share</button></div></div>';
+}
+function talkTo(n){openHybrid(n).then(function(){var q=document.getElementById("qain");if(q){try{q.focus()}catch(e){}try{q.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){}}})}
+async function dlForge(n){try{var r=await getHybrid(n);var blob=new Blob([fileText(r)],{type:"text/plain"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=r.stamp+".txt";a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)}catch(e){}}
+function shareHybrid(btn,n){
+ var url="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-"+String(n).padStart(6,"0");
+ function done(){btn.textContent="Link copied ✓";setTimeout(function(){btn.textContent="Share"},1500)}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done,function(){done()})}else{done()}
 }
 /* FIX-18-05: forge feedback — animated ticker, button disabling during the cycle */
 function forgeStep(t){var tick=document.getElementById("forgetick");if(tick)tick.innerHTML='<span class="spin"></span> '+esc(t)}
@@ -456,12 +480,26 @@ async function forgeFresh(){
  var html="";
  for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
  await new Promise(function(r){setTimeout(r,350)});
- box.innerHTML=html;bumpForged(12);
+ box.innerHTML=html;bumpForged(12);LASTFORGE=start;
  try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
+ var meta=document.getElementById("forgemeta");
+ if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+11).toLocaleString()+' · <button class="ghost" onclick="forgeRegen()">⟳ Regenerate (same pairs)</button> <span id="regenmsg" style="color:var(--amber)"></span>';
  if(tick)tick.innerHTML="✓ 12 hybrids forged — pair "+start.toLocaleString()+" to "+(start+11).toLocaleString();
  if(b1)b1.disabled=false;if(b2)b2.disabled=false;
 }
-function forgeRandom(){document.getElementById("forgenum").value=1+Math.floor(Math.random()*AFMAX);forgeFresh()}
+var LASTFORGE=0;
+async function forgeRegen(){
+ if(!LASTFORGE)return;
+ var box=document.getElementById("forgecards"),msg=document.getElementById("regenmsg");
+ forgeStep("Regenerating the same 12 pairs…");
+ await ensureBase();await ensureWordai();
+ var before=box.innerHTML,html="";
+ for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(LASTFORGE+k))}catch(e){}}
+ await new Promise(function(r){setTimeout(r,350)});
+ box.innerHTML=html;
+ if(msg)msg.textContent=(html===before)?"✓ Identical output — same pair, same hybrid, every time.":"(output differed — report this)";
+ forgeStep("✓ Regenerated pairs "+LASTFORGE.toLocaleString()+"–"+(LASTFORGE+11).toLocaleString()+" — compare with the first forge.");
+}
 /* ============ search + A–Z over seeded index ============ */
 /* FIX-18-06: filter pills (variant + parent type) over the seeded index */
 var PILLF="all";
