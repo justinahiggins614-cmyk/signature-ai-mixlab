@@ -6,6 +6,7 @@
 <title>The Signature AI Mix Lab — Forge 1,000,000 AI Hybrids</title>
 <meta name="description" content="The Signature AI Mix Lab: a deterministic forge blending every Signature AI into 1,000,000 hybrids (JAH-MIX-######). Read aloud, copy, download, dial, and ask each hybrid anything. Sister site of the Signature AI Phone Book and AI Olypics.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">
+<link rel="alternate" type="application/json" title="Mix Lab catalog feed" href="mix-lab-catalog.json">
 <script src="js/jah-talk-fallback.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"The Signature AI Mix Lab",
@@ -76,6 +77,19 @@ details.mstats>summary::-webkit-details-marker{display:none}
 #fileview.modal-open{position:relative;z-index:100;max-height:calc(100vh - 24px);overflow-y:auto}
 /* FIX-05: sticky A-Z index bar */
 .az{position:sticky;top:0;background:#14100b;z-index:60;padding:8px 0}
+/* FIX-18: spinner, status ticker, filter pills, sticky browse bar, mobile forge accordion */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--amber);border-radius:50%;animation:spn .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes spn{to{transform:rotate(360deg)}}
+.tick{color:var(--amber);font-size:.92em;margin:8px 0;min-height:1.4em}
+button:disabled{opacity:.45;cursor:wait}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.pill{background:transparent;color:var(--gold);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.85em;font-weight:normal}
+.pill.on{background:var(--molten);color:#14100b;border-color:var(--molten);font-weight:bold}
+.browsetop{position:sticky;top:0;z-index:55;background:var(--panel);padding:8px 0}
+.facc{border:1px solid var(--line);border-radius:10px;margin:10px 0;padding:8px 12px}
+.facc>summary{cursor:pointer;color:var(--gold);font-weight:bold;font-size:1.05em;list-style:none}
+.facc>summary::-webkit-details-marker{display:none}
+@media(min-width:768px){.facc>summary{cursor:default}}
 </style>
 </head>
 <body>
@@ -104,20 +118,36 @@ details.mstats>summary::-webkit-details-marker{display:none}
 <div class="panel" id="forgepanel">
   <h2>Forge fresh hybrids</h2>
   <p style="color:var(--dim)">Pick a hybrid number (1–1,000,000). The forge computes it on demand — no waiting, no storage.</p>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)">
-    <button onclick="forgeFresh()">&#128293; Forge 12</button>
-    <button class="ghost" onclick="forgeRandom()">&#127922; Surprise me</button>
-  </div>
-  <div class="cards" id="forgecards"></div>
+  <details class="facc" open><summary>&#9312; Inputs</summary>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
+    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)" aria-label="Hybrid number">
+    <button class="ghost" id="surprisebtn" onclick="forgeRandom()">&#127922; Surprise me</button>
+  </div></details>
+  <details class="facc" open><summary>&#9313; Blend</summary>
+  <div style="margin-top:8px">
+    <button id="forgebtn" onclick="forgeFresh()">&#128293; Forge 12</button>
+    <div class="tick" id="forgetick" style="display:none" aria-live="polite"></div>
+  </div></details>
+  <details class="facc" open><summary>&#9314; Output</summary>
+  <div class="cards" id="forgecards" style="margin-top:8px"></div></details>
 </div>
 <div class="panel">
   <h2>Browse the forged archive</h2>
+  <div class="browsetop">
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
     <input type="text" id="q" placeholder="Search hybrids by name or parent…" aria-label="Search hybrids">
-    <button onclick="doSearch()">Search</button>
+    <button id="searchbtn" onclick="doSearch()">Search</button>
+  </div>
+  <div class="pills" id="pills" role="group" aria-label="Filter hybrids">
+    <button class="pill on" data-f="all" onclick="setPill(this)">All</button>
+    <button class="pill" data-f="v0" onclick="setPill(this)">Logic-led</button>
+    <button class="pill" data-f="v1" onclick="setPill(this)">Soul-led</button>
+    <button class="pill" data-f="v2" onclick="setPill(this)">50/50</button>
+    <button class="pill" data-f="word" onclick="setPill(this)">Word-AI parent</button>
+    <button class="pill" data-f="sysper" onclick="setPill(this)">System × Persona</button>
   </div>
   <div class="az" id="az"></div>
+  </div>
   <div class="cards" id="browsecards"></div>
 </div>
 <div class="panel" id="fileview" aria-live="polite"></div>
@@ -125,7 +155,7 @@ details.mstats>summary::-webkit-details-marker{display:none}
 <footer>
   <p>The forge is deterministic: hybrid <b>JAH-MIX-######</b> is always the same fusion of the same two parents, on any device, forever. Seeded hybrids are stored in lazy-loaded chunks; unseeded hybrids compute on demand.</p>
   <p>Persona archive parents are fan-style interpretations, not affiliated with any rights holder. All hybrid names, mentalities, and abilities are original Signature creations by Justin Addam Higgins.</p>
-  <p>Cross-links: <a href="data/xlinks/dict-ai-terms.json">dictionary AI terms</a> · <a href="data/xlinks/wiki-mix-articles.json">wiki MIX: article resolution</a> · <a href="api.json">api.json</a> · <a href="sitemap.xml">sitemap</a></p>
+  <p>Cross-links: <a href="data/xlinks/dict-ai-terms.json">dictionary AI terms</a> · <a href="data/xlinks/wiki-mix-articles.json">wiki MIX: article resolution</a> · <a href="api.json">api.json</a> · <a href="mix-lab-catalog.json">catalog feed</a> · <a href="mixes.html">static index</a> · <a href="sitemap.xml">sitemap</a></p>
 </footer>
 </div>
 <script>
@@ -281,14 +311,29 @@ async function openHybrid(N,quiet){
  logQA("sys","This is "+CUR.name+" ("+CUR.stamp+"), born of "+CUR.parentA.name+" and "+CUR.parentB.name+". Ask me anything about my file.");
 }
 function closeFile(){rdStop();var box=document.getElementById("fileview");modalClose(box);box.style.display="none";try{history.replaceState(null,"",location.pathname)}catch(e){}}
+/* FIX-18-01: enriched hybrid schema — ID, parents + lineage, fusion parameters, creator */
 function setJSONLD(){
  var old=document.getElementById("jld-rec");if(old)old.remove();
  if(!CUR)return;
  var s=document.createElement("script");s.type="application/ld+json";s.id="jld-rec";
+ var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][CUR.variant];
  s.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CreativeWork",
   "name":CUR.name,"identifier":CUR.stamp,
   "url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix="+CUR.stamp,
-  "description":CUR.mentality,"author":{"@type":"Person","name":"Justin Addam Higgins"}});
+  "description":CUR.mentality,
+  "author":{"@type":"Person","name":"Justin Addam Higgins"},
+  "creator":{"@type":"Person","name":"Justin Addam Higgins"},
+  "isBasedOn":[
+   {"@type":"CreativeWork","name":CUR.parentA.name,"identifier":CUR.parentA.id,
+    "additionalType":CUR.parentA.type},
+   {"@type":"CreativeWork","name":CUR.parentB.name,"identifier":CUR.parentB.id,
+    "additionalType":CUR.parentB.type}],
+  "additionalProperty":[
+   {"@type":"PropertyValue","name":"fusionVariant","value":vname},
+   {"@type":"PropertyValue","name":"pairNumber","value":CUR.n},
+   {"@type":"PropertyValue","name":"fusionEngine","value":"Deterministic Signature forge v1"},
+   {"@type":"PropertyValue","name":"lineage","value":CUR.lineage},
+   {"@type":"PropertyValue","name":"fusedAbilities","value":CUR.abilities.join(" | ")}]});
  document.head.appendChild(s);
 }
 function fileText(r){
@@ -394,30 +439,62 @@ function cardHTML(r){
  '<div class="par">'+esc(r.parentA.name)+' \u00D7 '+esc(r.parentB.name)+'</div>'+
  '<div class="row"><button onclick="openHybrid('+r.n+')">Open file</button><button class="ghost" onclick="openHybrid('+r.n+').then(startDial)">\uD83D\uDCDE Dial</button></div></div>';
 }
+/* FIX-18-05: forge feedback — animated ticker, button disabling during the cycle */
+function forgeStep(t){var tick=document.getElementById("forgetick");if(tick)tick.innerHTML='<span class="spin"></span> '+esc(t)}
 async function forgeFresh(){
  var inp=document.getElementById("forgenum"),start=parseInt(inp.value,10);
  if(!start||start<1)start=1+Math.floor(Math.random()*AFMAX);
  start=Math.max(1,Math.min(AFMAX-11,start));
- var box=document.getElementById("forgecards");box.innerHTML="<p>Heating the forge…</p>";
- try{await ensureBase();await ensureWordai()}catch(e){box.innerHTML="<p>Forge needs a connection for parent records ("+esc(e.message)+").</p>";return}
+ var box=document.getElementById("forgecards"),tick=document.getElementById("forgetick");
+ var b1=document.getElementById("forgebtn"),b2=document.getElementById("surprisebtn");
+ if(b1)b1.disabled=true;if(b2)b2.disabled=true;
+ if(tick)tick.style.display="block";
+ forgeStep("Heating the forge…");
+ box.innerHTML="";
+ try{await ensureBase();await ensureWordai()}catch(e){forgeStep("Forge needs a connection for parent records ("+e.message+").");if(b1)b1.disabled=false;if(b2)b2.disabled=false;return}
+ forgeStep("Fusing 12 pairs…");
  var html="";
  for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
+ await new Promise(function(r){setTimeout(r,350)});
  box.innerHTML=html;bumpForged(12);
  try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
+ if(tick)tick.innerHTML="✓ 12 hybrids forged — pair "+start.toLocaleString()+" to "+(start+11).toLocaleString();
+ if(b1)b1.disabled=false;if(b2)b2.disabled=false;
 }
 function forgeRandom(){document.getElementById("forgenum").value=1+Math.floor(Math.random()*AFMAX);forgeFresh()}
 /* ============ search + A–Z over seeded index ============ */
+/* FIX-18-06: filter pills (variant + parent type) over the seeded index */
+var PILLF="all";
+function pillOK(r){
+ if(PILLF==="all")return true;
+ var n=r[0],v=(n-1)%3;
+ if(PILLF==="v0")return v===0;
+ if(PILLF==="v1")return v===1;
+ if(PILLF==="v2")return v===2;
+ var a=String(r[2]),b=String(r[3]);
+ if(PILLF==="word")return a.indexOf("WORD")>=0||b.indexOf("WORD")>=0;
+ if(PILLF==="sysper")return (a.indexOf("SIG")>=0&&b.indexOf("PER")>=0)||(a.indexOf("PER")>=0&&b.indexOf("SIG")>=0);
+ return true;
+}
+function setPill(btn){
+ var ps=document.querySelectorAll("#pills .pill");
+ for(var i=0;i<ps.length;i++)ps[i].className="pill";
+ btn.className="pill on";
+ PILLF=btn.getAttribute("data-f");
+ doSearch();
+}
 async function doSearch(){
- var q=document.getElementById("q").value.trim().toLowerCase(),box=document.getElementById("browsecards");
- if(!q){box.innerHTML="";return}
- box.innerHTML="<p>Searching…</p>";
- try{await ensureIdx()}catch(e){box.innerHTML="<p>Search needs a connection.</p>";return}
+ var q=document.getElementById("q").value.trim().toLowerCase(),box=document.getElementById("browsecards"),btn=document.getElementById("searchbtn");
+ if(btn)btn.disabled=true;
+ box.innerHTML='<p><span class="spin"></span> Searching…</p>';
+ try{await ensureIdx()}catch(e){box.innerHTML="<p>Search needs a connection.</p>";if(btn)btn.disabled=false;return}
  var hits=[];
- for(var i=0;i<SEEDIDX.length&&hits.length<12;i++){var r=SEEDIDX[i];
-  if(r[1].toLowerCase().indexOf(q)>=0||r[2].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0)hits.push(r[0])}
- if(!hits.length){box.innerHTML="<p>No forged hybrid matches \u201C"+esc(q)+"\u201D yet — try the forge above; every number 1\u20131,000,000 computes on demand.</p>";return}
- var html="";for(var h=0;h<hits.length;h++){var rec=await getHybrid(hits[h]);html+=cardHTML(rec)}
- box.innerHTML=html;
+ for(var i=0;i<SEEDIDX.length&&hits.length<60;i++){var r=SEEDIDX[i];
+  if(!pillOK(r))continue;
+  if(!q||r[1].toLowerCase().indexOf(q)>=0||r[2].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0)hits.push(r[0])}
+ if(!hits.length){box.innerHTML="<p>No forged hybrid matches"+(q?" \u201C"+esc(q)+"\u201D":" this filter")+" yet — try the forge above; every number 1\u20131,000,000 computes on demand.</p>";if(btn)btn.disabled=false;return}
+ var html="";for(var h=0;h<hits.length&&h<12;h++){var rec=await getHybrid(hits[h]);html+=cardHTML(rec)}
+ box.innerHTML=html;if(btn)btn.disabled=false;
 }
 async function buildAZ(){
  var az=document.getElementById("az");
@@ -431,8 +508,19 @@ async function buildAZ(){
 async function browseLetter(L){
  var box=document.getElementById("browsecards");box.innerHTML="<p>Loading "+esc(L)+ "…</p>";
  await ensureIdx();var html="",shown=0;
- for(var i=0;i<SEEDIDX.length&&shown<12;i++){if(SEEDIDX[i][1].charAt(0).toUpperCase()===L){var rec=await getHybrid(SEEDIDX[i][0]);html+=cardHTML(rec);shown++}}
+ for(var i=0;i<SEEDIDX.length&&shown<12;i++){var rr=SEEDIDX[i];if(rr[1].charAt(0).toUpperCase()===L&&pillOK(rr)){var rec=await getHybrid(rr[0]);html+=cardHTML(rec);shown++}}
  box.innerHTML=html||"<p>Nothing under "+esc(L)+" yet.</p>";
+}
+/* FIX-18-04: mobile forge accordion — one block open at a time on small screens */
+function forgeAccordion(){
+ try{
+  if(window.innerWidth>=768)return;
+  var acc=document.querySelectorAll("#forgepanel .facc");
+  for(var i=0;i<acc.length;i++){
+   if(i>0)acc[i].open=false;
+   (function(d){d.addEventListener("toggle",function(){if(d.open){for(var j=0;j<acc.length;j++){if(acc[j]!==d)acc[j].open=false}}})})(acc[i]);
+  }
+ }catch(e){}
 }
 /* ============ boot ============ */
 function parseMixParam(s){
@@ -441,6 +529,7 @@ function parseMixParam(s){
 }
 async function boot(){
  collapseStatsMobile();
+ forgeAccordion();
  var sc=document.getElementById("scrim");if(sc)sc.onclick=closeFile;
  try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
  try{var api=await ensureApi();document.getElementById("seededCount").textContent=(api.counts.seeded_hybrids||0).toLocaleString()}catch(e){document.getElementById("seededCount").textContent="3,000"}

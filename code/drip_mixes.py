@@ -93,11 +93,12 @@ def main():
     os.makedirs(os.path.join(DATA, "index"), exist_ok=True)
     with gzip.open(os.path.join(DATA, "index", "mixes.idx.json.gz"), "wt") as f:
         json.dump(idx, f)
-    # sitemap + api
+    # sitemap + api + catalog feed (Site #18 diagnostic: never let these go stale)
     sys.path.insert(0, HERE)
-    import build_sitemap, build_api
+    import build_sitemap, build_api, build_catalog
     build_sitemap.build(idx)
     build_api.build(len(idx), st["next_index"] - 1)
+    build_catalog.build(idx)
     size = dir_size_bytes(DATA)
     print("MIXLAB DRIP: +%d hybrids (%d-%d), %d chunks, %d total seeded, data %.1fMB %s" % (
         args.n, start, end - 1, len(buf), len(idx), size / 1048576,

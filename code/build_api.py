@@ -25,6 +25,8 @@ def build(total_seeded, forged_through):
             "compact_index": BASE + "data/index/mixes.idx.json.gz",
             "chunks": BASE + "data/mixes/mixes-c00001.jsonl.gz",
             "sitemap": BASE + "sitemap.xml",
+            "catalog_feed": BASE + "mix-lab-catalog.json",
+            "static_index": BASE + "mixes.html",
             "crosslinks_dict": BASE + "data/xlinks/dict-ai-terms.json",
             "crosslinks_wiki": BASE + "data/xlinks/wiki-mix-articles.json",
         },
