@@ -235,9 +235,15 @@ function parentLinks(p){
 }
 /* ============ hybrid file view ============ */
 var CUR=null;
+/* FIX-04: modal scrim + body scroll-lock (ES5-safe) */
+function modalOpen(panel){var s=document.getElementById("scrim");if(s)s.style.display="block";if(panel&&panel.classList)panel.classList.add("modal-open");document.body.style.overflow="hidden";}
+function modalClose(panel){var s=document.getElementById("scrim");if(s)s.style.display="none";if(panel&&panel.classList)panel.classList.remove("modal-open");document.body.style.overflow="";}
+/* FIX-03: collapse stat tickers on small screens */
+function collapseStatsMobile(){try{if(window.innerWidth<768){var d=document.querySelector("details.mstats");if(d)d.removeAttribute("open");}}catch(e){}}
 async function openHybrid(N,quiet){
  var box=document.getElementById("fileview");
  box.style.display="block";box.innerHTML="<p>Forging hybrid…</p>";
+ modalOpen(box);
  box.scrollIntoView({behavior:"smooth",block:"start"});
  try{CUR=await getHybrid(N)}catch(e){box.innerHTML="<p>Could not forge this hybrid ("+esc(e.message)+"). Check your connection and retry.</p>";return}
  var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][CUR.variant];
@@ -274,7 +280,7 @@ async function openHybrid(N,quiet){
  if(!quiet){try{history.replaceState(null,"","?mix="+CUR.stamp)}catch(e){}}
  logQA("sys","This is "+CUR.name+" ("+CUR.stamp+"), born of "+CUR.parentA.name+" and "+CUR.parentB.name+". Ask me anything about my file.");
 }
-function closeFile(){rdStop();document.getElementById("fileview").style.display="none";try{history.replaceState(null,"",location.pathname)}catch(e){}}
+function closeFile(){rdStop();var box=document.getElementById("fileview");modalClose(box);box.style.display="none";try{history.replaceState(null,"",location.pathname)}catch(e){}}
 function setJSONLD(){
  var old=document.getElementById("jld-rec");if(old)old.remove();
  if(!CUR)return;
@@ -434,6 +440,8 @@ function parseMixParam(s){
  var n=parseInt(s,10);return (n>=1&&n<=AFMAX)?n:0;
 }
 async function boot(){
+ collapseStatsMobile();
+ var sc=document.getElementById("scrim");if(sc)sc.onclick=closeFile;
  try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
  try{var api=await ensureApi();document.getElementById("seededCount").textContent=(api.counts.seeded_hybrids||0).toLocaleString()}catch(e){document.getElementById("seededCount").textContent="3,000"}
  buildAZ();
