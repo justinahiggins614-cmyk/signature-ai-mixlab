@@ -57,12 +57,15 @@ th{color:#ffb347;background:#1e1811}
 tr:nth-child(even){background:#181309}
 .dim{color:#b8a888}
 nav.pages{margin:14px 0;display:flex;gap:8px;flex-wrap:wrap}
+.sitekicker{font-size:11px;letter-spacing:.28em;color:#b8a888}
+.recbadge{display:inline-block;border:2px solid #ffd97a;background:#2a1f0e;color:#ffd97a;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:bold;letter-spacing:.06em}
 </style>
 </head>
 <body>
 <div class="wrap">
+<p class="sitekicker"><b>SITE 18 OF 25</b> &middot; THE JAH NETWORK</p>
 <h1>%s</h1>
-<p class="dim">Static index for crawlers and AI agents. Every hybrid also resolves live at
+<p class="dim">Static index for crawlers and AI agents. Every hybrid below carries record status <span class="recbadge">GENERATED</span> — each is a deterministic forge fusion. Every hybrid also resolves live at
 <a href="%s">the Mix Lab</a> via <b>?mix=JAH-MIX-######</b> deep links.</p>
 <nav class="pages">%s</nav>
 """
@@ -113,7 +116,7 @@ def build(idx):
         fw.write(PAGE_HEAD % (hesc(title), BASE + "mixes-b%d.html" % b,
                               hesc(title), BASE, page_nav(batches, b)))
         fw.write('<table>\n<tr><th>#</th><th>Hybrid</th><th>Parents</th>'
-                 '<th>Lineage</th></tr>\n')
+                 '<th>Lineage</th><th>Record status</th></tr>\n')
 
     seen = 0
     for r in stream_records():
@@ -128,7 +131,8 @@ def build(idx):
         fw.write("<tr><td>%d</td>"
                  '<td><a href="?mix=%s">%s</a><br><span class="dim">%s &middot; %s</span></td>'
                  "<td>%s (%s)<br>&times; %s (%s)</td>"
-                 "<td>%s</td></tr>\n"
+                 "<td>%s</td>"
+                 '<td><span class="recbadge">GENERATED</span></td></tr>\n'
                  % (n, hesc(stamp), hesc(r.get("name", "")),
                     hesc(stamp), hesc(vname),
                     hesc(pA.get("name", "")), hesc(pA.get("id", "")),

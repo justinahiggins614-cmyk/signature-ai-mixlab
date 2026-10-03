@@ -90,6 +90,21 @@ button:disabled{opacity:.45;cursor:wait}
 .facc>summary{cursor:pointer;color:var(--gold);font-weight:bold;font-size:1.05em;list-style:none}
 .facc>summary::-webkit-details-marker{display:none}
 @media(min-width:768px){.facc>summary{cursor:default}}
+/* CONSISTENCY PASS (network-wide 10-fix): shared record kit, styling-neutral */
+.sitekicker{font-size:11px;letter-spacing:.28em;color:var(--dim);text-align:center;margin:10px 0 0}
+.sitekicker b{color:var(--gold)}
+.reclbl{font-size:10.5px;letter-spacing:.22em;color:var(--dim);margin-right:8px}
+.recbadge{display:inline-block;border:2px solid var(--gold);background:#2a1f0e;color:var(--gold);border-radius:10px;padding:3px 12px;font-size:12px;font-weight:bold;letter-spacing:.06em;margin:3px 6px 3px 0}
+.recbadge.mini{font-size:10px;padding:1px 8px;border-width:1px;margin:0 0 6px}
+.provline{font-size:.85em;color:var(--dim);margin:8px 0}
+.provline b{color:var(--amber);font-weight:normal}
+.recbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;align-items:center}
+.recbar button{background:#241a0c;border:1px solid var(--amber);color:var(--gold);border-radius:8px;padding:8px 14px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.recbar button:hover{background:var(--amber);color:#14100b}
+.recinfo{background:#1e1811;border:1px dashed var(--amber);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:.9em;display:none}
+.aicard{background:#1e1811;border:1px solid var(--amber);border-radius:10px;padding:10px 12px;margin:12px 0;font-size:.9em}
+.aicard .aname{color:var(--amber);font-weight:bold}
+.aicard .duties{color:var(--dim)}
 </style>
 </head>
 <body>
@@ -104,6 +119,7 @@ button:disabled{opacity:.45;cursor:wait}
 <p style="text-align:center;color:var(--dim);font-size:.85em;margin:6px 0">Sister sites — shared record IDs: every AI keeps its ID across all three.</p>
 <nav class="jahnet" role="navigation" aria-label="JAH Network Global Ecosystem"><span class="jahnet-t">THE JAH NETWORK</span><span class="here">YOU ARE HERE &#9656;</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a class="cur" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
 <main id="main">
+<div class="sitekicker"><b>SITE 18 OF 25</b> · THE JAH NETWORK</div>
 <div class="hero">
   <h1>&#129518; The Signature AI Mix Lab</h1>
   <p>Every Signature AI, fused two by two, in a deterministic forge.<br>One million hybrids. Same pair, same hybrid — forever.</p>
@@ -282,7 +298,10 @@ async function openHybrid(N,quiet){
  box.innerHTML=
  '<div class="fv-head"><div style="color:var(--dim)">JAH Mix Lab &rsaquo; hybrid file</div>'+
  '<h2>'+esc(CUR.name)+' <span style="font-size:.6em;color:var(--dim)">'+esc(CUR.stamp)+'</span></h2>'+
- '<div style="color:var(--dim)">'+esc(vname)+' · pair '+CUR.n.toLocaleString()+' of 1,000,000</div></div>'+
+ '<div style="color:var(--dim)">'+esc(vname)+' · pair '+CUR.n.toLocaleString()+' of 1,000,000</div>'+
+ /* CONSISTENCY PASS: canonical record-status badge + provenance line */
+ '<div style="margin:8px 0"><span class="reclbl">RECORD STATUS</span><span class="recbadge">GENERATED</span></div>'+
+ '<p class="provline"><b>Provenance:</b> made by the deterministic Signature forge v1 · pair '+CUR.n+' of 1,000,000 · '+esc(CUR.parentA.id)+' × '+esc(CUR.parentB.id)+' · forge seed <code>'+esc(seedOf(CUR))+'</code></p></div>'+
  '<div id="fvtext"><dl class="kv">'+
  '<dt>Mentality</dt><dd>'+esc(CUR.mentality)+'</dd>'+
  '<dt>Abilities</dt><dd><ul style="margin:0;padding-left:18px">'+ab+'</ul></dd>'+
@@ -300,11 +319,22 @@ async function openHybrid(N,quiet){
  '<button onclick="dlHybrid(\'json\')">\u2B07 .json</button>'+
  '<button onclick="startDial()">\uD83D\uDCDE Dial this hybrid</button>'+
  '<button class="ghost" onclick="closeFile()">Close</button></div>'+
+ /* CONSISTENCY PASS: record panel — OPEN · SOURCE · ID · VERSION · SHARE (copy/download/read-aloud live in the toolbar above) */
+ '<div class="recbar" role="group" aria-label="Record panel: open, source, id, version, share"><span class="reclbl">RECORD</span>'+
+ '<button onclick="mixRecOpen()">↗ OPEN</button>'+
+ '<button onclick="mixRecSrc()">⇄ SOURCE</button>'+
+ '<button onclick="mixRecId()"># ID</button>'+
+ '<button onclick="mixRecVer()">⚙ VERSION</button>'+
+ '<button onclick="mixRecShare()">⤴ SHARE</button></div>'+
+ '<div class="recinfo" id="recinfo"></div>'+
  '<div class="panel" style="margin:12px 0"><h2>Ask '+esc(CUR.name)+'</h2>'+
+ /* CONSISTENCY PASS: AI identity card */
+ '<div class="aicard"><span class="aname">🤖 '+esc(CUR.name)+' — AI identity</span><br><span class="duties">A Signature hybrid AI ('+esc(CUR.stamp)+'). <b>Duties:</b> answers questions from its own hybrid file only — mentality, abilities, parents, lineage — it never invents. <b>Engine:</b> data-grounded file matcher with the JAHtalk conversational module — talks human.</span></div>'+
  '<div class="chatlog" id="qalog"></div>'+
  '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="qain" placeholder="Ask about this hybrid…" aria-label="Ask the hybrid a question" onkeydown="if(event.key===\'Enter\')askQA()"><button onclick="askQA()">Ask</button></div>'+
  '<p style="color:var(--dim);font-size:.85em">The Q&amp;A answers only from this hybrid\u2019s file — it never invents.</p></div>'+
  '<div class="panel" style="margin:12px 0;display:none" id="dialpanel"><h2>\uD83D\uDCDE Live session</h2>'+
+ '<div class="aicard"><span class="aname">🤖 '+esc(CUR.name)+' — live session AI identity</span><br><span class="duties">The same hybrid AI ('+esc(CUR.stamp)+'), talking live on this page. <b>Duties:</b> holds a real-time conversation in its fused voice and remembers this call. <b>Engine:</b> the JAHtalk conversational module, in-page — talks human, answers from the hybrid\u2019s file.</span></div>'+
  '<div class="chatlog" id="diallog"></div>'+
  '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="dialin" placeholder="Talk to the hybrid…" aria-label="Talk to the hybrid" onkeydown="if(event.key===\'Enter\')dialSay()"><button onclick="dialSay()">Send</button><button class="ghost" onclick="hangup()">Hang up</button></div></div>';
  setJSONLD();
@@ -447,7 +477,7 @@ function parentLinkHTML(p){
 }
 function cardHTML(r){
  var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
- return '<div class="card"><h3>'+esc(r.name)+'</h3>'+
+ return '<div class="card"><span class="recbadge mini">GENERATED</span><h3>'+esc(r.name)+'</h3>'+
  '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · pair '+r.n.toLocaleString()+' of 1,000,000</div>'+
  '<div class="par">Parent A: '+parentLinkHTML(r.parentA)+'<br>Parent B: '+parentLinkHTML(r.parentB)+'</div>'+
  '<div class="par" style="margin-top:4px">Forge seed: <code>'+esc(seedOf(r))+'</code> · '+esc(vname)+'</div>'+
@@ -463,6 +493,15 @@ function shareHybrid(btn,n){
  function done(){btn.textContent="Link copied ✓";setTimeout(function(){btn.textContent="Share"},1500)}
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done,function(){done()})}else{done()}
 }
+/* CONSISTENCY PASS: record-panel actions */
+function mixRecInfoBox(){return document.getElementById("recinfo")}
+function mixRecShow(html){var b=mixRecInfoBox();if(!b)return;b.style.display="block";b.innerHTML=html}
+function mixRecDeep(){return CUR?("https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix="+CUR.stamp):"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/"}
+function mixRecOpen(){window.open(mixRecDeep(),"_blank","noopener")}
+function mixRecSrc(){if(!CUR)return;var b=mixRecInfoBox();if(b.style.display==="block"&&b.dataset.kind==="src"){b.style.display="none";b.dataset.kind="";return}mixRecShow("<b>SOURCE</b> — "+esc(CUR.lineage)+" · forged from "+esc(CUR.parentA.id)+" × "+esc(CUR.parentB.id));b.dataset.kind="src"}
+function mixRecId(){if(!CUR)return;var b=mixRecInfoBox();mixRecShow("<b>ID</b> — "+esc(CUR.stamp)+" · pair "+CUR.n.toLocaleString()+" of 1,000,000");b.dataset.kind="id";if(navigator.clipboard)navigator.clipboard.writeText(CUR.stamp).catch(function(){})}
+function mixRecVer(){if(!CUR)return;var b=mixRecInfoBox();mixRecShow("<b>VERSION</b> — Signature forge v1 · JAH-MIX record schema v1 · deterministic: the same pair number always fuses the same hybrid.");b.dataset.kind="ver"}
+function mixRecShare(){var u=mixRecDeep();var b=mixRecInfoBox();if(navigator.share){navigator.share({title:document.title,url:u}).catch(function(){return})}if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){mixRecShow("<b>SHARE</b> — hybrid link copied: "+esc(u));b.dataset.kind="share"},function(){mixRecShow("<b>SHARE</b> — hybrid link: "+esc(u));b.dataset.kind="share"})}else{mixRecShow("<b>SHARE</b> — hybrid link: "+esc(u));b.dataset.kind="share"}}
 /* FIX-18-05: forge feedback — animated ticker, button disabling during the cycle */
 function forgeStep(t){var tick=document.getElementById("forgetick");if(tick)tick.innerHTML='<span class="spin"></span> '+esc(t)}
 async function forgeFresh(){
