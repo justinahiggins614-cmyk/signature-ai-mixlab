@@ -4,7 +4,7 @@
  "site": "The Signature AI Mix Lab",
  "site_url": "https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
  "title_status": "provisional \u2014 pending Manon's confirmation",
- "generated_at": "2026-10-03T15:43:24.777787+00:00",
+ "generated_at": "2026-10-03T15:48:16.385561+00:00",
  "counts": {
   "seeded_hybrids": 13000,
   "forged_through": 13000,
@@ -33,7 +33,7 @@
  },
  "index": {
   "rows": 13000,
-  "sha256": "e7c2a4db9fa7113e91672fb0a3718b91040e93978e7a190434472f2c5d66b1b7",
+  "sha256": "d353ae33479f1467f9b2f068f817214abd8fb063bc83846ae28f7c034da51f80",
   "path": "data/index/mixes.idx.json.gz"
  },
  "chunks": [
@@ -862,7 +862,7 @@
   "https://justinahiggins614-cmyk.github.io/signature-ai-olypics/"
  ],
  "health": {
-  "last_build": "2026-10-03T15:43:24.777787+00:00",
+  "last_build": "2026-10-03T15:48:16.385561+00:00",
   "checks_passed": null,
   "status": "unknown"
  }

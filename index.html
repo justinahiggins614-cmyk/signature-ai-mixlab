@@ -142,8 +142,9 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <details class="mstats" open><summary>Site statistics</summary>
   <div class="counter">
     <div class="count"><div class="n" id="seededCount">…</div><small>hybrids stored in the archive / 1,000,000</small></div>
-    <div class="count"><div class="n" id="yourCount">0</div><small>hybrids you forged this device</small></div>
+    <div class="count"><div class="n" id="yourCount">0</div><small>hybrids forged on this device (device-local)</small><br><button class="ghost" style="font-size:.75em;padding:2px 10px;margin-top:4px" onclick="resetForged()" title="Reset this device's forge counter">reset</button></div>
   </div>
+  <div id="statverified" style="color:var(--dim);font-size:.8em;text-align:center;margin-top:4px"></div>
   </details>
 </div>
 <div class="panel" id="forgepanel">
@@ -151,17 +152,29 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <p style="color:var(--dim)">Pick a hybrid number (1–1,000,000). The forge computes it on demand — no waiting, no storage.</p>
   <details class="facc" open><summary>&#9312; Inputs</summary>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
-    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)" aria-label="Hybrid number">
+    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)" aria-label="Hybrid number" oninput="forgeInputChanged()">
     <button class="ghost" id="surprisebtn" onclick="forgeRandom()">&#127922; Surprise me</button>
   </div></details>
   <details class="facc" open><summary>&#9313; Blend</summary>
   <div style="margin-top:8px">
-    <button id="forgebtn" onclick="forgeFresh()">&#128293; Forge 12</button>
+    <button id="forgebtn" onclick="forgeFresh()">&#128293; Forge</button>
+    <div class="tick" id="forgeerr" style="display:none;color:var(--amber)" aria-live="polite"></div>
     <div class="tick" id="forgetick" style="display:none" aria-live="polite"></div>
   </div></details>
   <details class="facc" open><summary>&#9314; Output</summary>
   <div id="forgemeta" style="margin-top:8px;color:var(--dim);font-size:.9em"></div>
   <div class="cards" id="forgecards" style="margin-top:8px"></div></details>
+</div>
+<div class="panel" id="comparepanel">
+  <h2>Compare two hybrids</h2>
+  <p style="color:var(--dim)">Two hybrid numbers, side by side — parents, variant, seed, mentality.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="number" id="cmpa" min="1" max="1000000" placeholder="First # (e.g. 12)" aria-label="First hybrid number">
+    <input type="number" id="cmpb" min="1" max="1000000" placeholder="Second # (e.g. 424242)" aria-label="Second hybrid number">
+    <button onclick="compareHybrids()">Compare</button>
+  </div>
+  <div class="tick" id="cmperr" style="display:none;color:var(--amber)" aria-live="polite"></div>
+  <div class="cards" id="cmpcards" style="margin-top:8px"></div>
 </div>
 <div class="panel">
   <h2>Browse the forged archive</h2>
@@ -269,19 +282,92 @@ function makeHybrid(N){
 async function ensureBase(){if(!BASE){BASE=JSON.parse(await (await fetch("data/base-ais.json")).text())}return BASE}
 async function ensureWordai(){if(!WORDAI){var arr=JSON.parse(await (await fetch("data/wordai-idx.json")).text());WORDAI=arr;WORDAIMAP={};arr.forEach(function(e){WORDAIMAP[e[1]]=e[0]})}return WORDAI}
 async function ensureIdx(){if(!SEEDIDX){SEEDIDX=JSON.parse(await gz("data/index/mixes.idx.json.gz"))}return SEEDIDX}
-async function ensureApi(){if(!APIINFO){try{APIINFO=JSON.parse(await (await fetch("api.json")).text())}catch(e){APIINFO={counts:{seeded_hybrids:3000}}}}return APIINFO}
+/* mixlab-manifest.json is the one count source; api.json mirrors it.
+   On failure we use the last cached copy labeled as such — never a stale
+   hard-coded number, and the forge/archive/search keep working independently. */
+var APICACHE="mixlab_api_cache";
+async function ensureApi(){
+ if(!APIINFO){
+  try{APIINFO=JSON.parse(await (await fetch("api.json")).text());APIINFO._live=true;
+   try{localStorage.setItem(APICACHE,JSON.stringify({at:Date.now(),counts:APIINFO.counts}))}catch(e){}}
+  catch(e){
+   var cached=null;try{cached=JSON.parse(localStorage.getItem(APICACHE)||"null")}catch(e2){}
+   if(cached&&cached.counts){APIINFO={counts:cached.counts,_live:false,_cachedAt:cached.at}}
+   else{APIINFO={counts:{seeded_hybrids:0},_live:false,_unavailable:true}}
+  }
+ }
+ return APIINFO}
+/* ============ record hashing (mirrors code/engine.py full_record) ============
+   fullRecordJS builds the same canonical core the Python build hashes, so the
+   page can display and verify a hybrid's SHA-256 content hash in-browser. */
+var FICTIONNOTE="Persona parents are fan-style interpretations, not affiliated with any rights holder. Hybrid names, mentalities and abilities are original Signature creations by Justin Addam Higgins.";
+function wordOfParent(p){
+ if(!p||p.type!=="word")return"";
+ var m=/JAH-AI-WORD-(\d+)/.exec(p.id||"");if(!m)return"";
+ return (typeof WORDAIMAP!=="undefined"&&WORDAIMAP&&WORDAIMAP[parseInt(m[1],10)])||"";
+}
+function unseededParent(r){
+ if(r.unseeded)return true;
+ var ps=[r.parentA,r.parentB];
+ for(var i=0;i<ps.length;i++){var p=ps[i]||{};
+  if(p.type==="word"){var m=/JAH-AI-WORD-(\d+)/.exec(p.id||"");
+   if(m&&typeof WORDAIMAP!=="undefined"&&WORDAIMAP&&!WORDAIMAP[parseInt(m[1],10)])return true}}
+ return false;
+}
+function fullRecordJS(r){
+ var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
+ return{
+  "JAH-MIX-ID":r.stamp,"MIX-VERSION":"1",
+  "PARENT-A-ID":r.parentA.id,"PARENT-A-NAME":r.parentA.name,"PARENT-A-TYPE":r.parentA.type,
+  "PARENT-B-ID":r.parentB.id,"PARENT-B-NAME":r.parentB.name,"PARENT-B-TYPE":r.parentB.type,
+  "PARENT-ORDER-RULE":"positional: parentA=slot(i), parentB=slot(j); i=z%P, j=j0 or j0+1 (j!=i guaranteed); ordering is part of the deterministic transform, NOT commutative",
+  "NORMALIZED-PARENT-PAIR":"N="+r.n+" i/j slots via mix-determinism/1",
+  "SEED":seedOf(r),"SEED-ALGORITHM":"identity","GENERATOR-VERSION":"1",
+  "HYBRID-NAME":r.name,"HYBRID-TYPE":vname,
+  "PERSONA":"Signature hybrid AI persona (generated interpretation, not a real AI product)",
+  "MENTALITY":r.mentality,"ABILITIES":r.abilities,
+  "DESCRIPTION-A":r.descA||"","DESCRIPTION-B":r.descB||"",
+  "PARENT-LINEAGE":r.lineage,"FICTIONALITY":FICTIONNOTE,
+  "CONTENT-STATUS":"GENERATED","VALIDATION-STATUS":"schema-valid",
+  "PROVENANCE":"Deterministic Signature forge v1; phone-book canon jah-ai-models/ai-catalog.json",
+  "OLYPICS-STATUS":"not-entered",
+  "WORD-AI-A":wordOfParent(r.parentA),"WORD-AI-B":wordOfParent(r.parentB),
+  "UNSEEDED-PARENT":unseededParent(r),"CREATED":null,
+  "CANONICAL-URL":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix="+r.stamp};
+}
+/* canonical JSON matching Python json.dumps(sort_keys=True, separators=(",",":"), ensure_ascii=False) */
+function canonPy(o){
+ if(o===null||o===undefined)return"null";
+ if(typeof o==="number"||typeof o==="boolean")return JSON.stringify(o);
+ if(typeof o==="string")return JSON.stringify(o);
+ if(Array.isArray(o))return"["+o.map(canonPy).join(",")+"]";
+ var ks=Object.keys(o).sort();
+ return"{"+ks.map(function(k){return JSON.stringify(k)+":"+canonPy(o[k])}).join(",")+"}";
+}
+async function sha256hex(str){
+ var buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+ var bytes=new Uint8Array(buf),out="";
+ for(var i=0;i<bytes.length;i++)out+=("0"+bytes[i].toString(16)).slice(-2);
+ return out;
+}
+async function recordHash(r){return await sha256hex(canonPy(fullRecordJS(r)))}
 /* ============ record resolution ============ */
 function chunkName(n){return "mixes-c"+String(Math.floor((n-1)/150)+1).padStart(5,"0")+".jsonl.gz"}
 async function getHybrid(N){
  N=Math.max(1,Math.min(AFMAX,parseInt(N,10)||1));
  var api=await ensureApi(),seeded=(api.counts&&api.counts.seeded_hybrids)||0;
  if(N<=seeded){
-  await ensureIdx();
-  var row=null;for(var k=0;k<SEEDIDX.length;k++){if(SEEDIDX[k][0]===N){row=SEEDIDX[k];break}}
-  if(row){var txt=await gz("data/mixes/"+chunkName(N));var lines=txt.trim().split("\n");
-   for(var l=0;l<lines.length;l++){var r=JSON.parse(lines[l]);if(r.n===N)return r}}
+  try{
+   await ensureIdx();
+   var row=null;for(var k=0;k<SEEDIDX.length;k++){if(SEEDIDX[k][0]===N){row=SEEDIDX[k];break}}
+   if(row){var txt=await gz("data/mixes/"+chunkName(N));var lines=txt.trim().split("\n");
+    for(var l=0;l<lines.length;l++){var r=JSON.parse(lines[l]);
+     if(r.n===N){r._status="ARCHIVED";r._hash=(row.length>5&&row[5])||null;return r}}}
+  }catch(e){/* archive unreachable — the deterministic compute below yields the identical record */}
  }
- await ensureBase();await ensureWordai();return makeHybrid(N);
+ await ensureBase();await ensureWordai();var h=makeHybrid(N);
+ h._status=(N<=seeded)?"ARCHIVED · archive index unavailable — recomputed on demand (identical by determinism)":"COMPUTED-ON-DEMAND";
+ h._hash=null;return h;
 }
 function parentLinks(p){
  var h='<b>'+esc(p.name)+'</b> <span style="color:var(--dim)">'+esc(p.id)+' · '+esc(p.type)+'</span><br>';
@@ -302,6 +388,40 @@ function modalOpen(panel){var s=document.getElementById("scrim");if(s)s.style.di
 function modalClose(panel){var s=document.getElementById("scrim");if(s)s.style.display="none";if(panel&&panel.classList)panel.classList.remove("modal-open");document.body.style.overflow="";}
 /* FIX-03: collapse stat tickers on small screens */
 function collapseStatsMobile(){try{if(window.innerWidth<768){var d=document.querySelector("details.mstats");if(d)d.removeAttribute("open");}}catch(e){}}
+/* record-status badge: ARCHIVED vs COMPUTED-ON-DEMAND — never confuse the two */
+function statusBadge(){
+ var s=(CUR&&CUR._status)||"";
+ if(s.indexOf("ARCHIVED")===0)return '<span class="recbadge">ARCHIVED</span>';
+ return '<span class="recbadge">COMPUTED-ON-DEMAND</span>';
+}
+async function fillHash(){
+ var el=document.getElementById("fvhash");if(!el||!CUR)return;
+ if(CUR._hash){el.innerHTML='<code>'+esc(CUR._hash)+'</code> <span style="color:var(--dim)">archive-stamped</span>';return}
+ el.textContent="computing…";
+ try{await ensureWordai();var h=await recordHash(CUR);
+  el.innerHTML='<code>'+h+'</code> <span style="color:var(--dim)">computed in your browser</span>';
+ }catch(e){el.textContent="unavailable ("+e.message+")"}
+}
+async function verifyRecord(){
+ var el=document.getElementById("fvverify");if(!el||!CUR)return;
+ el.textContent="verifying…";
+ try{await ensureWordai();var h=await recordHash(CUR);
+  if(CUR._hash){el.textContent=(h===CUR._hash)
+   ?"✓ Verified — the in-browser recomputation matches the archive-stamped hash."
+   :"⚠ MISMATCH — the in-browser hash differs from the archive-stamped hash. Please report this."}
+  else{el.textContent="No archive-stamped hash for this record (computed on demand). In-browser hash: "+h}
+ }catch(e){el.textContent="verification unavailable ("+e.message+")"}
+}
+/* report: assembles a copy-ready report — nothing is sent anywhere automatically */
+function reportRecord(){
+ var b=document.getElementById("recinfo");if(!b||!CUR)return;
+ var txt="RECORD PROBLEM REPORT\nID: "+CUR.stamp+"\nName: "+CUR.name+"\nStatus: "+(CUR._status||"")+"\nForge seed: "+seedOf(CUR)+"\nParents: "+CUR.parentA.id+" × "+CUR.parentB.id+"\nURL: https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix="+CUR.stamp+"\nDescribe the problem: ";
+ b.style.display="block";b.dataset.kind="report";
+ b.innerHTML="<b>REPORT RECORD PROBLEM</b> — copy the text below and send it to Manon:<br><textarea rows='7' style='width:100%' id='repreport'>"+esc(txt)+"</textarea><br><button onclick='copyReport()'>📋 Copy report</button>";
+}
+function copyReport(){var t=document.getElementById("repreport");if(!t)return;
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).catch(function(){})}
+ t.select();try{document.execCommand("copy")}catch(e){}}
 async function openHybrid(N,quiet){
  var box=document.getElementById("fileview");
  box.style.display="block";box.innerHTML="<p>Forging hybrid…</p>";
@@ -315,8 +435,11 @@ async function openHybrid(N,quiet){
  '<h2>'+esc(CUR.name)+' <span style="font-size:.6em;color:var(--dim)">'+esc(CUR.stamp)+'</span></h2>'+
  '<div style="color:var(--dim)">'+esc(vname)+' · pair '+CUR.n.toLocaleString()+' of 1,000,000</div>'+
  /* CONSISTENCY PASS: canonical record-status badge + provenance line */
- '<div style="margin:8px 0"><span class="reclbl">RECORD STATUS</span><span class="recbadge">GENERATED</span></div>'+
- '<p class="provline"><b>Provenance:</b> made by the deterministic Signature forge v1 · pair '+CUR.n+' of 1,000,000 · '+esc(CUR.parentA.id)+' × '+esc(CUR.parentB.id)+' · forge seed <code>'+esc(seedOf(CUR))+'</code></p></div>'+
+ '<div style="margin:8px 0"><span class="reclbl">RECORD STATUS</span>'+statusBadge()+'</div>'+
+ '<p class="provline"><b>Provenance:</b> made by the deterministic Signature forge v1 · pair '+CUR.n+' of 1,000,000 · '+esc(CUR.parentA.id)+' × '+esc(CUR.parentB.id)+' · forge seed <code>'+esc(seedOf(CUR))+'</code></p>'+
+ '<p class="provline"><b>Content hash (SHA-256):</b> <span id="fvhash">computing…</span> <button class="ghost" onclick="verifyRecord()">Verify Record</button> <span id="fvverify" style="color:var(--gold)"></span></p>'+
+ '<p class="provline"><button class="ghost" onclick="reportRecord()">⚠ Report record problem</button></p>'+
+ '<p class="provline" style="font-size:.82em">'+esc(FICTIONNOTE)+'</p></div>'+
  '<div id="fvtext"><dl class="kv">'+
  '<dt>Mentality</dt><dd>'+esc(CUR.mentality)+'</dd>'+
  '<dt>Abilities</dt><dd><ul style="margin:0;padding-left:18px">'+ab+'</ul></dd>'+
@@ -353,6 +476,7 @@ async function openHybrid(N,quiet){
  '<div class="chatlog" id="diallog"></div>'+
  '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="dialin" placeholder="Talk to the hybrid…" aria-label="Talk to the hybrid" onkeydown="if(event.key===\'Enter\')dialSay()"><button onclick="dialSay()">Send</button><button class="ghost" onclick="hangup()">Hang up</button></div></div>';
  setJSONLD();
+ fillHash();
  if(!quiet){try{history.replaceState(null,"","?mix="+CUR.stamp)}catch(e){}}
  logQA("sys","This is "+CUR.name+" ("+CUR.stamp+"), born of "+CUR.parentA.name+" and "+CUR.parentB.name+". Ask me anything about my file.");
 }
@@ -377,16 +501,23 @@ function setJSONLD(){
   "additionalProperty":[
    {"@type":"PropertyValue","name":"fusionVariant","value":vname},
    {"@type":"PropertyValue","name":"pairNumber","value":CUR.n},
+   {"@type":"PropertyValue","name":"forgeSeed","value":seedOf(CUR)},
+   {"@type":"PropertyValue","name":"generatorVersion","value":"1"},
+   {"@type":"PropertyValue","name":"recordStatus","value":((CUR._status||"").indexOf("ARCHIVED")===0?"ARCHIVED":"COMPUTED-ON-DEMAND")},
    {"@type":"PropertyValue","name":"fusionEngine","value":"Deterministic Signature forge v1"},
    {"@type":"PropertyValue","name":"lineage","value":CUR.lineage},
-   {"@type":"PropertyValue","name":"fusedAbilities","value":CUR.abilities.join(" | ")}]});
+   {"@type":"PropertyValue","name":"fusedAbilities","value":CUR.abilities.join(" | ")}],
+  "disambiguatingDescription":FICTIONNOTE});
  document.head.appendChild(s);
 }
 function fileText(r){
  return [r.name+" ("+r.stamp+")","Variant: "+["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant],
+ "Forge seed: "+seedOf(r),
+ "Archive status: "+(r._status||""),
+ "Generator: deterministic Signature forge v1 · Hybrid Record Standard v1",
  "Mentality: "+r.mentality,"Abilities:"," - "+r.abilities.join("\n - "),
  "Parent A: "+r.parentA.name+" ("+r.parentA.id+")","Parent B: "+r.parentB.name+" ("+r.parentB.id+")",
- "Lineage: "+r.lineage].join("\n");
+ "Lineage: "+r.lineage,FICTIONNOTE].join("\n");
 }
 function copyHybrid(btn){var t=fileText(CUR);
  function done(){btn.textContent="Copied ✓";setTimeout(function(){btn.textContent="\uD83D\uDCCB Copy"},1500)}
@@ -481,7 +612,8 @@ function hangup(){if(DIAL)dlog("sys","*click* — line closed. The forge is alwa
 /* ============ forge fresh hybrids ============ */
 function bumpForged(n){try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10)+n;localStorage.setItem("mixlab_forged",String(c));var e=document.getElementById("yourCount");if(e)e.textContent=c.toLocaleString()}catch(e){}}
 /* FIX-18 follow-up: rich forge-result cards — parents, permanent ID, seed, talk/download/share */
-function seedOf(r){return "MIX-"+r.n+"-V"+r.variant+"-E1"}
+/* mix-determinism/1: formal seed — MIX-{N:06d}-V{variant}-FORGE1 (mirrors engine.formal_seed) */
+function seedOf(r){return "MIX-"+String(r.n).padStart(6,"0")+"-V"+r.variant+"-FORGE1"}
 function parentLinkHTML(p){
  var url="https://justinahiggins614-cmyk.github.io/jah-ai-models/";
  if(p.type==="word"&&/^JAH-AI-WORD-(\d+)$/.test(p.id)){
@@ -517,12 +649,26 @@ function mixRecSrc(){if(!CUR)return;var b=mixRecInfoBox();if(b.style.display==="
 function mixRecId(){if(!CUR)return;var b=mixRecInfoBox();mixRecShow("<b>ID</b> — "+esc(CUR.stamp)+" · pair "+CUR.n.toLocaleString()+" of 1,000,000");b.dataset.kind="id";if(navigator.clipboard)navigator.clipboard.writeText(CUR.stamp).catch(function(){})}
 function mixRecVer(){if(!CUR)return;var b=mixRecInfoBox();mixRecShow("<b>VERSION</b> — Signature forge v1 · JAH-MIX record schema v1 · deterministic: the same pair number always fuses the same hybrid.");b.dataset.kind="ver"}
 function mixRecShare(){var u=mixRecDeep();var b=mixRecInfoBox();if(navigator.share){navigator.share({title:document.title,url:u}).catch(function(){return})}if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){mixRecShow("<b>SHARE</b> — hybrid link copied: "+esc(u));b.dataset.kind="share"},function(){mixRecShow("<b>SHARE</b> — hybrid link: "+esc(u));b.dataset.kind="share"})}else{mixRecShow("<b>SHARE</b> — hybrid link: "+esc(u));b.dataset.kind="share"}}
-/* FIX-18-05: forge feedback — animated ticker, button disabling during the cycle */
+/* FIX-18-05: forge feedback — animated ticker, button disabling during the cycle.
+   Forge-button contract: the label always shows the exact entered number
+   ("Forge 12"); input is strictly validated 1–1,000,000 (rejects 0,
+   negatives, decimals, letters); leading zeros are canonicalized. */
 function forgeStep(t){var tick=document.getElementById("forgetick");if(tick)tick.innerHTML='<span class="spin"></span> '+esc(t)}
-async function forgeFresh(){
- var inp=document.getElementById("forgenum"),start=parseInt(inp.value,10);
- if(!start||start<1)start=1+Math.floor(Math.random()*AFMAX);
- start=Math.max(1,Math.min(AFMAX-11,start));
+function forgeWanted(){
+ var v=document.getElementById("forgenum").value.trim();
+ if(v==="")return{ok:true,random:true};
+ if(!/^\d+$/.test(v))return{ok:false,err:"That is not a hybrid number — enter a whole number from 1 to 1,000,000 (no letters, decimals, or symbols)."};
+ var n=parseInt(v,10);
+ if(n<1||n>AFMAX)return{ok:false,err:"Hybrid numbers run from 1 to 1,000,000 — "+n.toLocaleString()+" is outside the range."};
+ return{ok:true,n:n};
+}
+function forgeInputChanged(){
+ var b=document.getElementById("forgebtn"),w=forgeWanted(),e=document.getElementById("forgeerr");
+ b.innerHTML=(w.ok&&!w.random)?"&#128293; Forge "+w.n.toLocaleString():"&#128293; Forge";
+ if(e){if(!w.ok){e.style.display="block";e.textContent=w.err}else{e.style.display="none";e.textContent=""}}
+}
+async function forgeBatch(start,count,srcLabel){
+ start=Math.max(1,Math.min(AFMAX-count+1,start));
  var box=document.getElementById("forgecards"),tick=document.getElementById("forgetick");
  var b1=document.getElementById("forgebtn"),b2=document.getElementById("surprisebtn");
  if(b1)b1.disabled=true;if(b2)b2.disabled=true;
@@ -530,16 +676,34 @@ async function forgeFresh(){
  forgeStep("Heating the forge…");
  box.innerHTML="";
  try{await ensureBase();await ensureWordai()}catch(e){forgeStep("Forge needs a connection for parent records ("+e.message+").");if(b1)b1.disabled=false;if(b2)b2.disabled=false;return}
- forgeStep("Fusing 12 pairs…");
+ forgeStep("Fusing "+count+" pairs…");
  var html="";
- for(var k=0;k<12;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
+ for(var k=0;k<count;k++){try{html+=cardHTML(makeHybrid(start+k))}catch(e){}}
  await new Promise(function(r){setTimeout(r,350)});
- box.innerHTML=html;bumpForged(12);LASTFORGE=start;
+ box.innerHTML=html;bumpForged(count);LASTFORGE=start;
  try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
  var meta=document.getElementById("forgemeta");
- if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+11).toLocaleString()+' · <button class="ghost" onclick="forgeRegen()">⟳ Regenerate (same pairs)</button> <span id="regenmsg" style="color:var(--amber)"></span>';
- if(tick)tick.innerHTML="✓ 12 hybrids forged — pair "+start.toLocaleString()+" to "+(start+11).toLocaleString();
+ if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+count-1).toLocaleString()+' · '+esc(srcLabel)+' · <button class="ghost" onclick="forgeRegen()">⟳ Regenerate (same pairs)</button> <span id="regenmsg" style="color:var(--amber)"></span>';
+ if(tick)tick.innerHTML="✓ "+count+" hybrids forged — pair "+start.toLocaleString()+" to "+(start+count-1).toLocaleString();
  if(b1)b1.disabled=false;if(b2)b2.disabled=false;
+}
+async function forgeFresh(){
+ var w=forgeWanted(),e=document.getElementById("forgeerr");
+ if(!w.ok){if(e){e.style.display="block";e.textContent=w.err}
+  var tick=document.getElementById("forgetick");if(tick){tick.style.display="block";tick.textContent="Enter a valid hybrid number first."}return}
+ if(e){e.style.display="none";e.textContent=""}
+ var start=w.random?(1+Math.floor(Math.random()*AFMAX)):w.n;
+ forgeBatch(start,12,"computed on demand");
+}
+/* Surprise me: a random batch drawn from the actual seeded archive when the
+   archive counts are known, labeled ARCHIVED — otherwise computed on demand. */
+async function forgeRandom(){
+ var seeded=0;
+ try{var api=await ensureApi();seeded=(api.counts&&api.counts.seeded_hybrids)||0}catch(e){}
+ var start,src;
+ if(seeded>12){start=1+Math.floor(Math.random()*(seeded-12));src="drawn from the seeded archive · labeled ARCHIVED"}
+ else{start=1+Math.floor(Math.random()*(AFMAX-12));src="computed on demand — archive counts unavailable"}
+ forgeBatch(start,12,src);
 }
 var LASTFORGE=0;
 async function forgeRegen(){
@@ -553,6 +717,29 @@ async function forgeRegen(){
  box.innerHTML=html;
  if(msg)msg.textContent=(html===before)?"✓ Identical output — same pair, same hybrid, every time.":"(output differed — report this)";
  forgeStep("✓ Regenerated pairs "+LASTFORGE.toLocaleString()+"–"+(LASTFORGE+11).toLocaleString()+" — compare with the first forge.");
+}
+/* ============ compare two hybrids ============ */
+function cmpNum(id){var v=document.getElementById(id).value.trim();if(!/^\d+$/.test(v))return 0;var n=parseInt(v,10);return(n>=1&&n<=AFMAX)?n:0}
+function cmpCard(r){
+ var vname=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"][r.variant];
+ var st=(r._status||"").indexOf("ARCHIVED")===0?"ARCHIVED":"COMPUTED-ON-DEMAND";
+ return '<div class="card"><h3>'+esc(r.name)+'</h3>'+
+ '<div class="st">Permanent ID: <b>'+esc(r.stamp)+'</b> · '+esc(st)+'</div>'+
+ '<div class="par">Parent A: '+esc(r.parentA.name)+' <span style="color:var(--dim)">'+esc(r.parentA.id)+'</span><br>'+
+ 'Parent B: '+esc(r.parentB.name)+' <span style="color:var(--dim)">'+esc(r.parentB.id)+'</span></div>'+
+ '<div class="par" style="margin-top:4px">'+esc(vname)+' · forge seed <code>'+esc(seedOf(r))+'</code></div>'+
+ '<div class="par" style="margin-top:4px">'+esc(firstSent(r.mentality))+'</div>'+
+ '<div class="row"><button onclick="openHybrid('+r.n+')">Open file</button></div></div>';
+}
+async function compareHybrids(){
+ var a=cmpNum("cmpa"),b=cmpNum("cmpb"),e=document.getElementById("cmperr"),box=document.getElementById("cmpcards");
+ if(!a||!b){if(e){e.style.display="block";e.textContent="Enter two whole hybrid numbers from 1 to 1,000,000."}return}
+ if(e){e.style.display="none";e.textContent=""}
+ box.innerHTML="<p><span class='spin'></span> Forging both…</p>";
+ try{await ensureBase();await ensureWordai();
+  var ra=await getHybrid(a),rb=await getHybrid(b);
+  box.innerHTML=cmpCard(ra)+cmpCard(rb);
+ }catch(err){box.innerHTML="<p>Could not forge these hybrids ("+esc(err.message)+"). Check your connection and retry.</p>"}
 }
 /* ============ search + A–Z over seeded index ============ */
 /* FIX-18-06: filter pills (variant + parent type) over the seeded index */
@@ -576,18 +763,28 @@ function setPill(btn){
  doSearch();
 }
 async function doSearch(){
- var q=document.getElementById("q").value.trim().toLowerCase(),box=document.getElementById("browsecards"),btn=document.getElementById("searchbtn");
+ var qraw=document.getElementById("q").value.trim(),q=qraw.toLowerCase(),box=document.getElementById("browsecards"),btn=document.getElementById("searchbtn");
  if(btn)btn.disabled=true;
  box.innerHTML='<p><span class="spin"></span> Searching…</p>';
- try{await ensureIdx()}catch(e){box.innerHTML="<p>Search needs a connection.</p>";if(btn)btn.disabled=false;return}
+ /* exact JAH-MIX-###### or bare number takes priority over fuzzy search */
+ var m=/JAH-MIX-(\d{1,6})/i.exec(qraw),exactN=0;
+ if(m)exactN=parseInt(m[1],10);else if(/^\d{1,6}$/.test(qraw))exactN=parseInt(qraw,10);
+ var exactHTML="";
+ if(exactN>=1&&exactN<=AFMAX){
+  try{var rec0=await getHybrid(exactN);exactHTML='<p style="color:var(--gold)">Exact ID match:</p>'+cardHTML(rec0)}catch(e){}
+ }
+ try{await ensureIdx()}catch(e){
+  box.innerHTML=exactHTML+"<p>The archive index could not be loaded — <button class='ghost' onclick='idxRetry()'>retry</button>. Search covers the seeded archive only; the forge above works on its own.</p>";
+  if(btn)btn.disabled=false;return}
  var hits=[];
  for(var i=0;i<SEEDIDX.length&&hits.length<60;i++){var r=SEEDIDX[i];
   if(!pillOK(r))continue;
   if(!q||r[1].toLowerCase().indexOf(q)>=0||r[2].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0)hits.push(r[0])}
- if(!hits.length){box.innerHTML="<p>No forged hybrid matches"+(q?" \u201C"+esc(q)+"\u201D":" this filter")+" yet — try the forge above; every number 1\u20131,000,000 computes on demand.</p>";if(btn)btn.disabled=false;return}
+ if(!hits.length&&!exactHTML){box.innerHTML="<p>No matching archived hybrid"+(q?" \u201C"+esc(q)+"\u201D":"")+". Search covers the seeded archive only — forge any number 1–1,000,000 above to compute it on demand.</p>";if(btn)btn.disabled=false;return}
  var html="";for(var h=0;h<hits.length&&h<12;h++){var rec=await getHybrid(hits[h]);html+=cardHTML(rec)}
- box.innerHTML=html;if(btn)btn.disabled=false;
+ box.innerHTML=exactHTML+html;if(btn)btn.disabled=false;
 }
+async function idxRetry(){SEEDIDX=null;doSearch()}
 async function buildAZ(){
  var az=document.getElementById("az");
  try{await ensureIdx()}catch(e){return}
@@ -619,12 +816,30 @@ function parseMixParam(s){
  if(!s)return 0;var m=/JAH-MIX-(\d{1,6})/i.exec(s);if(m)return parseInt(m[1],10);
  var n=parseInt(s,10);return (n>=1&&n<=AFMAX)?n:0;
 }
+/* counts: live from the manifest, cached copy labeled when offline, retry when unreachable */
+async function refreshCounts(){
+ var sc=document.getElementById("seededCount"),lv=document.getElementById("statverified");
+ try{
+  var api=await ensureApi();
+  if(api._unavailable){
+   sc.innerHTML='unavailable — <button class="ghost" onclick="apiRetry()">retry</button>';
+   if(lv)lv.textContent="archive counts unreachable — forge, search, and file views still work on their own";
+  }else{
+   sc.textContent=(api.counts.seeded_hybrids||0).toLocaleString();
+   if(lv)lv.textContent=api._live?"counts live from the manifest":"cached counts · last verified "+new Date(api._cachedAt).toLocaleString();
+  }
+ }catch(e){if(sc)sc.textContent="unavailable"}
+}
+async function apiRetry(){APIINFO=null;refreshCounts()}
+/* device-local forge counter: counts hybrids forged via the forge panel ON THIS DEVICE ONLY */
+function resetForged(){try{localStorage.removeItem("mixlab_forged")}catch(e){}var e=document.getElementById("yourCount");if(e)e.textContent="0"}
 async function boot(){
  collapseStatsMobile();
  forgeAccordion();
  var sc=document.getElementById("scrim");if(sc)sc.onclick=closeFile;
  try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
- try{var api=await ensureApi();document.getElementById("seededCount").textContent=(api.counts.seeded_hybrids||0).toLocaleString()}catch(e){document.getElementById("seededCount").textContent="3,000"}
+ refreshCounts();
+ forgeInputChanged();
  buildAZ();
  var qs=new URLSearchParams(location.search),mix=parseMixParam(qs.get("mix")),q=qs.get("q");
  if(mix){openHybrid(mix,true);try{history.replaceState(null,"","?mix=JAH-MIX-"+String(mix).padStart(6,"0"))}catch(e){}}

@@ -69,7 +69,28 @@ def main():
     if not m:
         fail("could not extract JS engine block from index.html")
     else:
-        js_engine = m.group(1)
+        # NOTE: the engine block ends where the hashing block begins
+        m = re.search(
+            r"/\* =+ deterministic forge engine.*?\*/(.*?)/\* =+ record hashing",
+            html, re.S)
+        if not m:
+            fail("could not extract JS engine block from index.html")
+            js_engine = ""
+        else:
+            js_engine = m.group(1)
+        # the page's real seedOf (formal seed format lives outside the engine block)
+        sm = re.search(r"function seedOf\(r\)\{[^}]*\}", html)
+        js_seedof = sm.group(0) if sm else ""
+        if not js_seedof:
+            fail("could not extract seedOf from index.html")
+        # record-hashing block (mirrors engine.full_record; multi-line comment)
+        hm = re.search(
+            r"/\* =+ record hashing.*?\*/(.*?)/\* =+ record resolution",
+            html, re.S)
+        js_hashblock = hm.group(1) if hm else ""
+        if not js_hashblock:
+            fail("could not extract record-hashing block from index.html")
+        vec_ns = [int(n) for n in vectors]
         node_src = (
             js_engine + "\n"
             "BASE=" + json.dumps(
@@ -78,13 +99,16 @@ def main():
             "WORDAIMAP={};\n"
             + json.dumps([[w, wid] for w, wid in load_wordai()]) +
             ".forEach(function(e){WORDAIMAP[e[1]]=e[0]});\n"
+            + js_seedof + "\n" + js_hashblock + "\n"
+            + "var VECNS=" + json.dumps(vec_ns) + ";\n"
             + "var out={};\n"
-            + json.dumps([int(n) for n in vectors]) +
-            ".forEach(function(N){var h=makeHybrid(N);"
+            + "VECNS.forEach(function(N){var h=makeHybrid(N);"
             "out[N]={stamp:h.stamp,name:h.name,variant:h.variant,"
-            "a:h.parentA.id,b:h.parentB.id,"
-            "seed:\"MIX-\"+String(N).padStart(6,\"0\")+\"-V\"+h.variant+\"-FORGE1\"}});\n"
-            "console.log(JSON.stringify(out));\n")
+            "a:h.parentA.id,b:h.parentB.id,seed:seedOf(h)}});\n"
+            + "(async function(){\n"
+            + " for(var k=0;k<VECNS.length;k++){var N=VECNS[k];\n"
+            + "  out[N].hash=await recordHash(makeHybrid(N));}\n"
+            + " console.log(JSON.stringify(out));})();\n")
         with tempfile.NamedTemporaryFile("w", suffix=".js",
                                          delete=False) as tf:
             tf.write(node_src)
@@ -106,11 +130,13 @@ def main():
                         ("variant", "variant", v["variant"]),
                         ("parentA", "a", v["parentA_id"]),
                         ("parentB", "b", v["parentB_id"]),
-                        ("seed", "seed", v["seed"])):
+                        ("seed", "seed", v["seed"]),
+                        ("content_hash", "hash", v["content_hash"])):
                     if j[jk] != want:
                         fail("JS mirror N=%s %s: got %r want %r"
                              % (ns, key, j[jk], want))
-            print("js-mirror parity: %d vectors checked" % len(vectors))
+            print("js-mirror parity: %d vectors checked (incl. content hashes)"
+                  % len(vectors))
 
     # ---- 3. boundary + invalid handling ----
     for bad in (0, -5, 1000001):

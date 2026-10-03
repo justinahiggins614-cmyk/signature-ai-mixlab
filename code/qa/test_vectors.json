@@ -28,7 +28,7 @@
   "parentA_id": "JAH-AI-WORD-006240",
   "parentB_id": "JAH-AI-WORD-075434",
   "seed": "MIX-006500-V1-FORGE1",
-  "content_hash": "4892cafa9e48744831718618233d2c63a92f7d5ac136f90a844a96ab6314f6c9",
+  "content_hash": "bad1bca5ecbf342b5c478f7b8d8f79167b62ea57f0cc3c8fa8f7919080366349",
   "generator_version": "1",
   "record_schema": "1"
  },
@@ -39,7 +39,7 @@
   "parentA_id": "JAH-AI-WORD-012740",
   "parentB_id": "JAH-AI-WORD-055324",
   "seed": "MIX-013000-V0-FORGE1",
-  "content_hash": "a9137eb95702389c325223cf3e123433b6786c0b36c0fcfae76f04f5f6e4eccf",
+  "content_hash": "2019c860a53850c37d08800827ea38a73d2bba4cb6518e9929b0061cfe77b314",
   "generator_version": "1",
   "record_schema": "1"
  },
@@ -50,7 +50,7 @@
   "parentA_id": "JAH-AI-WORD-012741",
   "parentB_id": "JAH-AI-WORD-059794",
   "seed": "MIX-013001-V1-FORGE1",
-  "content_hash": "f7ed0ffdb11454e9ec683823562cf47ffd5836871f7975e6e7aaf1efcb3bc069",
+  "content_hash": "f4139474b3a83e542c0811614dae136f007c28db0f0254cacb789e9aeb2258d3",
   "generator_version": "1",
   "record_schema": "1"
  },
@@ -61,7 +61,7 @@
   "parentA_id": "JAH-AI-WORD-097400",
   "parentB_id": "JAH-AI-WORD-079069",
   "seed": "MIX-1000000-V0-FORGE1",
-  "content_hash": "e55afec5b26e9d21d1967efb8feda5cd6e14bd483baaed2b0b5dd20cb1f4d720",
+  "content_hash": "c0a4a613e86bff3a97b3d1d62e327c1356e945453153c4461567962dea399902",
   "generator_version": "1",
   "record_schema": "1"
  }

@@ -181,6 +181,23 @@ def content_hash(full_record):
     return hashlib.sha256(canonical_json(full_record)).hexdigest()
 
 
+def _unseeded_parent(rec, wbyid):
+    """True when either parent is a word-AI slot with no populated word yet."""
+    for key in ("parentA", "parentB"):
+        p = rec.get(key) or {}
+        if p.get("type") == "word":
+            m = re.fullmatch(r"JAH-AI-WORD-(\d+)", p.get("id", "") or "")
+            if m and wbyid is not None and int(m.group(1)) not in wbyid:
+                return True
+    if rec.get("unseeded"):
+        return True
+    pd = rec.get("parents_detail") or {}
+    for side in ("A", "B"):
+        if (pd.get(side) or {}).get("unseeded"):
+            return True
+    return False
+
+
 def _word_of(parent, wbyid):
     """The dictionary word behind a word-AI parent, else ''.
 
@@ -242,7 +259,7 @@ def full_record(rec, status="ARCHIVED", created=None, olypics_status="not-entere
         "OLYPICS-STATUS": olypics_status,
         "WORD-AI-A": _word_of(rec.get("parentA"), wbyid),
         "WORD-AI-B": _word_of(rec.get("parentB"), wbyid),
-        "UNSEEDED-PARENT": bool(rec.get("unseeded", False)),
+        "UNSEEDED-PARENT": _unseeded_parent(rec, wbyid),
         "CREATED": created,
         "CANONICAL-URL": ("https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/"
                           "?mix=" + rec["stamp"]),
