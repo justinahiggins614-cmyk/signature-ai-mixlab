@@ -12,6 +12,12 @@
 "url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
 "description":"Deterministic forge of 1,000,000 AI hybrids (JAH-MIX-######), each with read-aloud, copy, download, dial-up session, and a personal Q&A AI."}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"The Signature AI Mix Lab",
+"url":"https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/",
+"creator":{"@type":"Person","name":"Justin Addam Higgins"},
+"description":"Deterministic forge of 1,000,000 AI hybrids (JAH-MIX-######), each with read-aloud, copy, download, dial-up session, and a personal Q&A AI."}
+</script>
 <style>
 :root{--bg:#14100b;--panel:#1e1811;--amber:#ffb347;--molten:#ff7b1c;--gold:#ffd97a;--ink:#f3e9d2;--dim:#b8a888;--line:#3a2f1f}
 *{box-sizing:border-box}
@@ -59,10 +65,22 @@ input[type=text],input[type=number]{background:#0f0c08;color:var(--ink);border:1
 .chatlog .sys{color:var(--dim);font-style:italic;margin:6px 0}
 footer{border-top:1px solid var(--line);padding:18px 12px 40px;color:var(--dim);font-size:.88em;text-align:center}
 .skip{position:absolute;left:-9999px} .skip:focus{left:8px;top:8px;background:var(--gold);color:#000;padding:8px}
+/* FIX-03: stat tickers collapse on mobile (<768px); desktop unchanged */
+details.mstats{margin:16px 0}
+details.mstats>.counter{margin:0}
+details.mstats>summary{cursor:pointer;color:var(--dim);font-size:.92em;text-align:center;list-style:none}
+details.mstats>summary::-webkit-details-marker{display:none}
+@media(min-width:768px){details.mstats>summary{display:none}}
+/* FIX-04: modal scrim + focused panel */
+#scrim{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:90;display:none}
+#fileview.modal-open{position:relative;z-index:100;max-height:calc(100vh - 24px);overflow-y:auto}
+/* FIX-05: sticky A-Z index bar */
+.az{position:sticky;top:0;background:#14100b;z-index:60;padding:8px 0}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div id="scrim" aria-hidden="true"></div>
 <div class="wrap">
 <div class="sisters" aria-label="Sister sites">
   <div class="sis"><b><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a></b><small>Home of every AI — dial &amp; talk</small></div>
@@ -70,16 +88,18 @@ footer{border-top:1px solid var(--line);padding:18px 12px 40px;color:var(--dim);
   <div class="sis"><b><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a></b><small>The battle dome — hybrids compete</small></div>
 </div>
 <p style="text-align:center;color:var(--dim);font-size:.85em;margin:6px 0">Sister sites — shared record IDs: every AI keeps its ID across all three.</p>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-t">THE JAH NETWORK</span><span class="here">YOU ARE HERE &#9656;</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a class="cur" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
+<nav class="jahnet" role="navigation" aria-label="JAH Network Global Ecosystem"><span class="jahnet-t">THE JAH NETWORK</span><span class="here">YOU ARE HERE &#9656;</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a class="cur" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><span style="color:var(--dim);font-size:.8em">(launching soon)</span><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
 <main id="main">
 <div class="hero">
   <h1>&#129518; The Signature AI Mix Lab</h1>
   <p class="prov">Working title — pending Manon's confirmation.</p>
   <p>Every Signature AI, fused two by two, in a deterministic forge.<br>One million hybrids. Same pair, same hybrid — forever.</p>
+  <details class="mstats" open><summary>Site statistics</summary>
   <div class="counter">
     <div class="count"><div class="n" id="seededCount">…</div><small>hybrids forged on site / 1,000,000</small></div>
     <div class="count"><div class="n" id="yourCount">0</div><small>hybrids you forged this device</small></div>
   </div>
+  </details>
 </div>
 <div class="panel" id="forgepanel">
   <h2>Forge fresh hybrids</h2>

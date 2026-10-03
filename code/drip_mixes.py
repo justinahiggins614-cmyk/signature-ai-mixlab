@@ -25,6 +25,31 @@ def get_state():
 def chunk_name(n):
     return "mixes-c%05d.jsonl.gz" % (((n - 1) // CHUNK) + 1)
 
+def write_chunk_merged(mixes_dir, cn, new_lines):
+    """Merge new records into a chunk file keyed by record n, sorted.
+
+    NEVER truncate-write: a drip range can start mid-chunk (e.g. --n 1000 is
+    not a multiple of CHUNK=150), and a raw 'wt' open would silently wipe the
+    records already stored in that chunk. 2026-10-02: this exact bug deleted
+    JAH-MIX-003901-004000 and JAH-MIX-004951-005000 across two drips.
+    """
+    path = os.path.join(mixes_dir, cn)
+    merged = {}
+    if os.path.exists(path):
+        with gzip.open(path, "rt") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                r = json.loads(line)
+                merged[r["n"]] = line
+    for line in new_lines:
+        r = json.loads(line)
+        merged[r["n"]] = line
+    with gzip.open(path, "wt") as f:
+        for n in sorted(merged):
+            f.write(merged[n] + "\n")
+
 def dir_size_bytes(path):
     total = 0
     for dp, _, fns in os.walk(path):
@@ -51,8 +76,7 @@ def main():
     mixes_dir = os.path.join(DATA, "mixes")
     os.makedirs(mixes_dir, exist_ok=True)
     for cn, lines in sorted(buf.items()):
-        with gzip.open(os.path.join(mixes_dir, cn), "wt") as f:
-            f.write("\n".join(lines) + "\n")
+        write_chunk_merged(mixes_dir, cn, lines)
     st["next_index"] = end
     json.dump(st, open(state_path(), "w"))
     # compact index: [n, name, parentA_id, parentB_id, chunk_n]
