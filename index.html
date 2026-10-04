@@ -159,7 +159,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <p class="badgelegend"><span class="recbadge archived mini">ARCHIVED</span> = stored in the archive · <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live in your browser — nothing stored, identical every time</p>
   <details class="mstats" open><summary>Site statistics</summary>
   <div class="counter">
-    <div class="count"><div class="n" id="seededCount">26,000</div><small>hybrids stored in the archive / 1,000,000</small></div>
+    <div class="count"><div class="n" id="seededCount">27,000</div><small>hybrids stored in the archive / 1,000,000</small></div>
     <div class="count"><div class="n" id="yourCount">0</div><small>hybrids forged on this device (device-local)</small><br><button class="ghost" style="font-size:.75em;padding:2px 10px;margin-top:4px" onclick="resetForged()" title="Reset this device's forge counter">reset</button></div>
   </div>
   <div id="statverified" style="color:var(--dim);font-size:.8em;text-align:center;margin-top:4px"></div>
@@ -265,6 +265,34 @@ async function gz(url,ms){ms=ms||25000;var ctl=null;try{ctl=new AbortController(
   var r=await fetch(url,{signal:sig});clearTimeout(to);if(!r.ok)throw new Error("HTTP "+r.status);
   if(typeof DecompressionStream==="undefined")throw new Error("gzip unsupported");
   var ds=new DecompressionStream("gzip");return await new Response(r.body.pipeThrough(ds)).text()}
+/* ==== JAH global read-aloud controller (one per page): no stacked voices, no orphan audio ==== */
+(function(){
+if(window.__JAHREAD)return;
+var R={audios:[],lastTap:0,lastLabel:""};
+R.stopAll=function(){
+ try{if(window.speechSynthesis)window.speechSynthesis.cancel();}catch(e){}
+ try{if(window.responsiveVoice&&window.responsiveVoice.cancel)window.responsiveVoice.cancel();}catch(e){}
+ var i,a;
+ for(i=0;i<R.audios.length;i++){a=R.audios[i];try{a.pause();}catch(e){}try{a.removeAttribute("src");}catch(e){}try{a.load();}catch(e){}}
+ R.audios.length=0;
+ var els=document.querySelectorAll("audio");
+ for(i=0;i<els.length;i++){try{els[i].pause();}catch(e){}}
+};
+R.reg=function(a){if(a&&R.audios.indexOf(a)<0)R.audios.push(a);return a;};
+R.playGuard=function(label){
+ var now=Date.now();
+ if(now-R.lastTap<450&&label===R.lastLabel){R.lastTap=0;R.lastLabel="";R.stopAll();return false;}
+ R.lastTap=now;R.lastLabel=String(label||"");
+ R.stopAll();return true;
+};
+try{
+ var NativeAudio=window.Audio;
+ window.Audio=function(src){var a=src===undefined?new NativeAudio():new NativeAudio(src);R.reg(a);return a;};
+ window.Audio.prototype=NativeAudio.prototype;
+}catch(e){}
+window.__JAHREAD=R;
+})();
+
 /* ============ read aloud: tiered TTS (ResponsiveVoice -> 2x Google) ============ */
 var RD={audio:null,queue:[],playing:false,stopped:true,timer:null,speed:1};
 var RD_TIERS=[
@@ -272,7 +300,7 @@ var RD_TIERS=[
  function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob"},
  function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob"}];
 function rdChunks(t){t=String(t).replace(/\s+/g," ").trim();var out=[],cur="";t.split(/(?<=[.!?])\s+/).forEach(function(s){if((cur+" "+s).length>170){if(cur)out.push(cur);cur=s}else cur=(cur?cur+" ":"")+s});if(cur)out.push(cur);return out.slice(0,80)}
-function rdStop(){RD.stopped=true;RD.playing=false;RD.queue=[];if(RD.timer){clearTimeout(RD.timer);RD.timer=null}if(RD.audio){try{RD.audio.pause()}catch(e){}RD.audio=null}var b=document.getElementById("rdbtn");if(b)b.textContent="\uD83D\uDD0A Read aloud"}
+function rdStop(){try{if(window.__JAHREAD)window.__JAHREAD.stopAll();}catch(e){}RD.stopped=true;RD.playing=false;RD.queue=[];if(RD.timer){clearTimeout(RD.timer);RD.timer=null}if(RD.audio){try{RD.audio.pause()}catch(e){}RD.audio=null}var b=document.getElementById("rdbtn");if(b)b.textContent="\uD83D\uDD0A Read aloud"}
 function rdPlayTier(chunk,tier,done){
  if(tier>=RD_TIERS.length){done(false);return}
  var url=RD_TIERS[tier](chunk),a=new Audio();RD.audio=a;a.playbackRate=RD.speed;
@@ -295,9 +323,9 @@ function rdNext(){
   });
  })();
 }
-function rdSpeak(text){rdStop();RD.queue=rdChunks(text);if(!RD.queue.length)return;RD.stopped=false;
+function rdSpeak(text){if(window.__JAHREAD&&!window.__JAHREAD.playGuard("rdSpeak"))return;rdStop();RD.queue=rdChunks(text);if(!RD.queue.length)return;RD.stopped=false;
  var b=document.getElementById("rdbtn");if(b)b.textContent="\u23F9 Stop";rdNext()}
-function rdToggle(){if(!RD.stopped){rdStop()}else{var t=document.getElementById("fvtext");if(t)rdSpeak(t.textContent)}}
+function rdToggle(){if(window.__JAHREAD&&!window.__JAHREAD.playGuard("rdToggle"))return;if(!RD.stopped){rdStop()}else{var t=document.getElementById("fvtext");if(t)rdSpeak(t.textContent)}}
 /* ============ deterministic forge engine (mirrors code/engine.py) ============ */
 var WORDCAP=100000,AFMAX=1000000,BASE=null,WORDAI=null,WORDAIMAP=null,SEEDIDX=null,APIINFO=null;
 function poolSize(){return BASE.length+WORDCAP}
