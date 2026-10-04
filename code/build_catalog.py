@@ -21,6 +21,24 @@ BATCH = 2500
 TODAY = datetime.date.today().isoformat()
 VNAMES = ["Logic-led fusion", "Soul-led fusion", "True 50/50 fusion"]
 
+# THE JAH NETWORK nav block — Manon's 2026-10-04 standing order: sits at the
+# BOTTOM of every page (below all content), one instance per page, never
+# mid-page. Copied verbatim from index.html (site-5 label "JAH-N Wiki Leaks").
+JAHNET = """<nav class="jahnet" role="navigation" aria-label="JAH Network Global Ecosystem"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Mega Mall</a><span class="here">16 The Signature AI Mix Lab &mdash; YOU ARE HERE</span></nav>"""
+
+# Pill tab bar — same tabs/order as the front door (index.html). On these
+# static archive pages the "Mixes" tab carries the active state.
+TABBAR = """<style>
+.jtabbar{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;border-bottom:1px solid rgba(128,128,128,.25)}
+.jtabbar a.jtab{flex:0 0 auto;text-decoration:none;border:1px solid rgba(160,160,160,.45);border-radius:999px;padding:9px 16px;font-size:.92em;color:inherit;background:rgba(127,127,127,.08);white-space:nowrap;font-family:inherit}
+.jtabbar a.jtab.on{background:#f5c518;border-color:#f5c518;color:#191919;font-weight:700}
+</style>
+<nav class="jtabbar" aria-label="Site sections">
+<a class="jtab" href="index.html">&#x1F3E0; Front Door</a>
+<a class="jtab" href="browse.html">&#x1F4DA; 1 Million Archive</a>
+<a class="jtab on" href="mixes.html">Mixes</a>
+</nav>"""
+
 
 def hesc(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
@@ -59,6 +77,11 @@ tr:nth-child(even){background:#181309}
 nav.pages{margin:14px 0;display:flex;gap:8px;flex-wrap:wrap}
 .sitekicker{font-size:11px;letter-spacing:.28em;color:#b8a888}
 .recbadge{display:inline-block;border:2px solid #ffd97a;background:#2a1f0e;color:#ffd97a;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:bold;letter-spacing:.06em}
+.jahnet{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:10px 4px;font-size:.82em;border-bottom:1px solid #3a2f1f}
+.jahnet-t{color:#ffb347;font-weight:bold;letter-spacing:1px}
+.jahnet a{color:#b8a888;text-decoration:none;padding:2px 6px;border:1px solid transparent;border-radius:6px}
+.jahnet a:hover{color:#ffd97a;border-color:#3a2f1f}
+.jahnet .here{color:#ff7b1c;font-weight:bold;font-size:.85em}
 </style>
 </head>
 <body>
@@ -68,6 +91,7 @@ nav.pages{margin:14px 0;display:flex;gap:8px;flex-wrap:wrap}
 <p class="dim">Static index for crawlers and AI agents. Every hybrid below carries record status <span class="recbadge">GENERATED</span> — each is a deterministic forge fusion. Every hybrid also resolves live at
 <a href="%s">the Mix Lab</a> via <b>?mix=JAH-MIX-######</b> deep links.</p>
 <nav class="pages">%s</nav>
+""" + TABBAR + """
 """
 
 
@@ -151,7 +175,7 @@ def build(idx):
         seen += 1
 
     for b, fw in writers.items():
-        fw.write("</table>\n" + "</div>\n</body>\n</html>\n")
+        fw.write("</table>\n" + JAHNET + "\n</div>\n</body>\n</html>\n")
         fw.close()
 
     # ---- hub page ----
@@ -165,9 +189,9 @@ def build(idx):
                     "(%d seeded hybrids)</li>\n"
                     % (b, b, (b - 1) * BATCH + 1, b * BATCH,
                        min(BATCH, total - (b - 1) * BATCH)))
-        f.write("</ul>\n<p class=\"dim\">%d seeded hybrids indexed %s. "
+        f.write(("</ul>\n<p class=\"dim\">%d seeded hybrids indexed %s. "
                 "Full live records: <a href=\"%s\">The Signature AI Mix Lab</a>.</p>\n"
-                "</div>\n</body>\n</html>\n" % (total, TODAY, BASE))
+                + JAHNET + "\n</div>\n</body>\n</html>\n") % (total, TODAY, BASE))
 
     with open(os.path.join(ROOT, "mix-lab-catalog.json"), "w") as f:
         json.dump(feed, f, indent=1)
