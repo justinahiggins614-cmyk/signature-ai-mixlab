@@ -19,7 +19,7 @@ a Signature recipe, deterministic to the core: **same pair, same hybrid — fore
   your exact number, e.g. "Forge 12").
 - The number picks two parents from the parent pool — 260 Signature AIs
   (11 systems, 6 personas, 243 domain specialists) plus 100,000 word-AI
-  slots, each word in the IWB Dictionary carrying its own AI.
+  slots, each word in the Signature Dictionary carrying its own AI.
 - **Surprise me** forges a random hybrid drawn from the live seeded archive.
 
 ## The seeded drip

@@ -23,7 +23,7 @@
 - JAH-MIX-###### — permanent, never reused, never changed. Canonical URL:
   https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-######
 - Parents resolve to the phone book (jah-ai-models/ai-catalog.json) or to
-  JAH-AI-WORD-###### word AIs (populated from the IWB Dictionary).
+  JAH-AI-WORD-###### word AIs (populated from the Signature Dictionary).
 - Recursive mixing is NOT allowed in v1: hybrids cannot be parents.
 
 ## Archive vs on-demand
