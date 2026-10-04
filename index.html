@@ -110,14 +110,17 @@ button:disabled{opacity:.45;cursor:wait}
 .recbadge.ondemand{border-color:#7ad4ff;background:#0e2233;color:#aee6ff}
 .badgelegend{font-size:.85em;color:var(--dim);margin:8px 0;text-align:center}
 .badgelegend .recbadge{margin:0 4px 0 0}
-/* FIRST-TIME USER GUIDE: spotlight tour (theme-neutral; never traps content — Esc/Skip/arrows) */
-#tourscrim{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:200;display:none}
-#tourcard{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:201;background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:14px 16px;max-width:560px;width:calc(100% - 28px);display:none;text-align:left;max-height:70vh;overflow-y:auto}
-#tourcard h2{color:var(--gold);margin:.1em 0 .4em;font-size:1.12em}
-#tourcard p{margin:.35em 0;font-size:.93em}
-#tourcard .tbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-#tourcard .tbtns button{min-height:44px;min-width:90px}
-.tour-hl{outline:3px solid var(--gold)!important;outline-offset:3px}
+/* FIRST-TIME USER GUIDE: centered welcome overlay (no auto-scroll, no spotlight) */
+#welcomemodal{position:fixed;inset:0;z-index:201;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);padding:16px}
+#welcomemodal.on{display:flex}
+#welcomebox{background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:20px 22px;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;text-align:left}
+#welcomebox .wkind{font-size:.75em;color:var(--dim);letter-spacing:.18em;font-weight:700}
+#welcomebox h2{color:var(--gold);margin:.1em 0 .4em;font-size:1.12em}
+#welcomebox ol{margin:.4em 0;padding-left:1.25em}
+#welcomebox li{font-size:.93em;line-height:1.5;margin:.55em 0}
+#welcomebox li b{color:var(--gold)}
+#welcomebox .wok{display:block;width:100%;min-height:52px;margin-top:12px;font-size:1em;font-weight:700;border-radius:8px;border:2px solid var(--gold);background:var(--gold);color:#0a0f22;cursor:pointer}
+#welcomebox .wnote{color:var(--dim);font-size:.78em;margin-top:8px;text-align:center}
 .provline{font-size:.85em;color:var(--dim);margin:8px 0}
 .provline b{color:var(--amber);font-weight:normal}
 .recbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;align-items:center}
@@ -161,7 +164,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   </div>
   <div id="statverified" style="color:var(--dim);font-size:.8em;text-align:center;margin-top:4px"></div>
   </details>
-  <div style="text-align:center;margin:6px 0"><button class="ghost" onclick="startTour(true)" style="font-size:.9em">❓ First-time guide — take the 1-minute tour</button></div>
+  <div style="text-align:center;margin:6px 0"><button class="ghost" onclick="welcomeShow(true)" style="font-size:.9em">❓ First-time guide — take the 1-minute tour</button></div>
 </div>
 <div class="panel" id="forgepanel">
   <h2>Forge fresh hybrids</h2>
@@ -226,7 +229,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <p><b>Copy, download, share.</b> Copy the record text, download <b>.txt</b> or <b>.json</b>, or <b>Share</b> a link like <code>?mix=JAH-MIX-000042</code> — the link opens the same hybrid on any device, and survives a refresh.</p>
 <p><b>Read aloud.</b> The 🔊 button reads any hybrid file with tiered audio failover.</p>
 <p><b>Site statistics.</b> The top counter shows hybrids stored in the archive (live from the manifest); the second counts hybrids forged on this device only — <b>reset</b> clears it.</p>
-<p><button class="ghost" onclick="startTour(true)">▶ Replay the 1-minute guided tour</button></p>
+<p><button class="ghost" onclick="welcomeShow(true)">▶ Replay the 1-minute guided tour</button></p>
 </div>
 </details>
 </main>
@@ -238,17 +241,20 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
   <p>Cross-links: <a href="data/xlinks/dict-ai-terms.json">dictionary AI terms</a> · <a href="data/xlinks/wiki-mix-articles.json">wiki MIX: article resolution</a> · <a href="api.json">api.json</a> · <a href="mix-lab-catalog.json">catalog feed</a> · <a href="browse.html">A–Z archive</a> · <a href="mixes.html">static index</a> · <a href="sitemap.xml">sitemap</a></p>
 </footer>
 </div>
-<!-- FIRST-TIME USER GUIDE: spotlight tour overlay (never traps content) -->
-<div id="tourscrim" aria-hidden="true"></div>
-<div id="tourcard" role="dialog" aria-labelledby="tourtitle" style="display:none">
-  <h2 id="tourtitle"></h2>
-  <div id="tourbody"></div>
-  <div class="tbtns">
-    <button id="tourback" onclick="tourBack()">← Back</button>
-    <button id="tournext" onclick="tourNext()">Next →</button>
-    <button class="ghost" id="tourskip" onclick="tourSkip()">Skip tour</button>
+<!-- FIRST-TIME USER GUIDE: centered welcome overlay (no auto-scroll, no spotlight) -->
+<div id="welcomemodal" role="dialog" aria-modal="true" aria-labelledby="welcometitle">
+  <div id="welcomebox">
+    <div class="wkind">WELCOME</div>
+    <h2 id="welcometitle">The Mix Lab in 4 taps</h2>
+    <ol>
+      <li><b>Forge a hybrid.</b> Type any whole number from 1 to 1,000,000 and tap <b>Forge</b> — or tap <b>Surprise me</b> for a random dozen. The forge fuses two real Signature AIs live in your browser; nothing is stored.</li>
+      <li><b>Read the card.</b> Every hybrid card shows its two real parent AIs, the fusion style, and a badge: <b>ARCHIVED</b> means stored in the archive, <b>COMPUTED ON DEMAND</b> means forged live just now.</li>
+      <li><b>Open a file.</b> Tap <b>Open file</b> on any card to ask the hybrid questions, dial it for a live session, copy or download its record as .txt/.json, and share its ?mix= link.</li>
+      <li><b>Search the archive.</b> The search box, filter pills and the A–Z bar find stored hybrids by name or parent — or type a JAH-MIX-###### ID to jump straight to it.</li>
+    </ol>
+    <button type="button" class="wok" id="welcomegotit">Got it ✓</button>
+    <div class="wnote">The ❓ First-time guide button up top brings this guide back any time.</div>
   </div>
-  <p style="color:var(--dim);font-size:.8em">Tip: arrow keys move, Esc skips. Replay anytime with the ❓ First-time guide button.</p>
 </div>
 <script>
 "use strict";
@@ -904,7 +910,7 @@ async function boot(){
  if(mix){openHybrid(mix,true);try{history.replaceState(null,"","?mix=JAH-MIX-"+String(mix).padStart(6,"0"))}catch(e){}}
  else if(q){document.getElementById("q").value=q;doSearch()}
  /* first-time user guide: 1-minute spotlight tour, once per device */
- try{if(typeof startTour==="function")startTour(false)}catch(e){}
+ try{if(typeof welcomeShow==="function")welcomeShow(false)}catch(e){}
 }
 document.addEventListener("DOMContentLoaded",boot);
 </script>
@@ -942,63 +948,23 @@ window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) re
 })();
 </script>
 <script>
-/* FIRST-TIME USER GUIDE: 1-minute spotlight tour (localStorage jah-tour-seen-mixlab).
-   Start/Skip on step 1, Next/Back after, Esc/arrows keyboard, touch-sized
-   buttons, scrim-click dismisses — never blocks content. Theme untouched. */
+/* FIRST-TIME USER GUIDE: centered welcome overlay (localStorage jah-tour-seen-mixlab).
+   One welcome modal, one OK button, no auto-scroll, no spotlight. Theme untouched. */
 (function(){
 'use strict';
-var KEY='jah-tour-seen-mixlab',I=-1,HL=null;
-var STEPS=[
- {sel:'.hero h1',t:'Welcome to the Mix Lab',
-  what:'The Signature AI Mix Lab — the hybrid forge.',
-  does:'Fuses any two Signature AIs into a brand-new hybrid AI. 1,000,000 possible hybrids, and the same number always makes the same hybrid — forever.',
-  how:'This 1-minute tour walks each part. Use Next (or the → key), Back (or ←), or Skip (or Esc) anytime. Replay later with the ❓ First-time guide button.'},
- {sel:'#forgenum',t:'The hybrid number',
-  what:'The hybrid number box.',
-  does:'Picks exactly which of the 1,000,000 hybrids you get — every number is a different fusion of two AIs.',
-  how:'Type any whole number from 1 to 1,000,000, then tap Forge. 0, numbers past a million, and letters are rejected with a plain message.'},
- {sel:'#forgebtn',t:'Forge',
-  what:'The Forge button — and Surprise me beside it.',
-  does:'Computes 12 hybrids on demand. Nothing is stored: the forge calculates them live in your browser.',
-  how:'Tap Forge for your number, or Surprise me for a random dozen. Watch the badges: ARCHIVED means stored in the archive, COMPUTED ON DEMAND means forged live.'},
- {sel:'#forgecards',t:'Parents',
-  what:'The parent lines on each hybrid card.',
-  does:'Shows the two real AIs that were fused — every parent resolves to a real Signature AI from the Phone Book, or a word-born AI.',
-  how:'Tap a parent name to open that AI in the Phone Book or its dictionary word. Open file shows the full record.'},
- {sel:'#comparepanel',t:'Compare',
-  what:'Compare two hybrids.',
-  does:'Puts any two hybrids side by side — parents, variant, seed, mentality.',
-  how:'Type two hybrid numbers and tap Compare.'},
- {sel:'#q',t:'Archive search',
-  what:'The archive search box.',
-  does:'Searches the stored hybrids (the ARCHIVED ones) by name or parent, with filter pills for fusion style and parent type.',
-  how:'Type a name or parent, pick a filter, tap Search. The A–Z bar jumps by first letter. Anything not stored can still be forged above by number.'},
- {sel:'#forgepanel',t:'Talk & download',
-  what:'Open file — talk, dial, download.',
-  does:'Every hybrid has a full file: ask it questions, dial it for a live session, copy or download its record, share its link.',
-  how:'Tap Open file on any card, then use Ask, Dial this hybrid, Copy, .txt/.json, and Share in the file view.'}
-];
+var KEY='jah-tour-seen-mixlab';
 function el(id){return document.getElementById(id)}
-function clearHL(){if(HL){try{HL.classList.remove('tour-hl')}catch(e){}HL=null}}
-function show(i){
- I=i;var s=STEPS[i];if(!s){end(true);return}
- clearHL();
- var t=null;try{t=document.querySelector(s.sel)}catch(e){}
- if(t){try{t.scrollIntoView({behavior:'smooth',block:'center'})}catch(e2){}try{t.classList.add('tour-hl')}catch(e3){}HL=t}
- el('tourtitle').textContent='Step '+(i+1)+' of '+STEPS.length+': '+s.t;
- el('tourbody').innerHTML='<p><b>WHAT</b> — '+s.what+'</p><p><b>WHAT IT DOES</b> — '+s.does+'</p><p><b>HOW</b> — '+s.how+'</p>';
- el('tourback').style.display=i>0?'':'none';
- el('tournext').textContent=(i===STEPS.length-1)?'Finish ✓':'Next →';
- el('tourscrim').style.display='block';el('tourcard').style.display='block';
- try{el('tournext').focus()}catch(e){}
+function welcomeShow(force){
+ if(!force){try{if(localStorage.getItem(KEY))return}catch(e){return}}
+ var m=el('welcomemodal');if(!m)return;
+ m.classList.add('on');
+ var ok=el('welcomegotit');if(ok)try{ok.focus()}catch(e){}
 }
-function end(mark){try{if(mark)localStorage.setItem(KEY,'1')}catch(e){}clearHL();I=-1;var c=el('tourcard'),s=el('tourscrim');if(c)c.style.display='none';if(s)s.style.display='none'}
-window.startTour=function(force){if(!force){try{if(localStorage.getItem(KEY))return}catch(e){}}show(0)};
-window.tourNext=function(){if(I<STEPS.length-1)show(I+1);else end(true)};
-window.tourBack=function(){if(I>0)show(I-1)};
-window.tourSkip=function(){end(true)};
-document.addEventListener('keydown',function(e){if(I<0)return;if(e.key==='Escape')window.tourSkip();else if(e.key==='ArrowRight')window.tourNext();else if(e.key==='ArrowLeft')window.tourBack()});
-var ts=el('tourscrim');if(ts)ts.onclick=function(){window.tourSkip()};
+function welcomeDone(){try{localStorage.setItem(KEY,'1')}catch(e){}var m=el('welcomemodal');if(m)m.classList.remove('on')}
+window.welcomeShow=welcomeShow;
+var ok=el('welcomegotit');if(ok)ok.onclick=function(){welcomeDone()};
+var m0=el('welcomemodal');if(m0)m0.addEventListener('click',function(e){if(e.target===m0)welcomeDone()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=el('welcomemodal');if(m&&m.classList.contains('on'))welcomeDone()}});
 })();
 </script>
 </body>
