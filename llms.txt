@@ -3,7 +3,7 @@
 > The Signature AI Mix Lab is a deterministic forge blending Signature AIs,
 > two by two, into 1,000,000 hybrids (JAH-MIX-######).
 > Site: https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/
-> Sister sites: the Signature AI Phone Book (parents), AI Olypics (battles).
+> Sister sites: the Signature AI Phone Book (parents), AI Olympics (battles).
 
 ## Authoritative sources (read these, never guess)
 - mixlab-manifest.json — the ONE authoritative count/version source

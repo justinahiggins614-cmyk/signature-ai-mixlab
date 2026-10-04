@@ -2,7 +2,7 @@
 
 Site 18. Deterministic forge of 1,000,000 AI hybrids (JAH-MIX-######) from the
 phone book's parent catalog (260 base AIs + 100,000 word-AI slots). Sister site
-of the Signature AI Phone Book (jah-ai-models) and AI Olypics
+of the Signature AI Phone Book (jah-ai-models) and AI Olympics
 (signature-ai-olypics) — shared record IDs across all three.
 
 - `index.html` — the whole app (forge, browse, hybrid files, Q&A, dial, TTS)
