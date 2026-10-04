@@ -49,6 +49,21 @@ details.letter summary .cnt{color:var(--dim);font-size:.8em;font-weight:normal;m
 footer{color:var(--dim);font-size:.85em;text-align:center;padding:26px 12px 40px;border-top:1px solid var(--line);margin-top:26px}
 footer a{color:var(--gold)}
 .homelink{display:block;text-align:center;margin:16px 0}
+/* BEST OF THE BEST — Manon's 2026-10-04 archive pattern: the AI's top pick pinned above the A–Z list */
+.bestofbest{border:2px solid var(--molten);border-radius:12px;background:linear-gradient(180deg,#2a1a0e,var(--panel));padding:20px;margin:18px 0}
+.bestofbest h2{margin:0 0 4px;color:var(--gold);letter-spacing:.06em}
+.bestofbest .whybest{background:rgba(255,123,28,.1);border-left:3px solid var(--molten);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0;font-size:.92em}
+.bestofbest .beststats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.bestofbest .beststat{background:#0f0c08;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:.82em;color:var(--dim)}
+.bestofbest .beststat b{color:var(--gold)}
+.bestofbest .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bestofbest button{cursor:pointer;background:#0f0c08;border:1px solid var(--molten);color:var(--ink);border-radius:8px;padding:9px 16px;font-family:inherit;font-size:.92em}
+.bestofbest button:hover{border-color:var(--gold);color:var(--gold)}
+.bestofbest .openlink{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:8px;padding:9px 16px;text-decoration:none;font-size:.92em}
+.bestflow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 0;justify-content:center;font-size:.8em}
+.bestflow .bnode{background:#0f0c08;border:1px solid var(--molten);border-radius:8px;padding:8px 12px;text-align:center;max-width:150px}
+.bestflow .bnode b{display:block;color:var(--gold);margin-bottom:2px}
+.bestflow .barrow{color:var(--molten);font-size:18px;font-weight:700}
 </style>
 </head>
 <body>
@@ -191,6 +206,53 @@ document.getElementById("jah-askai-q").addEventListener("keydown",function(e){if
 </script>
 </div>
 
+<section class="bestofbest" aria-labelledby="besth">
+<h2 id="besth">★ Best of the Best</h2>
+<p style="margin:4px 0;font-size:.9em;color:var(--dim)">The AI's top pick from this archive — the single hybrid that best shows what the forge does. Popped open for you.</p>
+<details open>
+<summary style="cursor:pointer;font-size:1.1em"><b>DeteIS</b> <span class="recbadge archived mini">ARCHIVED</span> <span style="font-size:.8em;color:var(--dim)">JAH-MIX-000001 · hybrid #1</span></summary>
+<div style="padding-top:8px">
+<p class="whybest"><b>Why this is the best:</b> the first hybrid ever forged — hybrid #1 of 1,000,000. It set the forge's format: two parents fused into a named mentality with lineage. The first fusion of the Signature forge, and every hybrid since follows its mold.</p>
+<div class="bestflow" aria-hidden="true"><div class="bnode"><b>Parent A</b>Deterministic Engine — pure rules</div><div class="barrow">×</div><div class="bnode"><b>Parent B</b>J.A.R.V.I.S. — gentleman soul</div><div class="barrow">→</div><div class="bnode"><b>The forge</b>deterministic fusion</div><div class="barrow">→</div><div class="bnode"><b>DeteIS</b>order × soul</div></div>
+<p><b>What it does:</b> fuses Deterministic Engine (absolute order — every input follows fixed IF-THEN law) with J.A.R.V.I.S. (the perfect gentleman butler in machine form). The Engine's logic leads; J.A.R.V.I.S.'s soul flavors every answer. Abilities: absolute order fused, gentleman-butler composure, hybrid vigor of both parents.</p>
+<p><b>Implications:</b> <b>28,000</b> hybrids are stored in this archive and up to <b>1,000,000</b> can be computed on demand — each a deterministic fusion, identical every time, with parents, mentality, forge seed, and content hash.</p>
+<div class="beststats"><span class="beststat"><b>28,000</b> hybrids archived</span><span class="beststat">Hybrid <b>#1</b> — the genesis</span><span class="beststat">Parents: <b>2</b> AIs fused</span><span class="beststat">Forge: <b>deterministic</b></span></div>
+<div class="toolbar">
+<button id="best-speak" type="button">🔊 Read aloud</button>
+<button id="best-copy" type="button">⧉ Copy</button>
+<button id="best-dl" type="button">⤓ Download</button>
+<a class="openlink" href="./?mix=JAH-MIX-000001">Open the full record →</a>
+</div>
+</div>
+</details>
+</section>
+<script>
+(function(){
+"use strict";
+var plain="Best of the Best — DeteIS, JAH-MIX-000001. The first hybrid ever forged — hybrid 1 of 1,000,000. It fuses Deterministic Engine, absolute order, with J.A.R.V.I.S., the perfect gentleman butler in machine form. The Engine's logic leads; J.A.R.V.I.S.'s soul flavors every answer.";
+var dl="THE SIGNATURE AI MIX LAB — BEST OF THE BEST\nDeteIS — JAH-MIX-000001 (hybrid 1 of 1,000,000)\n\nWHY THIS IS THE BEST\nThe first hybrid ever forged — it set the forge's format: two parents fused into a named mentality with lineage.\n\nPARENTS\nParent A: Deterministic Engine (JAH-AI-SIG-001) — Absolute order. Every input follows fixed IF-THEN law; the same facts always produce the same verdict. No guessing, no chance — a mind of pure rules.\nParent B: J.A.R.V.I.S. (JAH-AI-PER-004) — The perfect gentleman butler in machine form. Polite, precise, dryly witty.\n\nMENTALITY\nBorn of Deterministic Engine and J.A.R.V.I.S. Deterministic Engine's logic leads; J.A.R.V.I.S.'s soul flavors every answer.\n\nIMPLICATIONS\n28,000 hybrids archived; 1,000,000 computable on demand — deterministic, identical every time.\n\nFull record: https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/?mix=JAH-MIX-000001";
+function copyText(t,btn){function done(ok){var o=btn.textContent;btn.textContent=ok?"Copied ✓":"Copy failed";setTimeout(function(){btn.textContent=o;},1500);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done(true);}catch(e){done(false);}document.body.removeChild(ta);}}
+function download(name,text){try{var url=URL.createObjectURL(new Blob([text],{type:"text/plain"}));var a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);try{URL.revokeObjectURL(url);}catch(e){}},800);}catch(e){}}
+var speakTimer=null;
+function speakStop(){try{if(window.speechSynthesis)window.speechSynthesis.cancel();}catch(e){}if(speakTimer){clearTimeout(speakTimer);speakTimer=null;}}
+var speakBtn=document.getElementById("best-speak");
+speakBtn.onclick=function(){
+  speakStop();
+  try{
+    if(!("speechSynthesis" in window)){speakBtn.textContent="No voice on this device";setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},1800);return;}
+    if(window.speechSynthesis.speaking){speakBtn.textContent="🔊 Read aloud";return;}
+    var u=new SpeechSynthesisUtterance(plain);
+    speakBtn.textContent="⏹ Stop";
+    u.onend=function(){speakBtn.textContent="🔊 Read aloud";};
+    u.onerror=function(){speakBtn.textContent="🔊 Read aloud";};
+    window.speechSynthesis.speak(u);
+    speakTimer=setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},30000);
+  }catch(e){speakBtn.textContent="🔊 Read aloud";}
+};
+document.getElementById("best-copy").onclick=function(){copyText(dl,this);};
+document.getElementById("best-dl").onclick=function(){download("JAH-MIX-000001-best.txt",dl);};
+})();
+</script>
 <div class="azbar" id="azbar" role="navigation" aria-label="A–Z index"></div>
 <div id="jah-askai-scope"><div id="letters"></div></div>
 <footer>
