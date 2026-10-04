@@ -1001,7 +1001,7 @@ function welcomeShow(force){
  if(!force){try{if(localStorage.getItem(KEY))return}catch(e){return}}
  var m=el('welcomemodal');if(!m)return;
  m.classList.add('on');
- var ok=el('welcomegotit');if(ok)try{ok.focus()}catch(e){}
+ var ok=el('welcomegotit');if(ok)try{ok.focus({preventScroll:true})}catch(e){}
 }
 function welcomeDone(){try{localStorage.setItem(KEY,'1')}catch(e){}var m=el('welcomemodal');if(m)m.classList.remove('on')}
 window.welcomeShow=welcomeShow;
