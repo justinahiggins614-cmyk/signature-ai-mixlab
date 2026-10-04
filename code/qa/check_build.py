@@ -110,6 +110,7 @@ def main():
         fail("sitemap.xml not well-formed: %s" % e)
         kids = []
     total_urls = 0
+    core_urls = 0
     for kid in kids:
         name = kid.rsplit("/", 1)[-1]
         p = os.path.join(REPO, name)
@@ -122,13 +123,21 @@ def main():
         except Exception as e:  # noqa
             fail("sitemap child %s not well-formed: %s" % (name, e))
             continue
+        if name == "sitemap-core.xml":
+            # core site pages (home + A-Z archive) — not mix records
+            want = {BASE, BASE + "browse.html"}
+            got = set(urls)
+            if got != want:
+                fail("sitemap-core urls wrong: %r" % sorted(urls))
+            core_urls += len(urls)
+            continue
         total_urls += len(urls)
         for u in urls[:2] + urls[-2:]:
             if not re.fullmatch(re.escape(BASE) + r"\?mix=JAH-MIX-\d{6}", u or ""):
                 fail("sitemap URL malformed: %r" % u)
     if total_urls != seeded:
         fail("sitemap urls %d != seeded %d" % (total_urls, seeded))
-    print("sitemap: %d urls ok" % total_urls)
+    print("sitemap: %d urls ok (+%d core pages)" % (total_urls, core_urls))
 
     # ---- cross-links ----
     xl_d = json.load(open(os.path.join(DATA, "xlinks", "dict-ai-terms.json")))
