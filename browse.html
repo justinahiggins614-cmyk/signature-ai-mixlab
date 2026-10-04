@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hybrid Archive — A–Z of every forged hybrid &mdash; The Signature AI Mix Lab</title>
+<meta name="description" content="Browse every archived Signature AI Mix Lab hybrid (JAH-MIX-######), A–Z, with live search. Stored ARCHIVED hybrids plus the on-demand forge to 1,000,000.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/browse.html">
+<style>
+:root{--bg:#14100b;--panel:#1e1811;--amber:#ffb347;--molten:#ff7b1c;--gold:#ffd97a;--ink:#f3e9d2;--dim:#b8a888;--line:#3a2f1f}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;margin:0;line-height:1.5}
+a{color:var(--gold)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 14px}
+.sitekicker{font-size:11px;letter-spacing:.28em;color:var(--dim);text-align:center;margin:10px 0 0}
+.sitekicker b{color:var(--gold)}
+.hero{text-align:center;padding:30px 12px 18px;background:radial-gradient(ellipse at 50% 0%,#3a2410 0%,var(--bg) 70%)}
+.hero h1{color:var(--gold);font-size:2em;margin:.2em 0;letter-spacing:1px}
+.hero p.sub{color:var(--dim);max-width:720px;margin:0 auto}
+.recbadge{display:inline-block;border:2px solid var(--gold);background:#2a1f0e;color:var(--gold);border-radius:10px;padding:3px 12px;font-size:12px;font-weight:bold;letter-spacing:.06em;margin:3px 6px 3px 0}
+.recbadge.mini{font-size:10px;padding:1px 8px;border-width:1px;margin:0 6px 0 0}
+.recbadge.archived{border-color:var(--gold);background:#2a1f0e;color:var(--gold)}
+.recbadge.ondemand{border-color:#7ad4ff;background:#0e2233;color:#aee6ff}
+.badgelegend{font-size:.85em;color:var(--dim);margin:10px 0;text-align:center}
+.counter{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.count{background:var(--panel);border:1px solid var(--molten);border-radius:10px;padding:10px 18px;min-width:220px}
+.count .n{font-size:1.7em;color:var(--amber);font-weight:bold}
+.count small{color:var(--dim)}
+.searchrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0 6px}
+input[type=text]{background:#0f0c08;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:1em;width:100%;max-width:380px}
+button{background:var(--molten);color:#14100b;border:none;border-radius:8px;padding:9px 16px;font-weight:bold;cursor:pointer;font-size:1em}
+button:hover{background:var(--amber)}
+button.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
+.azbar{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.azbar a{display:inline-block;min-width:34px;text-align:center;padding:6px 8px;border:1px solid var(--line);border-radius:8px;color:var(--gold);text-decoration:none;background:var(--panel);font-weight:bold}
+.azbar a.empty{color:#5a5040;border-color:#2a2318;font-weight:normal}
+.azbar a:hover{border-color:var(--molten)}
+details.letter{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:0}
+details.letter summary{cursor:pointer;padding:12px 14px;font-size:1.15em;color:var(--gold);font-weight:bold;list-style:none}
+details.letter summary::-webkit-details-marker{display:none}
+details.letter summary .cnt{color:var(--dim);font-size:.8em;font-weight:normal;margin-left:8px}
+.mixlist{list-style:none;margin:0;padding:0 14px 14px;max-height:420px;overflow-y:auto}
+.mixlist li{padding:8px 4px;border-top:1px solid var(--line);font-size:.95em}
+.mixlist li .dim{color:var(--dim)}
+.mixlist li .parents{color:var(--dim);font-size:.88em;display:block}
+.mixlist li .open{display:inline-block;margin-top:4px;font-size:.88em}
+.loading{color:var(--dim);padding:10px 14px;font-style:italic}
+.err{color:var(--amber);padding:10px 14px}
+footer{color:var(--dim);font-size:.85em;text-align:center;padding:26px 12px 40px;border-top:1px solid var(--line);margin-top:26px}
+footer a{color:var(--gold)}
+.homelink{display:block;text-align:center;margin:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="sitekicker"><b>SITE 16 OF 27</b> &middot; THE JAH NETWORK</p>
+<div class="hero">
+  <h1>&#128214; The Hybrid Archive</h1>
+  <p class="sub">Every hybrid the forge has stored, A–Z. The records <b style="color:var(--gold)">are</b> the product — tap any hybrid to open its full record: parents, mentality, forge seed, and content hash.</p>
+  <p class="badgelegend"><span class="recbadge archived mini">ARCHIVED</span> = stored in the archive &middot; <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live in your browser — nothing stored, identical every time</p>
+  <div class="counter">
+    <div class="count"><div class="n" id="browseCount">20,000</div><small>hybrids stored in the archive / 1,000,000</small></div>
+  </div>
+  <p class="sub" style="font-size:.85em">Hybrids past the archived count — up to #1,000,000 — are <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span>: type any JAH-MIX-###### ID below and the forge computes it instantly.</p>
+</div>
+<a class="homelink" href="./">&larr; Back to the Mix Lab</a>
+<div class="searchrow">
+  <input type="text" id="q2" placeholder="Search by name, parent, or JAH-MIX-######…" aria-label="Search the hybrid archive">
+  <button onclick="doSearch2()">Search</button>
+  <button class="ghost" onclick="clearSearch2()">Clear</button>
+</div>
+<div id="searchres"></div>
+<div class="azbar" id="azbar" role="navigation" aria-label="A–Z index"></div>
+<div id="letters"></div>
+<footer>
+  <p>Every archived hybrid carries record status <span class="recbadge archived mini">ARCHIVED</span> — each a deterministic forge fusion by Justin Addam Higgins.</p>
+  <p><a href="./">The Signature AI Mix Lab</a> &middot; <a href="mixes.html">static index</a> &middot; <a href="sitemap.xml">sitemap</a></p>
+</footer>
+</div>
+<script>
+var IDX=null, GROUPS=null, CHUNK_CACHE={}, SEEDED=0;
+var VARIANT=["Logic-led fusion","Soul-led fusion","True 50/50 fusion"];
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function stamp(n){return "JAH-MIX-"+String(n).padStart(6,"0")}
+function mixUrl(n){return "./?mix="+stamp(n)}
+async function gzText(url){var r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status+" on "+url);if(typeof DecompressionStream==="undefined")throw new Error("gzip unsupported");var ds=new DecompressionStream("gzip");return await new Response(r.body.pipeThrough(ds)).text()}
+function chunkName(n){return "data/mixes/mixes-c"+String(Math.floor((n-1)/150)+1).padStart(5,"0")+".jsonl.gz"}
+function letterOf(name){var c=String(name||"").charAt(0).toUpperCase();return (c>="A"&&c<="Z")?c:"#"}
+async function ensureChunk(cn){if(!CHUNK_CACHE[cn]){var t=await gzText(chunkName(cn)),map={};t.split("\n").forEach(function(ln){ln=ln.trim();if(!ln)return;try{var r=JSON.parse(ln);map[r.n]=r}catch(e){}});CHUNK_CACHE[cn]=map}return CHUNK_CACHE[cn]}
+function rowHtml(row,rec){
+  var n=row[0],name=row[1],pa=row[2],pb=row[3];
+  var paName=(rec&&rec.parentA&&rec.parentA.name)||"",pbName=(rec&&rec.parentB&&rec.parentB.name)||"";
+  var v=(rec&&typeof rec.variant==="number")?rec.variant:null;
+  var h="<li><a href=\""+mixUrl(n)+"\"><b>"+esc(name)+"</b></a> "+'<span class="recbadge archived mini">ARCHIVED</span>';
+  h+='<span class="dim">'+esc(stamp(n))+(v==null?"":" &middot; "+esc(VARIANT[v]))+"</span>";
+  h+='<span class="parents">'+esc(paName||pa)+" &times; "+esc(pbName||pb);
+  if(paName&&pbName)h+=' <span class="dim">('+esc(pa)+", "+esc(pb)+")</span>";
+  h+="</span>";
+  h+='<a class="open" href="'+mixUrl(n)+'">Open full hybrid record &rarr;</a></li>';
+  return h;
+}
+async function loadLetter(L,box){
+  if(box.dataset.loaded==="1")return;
+  box.dataset.loaded="1";
+  box.innerHTML='<p class="loading">Loading hybrids…</p>';
+  try{
+    var rows=GROUPS[L]||[];
+    var cns={};rows.forEach(function(r){cns[r[4]]=1});
+    var maps={};
+    for(var cn in cns){maps[cn]=await ensureChunk(parseInt(cn,10))}
+    var html='<ul class="mixlist">';
+    rows.forEach(function(r){html+=rowHtml(r,maps[r[4]]&&maps[r[4]][r[0]])});
+    html+="</ul>";
+    box.innerHTML=html;
+  }catch(e){box.innerHTML='<p class="err">Could not load this section: '+esc(e.message)+'. Try again.</p>';box.dataset.loaded="0"}
+}
+function buildAZ(){
+  var order="ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
+  var bar=document.getElementById("azbar"),wrap=document.getElementById("letters");
+  var bh="",wh="";
+  order.forEach(function(L){
+    var rows=GROUPS[L]||[];
+    bh+='<a href="#L-'+L+'" class="'+(rows.length?"":"empty")+'">'+L+'</a>';
+    wh+='<details class="letter" id="L-'+L+'"><summary>'+(L==="#"?"0–9 &amp; symbols":L)+'<span class="cnt">'+rows.length.toLocaleString()+" hybrids</span></summary><div class=\"lbox\"></div></details>";
+  });
+  bar.innerHTML=bh;wrap.innerHTML=wh;
+  Array.prototype.forEach.call(wrap.querySelectorAll("details.letter"),function(d){
+    var L=d.id.slice(2),box=d.querySelector(".lbox");
+    d.addEventListener("toggle",function(){if(d.open)loadLetter(L,box)});
+  });
+}
+function findHybrid(n){for(var i=0;i<IDX.length;i++){if(IDX[i][0]===n)return IDX[i]}return null}
+function doSearch2(){
+  var q=document.getElementById("q2").value.trim(),res=document.getElementById("searchres");
+  if(!q){res.innerHTML="";return}
+  var html='<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0">';
+  var m=q.match(/^JAH-MIX-?(\d{1,6})$/i);
+  if(m){
+    var n=parseInt(m[1],10),row=findHybrid(n);
+    if(row){
+      var L=letterOf(row[1]),d=document.getElementById("L-"+L);
+      res.innerHTML="";d.open=true;
+      var box=d.querySelector(".lbox");loadLetter(L,box);
+      d.scrollIntoView();return;
+    }else if(n>=1&&n<=1000000){
+      html+='<p><b>'+esc(stamp(n))+'</b> '+ '<span class="recbadge ondemand mini">COMPUTED ON DEMAND</span></p>';
+      html+='<p style="color:var(--dim)">Not stored in the archive yet — the forge computes it live, identical every time.</p>';
+      html+='<p><a href="'+mixUrl(n)+'"><b>Forge '+esc(stamp(n))+' now &rarr;</b></a></p>';
+      html+="</div>";res.innerHTML=html;return;
+    }
+  }
+  var ql=q.toLowerCase(),hits=[];
+  for(var i=0;i<IDX.length&&hits.length<200;i++){
+    var r=IDX[i];
+    if(String(r[1]).toLowerCase().indexOf(ql)>-1||String(r[2]).toLowerCase().indexOf(ql)>-1||String(r[3]).toLowerCase().indexOf(ql)>-1||stamp(r[0]).toLowerCase()===ql)hits.push(r);
+  }
+  html+='<p><b>'+hits.length+'</b> result'+(hits.length===1?"":"s")+' for "'+esc(q)+'"'+(hits.length>=200?' (first 200)':"")+'</p>';
+  if(hits.length){
+    html+='<ul class="mixlist" style="max-height:320px">';
+    hits.forEach(function(r){html+=rowHtml(r,null)});
+    html+="</ul>";
+  }
+  html+="</div>";res.innerHTML=html;res.scrollIntoView();
+}
+function clearSearch2(){document.getElementById("q2").value="";document.getElementById("searchres").innerHTML=""}
+document.getElementById("q2").addEventListener("keydown",function(e){if(e.key==="Enter")doSearch2()});
+(async function init(){
+  try{
+    IDX=JSON.parse(await gzText("data/index/mixes.idx.json.gz"));
+    SEEDED=IDX.length;
+    var bc=document.getElementById("browseCount");if(bc)bc.textContent=SEEDED.toLocaleString();
+    GROUPS={};IDX.forEach(function(r){var L=letterOf(r[1]);(GROUPS[L]=GROUPS[L]||[]).push(r)});
+    Object.keys(GROUPS).forEach(function(L){GROUPS[L].sort(function(a,b){return a[1]<b[1]?-1:1})});
+    buildAZ();
+  }catch(e){
+    document.getElementById("letters").innerHTML='<p class="err">The archive index could not be loaded: '+esc(e.message)+'. Check your connection and reload.</p>';
+  }
+})();
+</script>
+</body>
+</html>

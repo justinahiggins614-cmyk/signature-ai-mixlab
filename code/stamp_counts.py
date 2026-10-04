@@ -29,6 +29,21 @@ def stamp():
     if html2 != html:
         open(p, "w").write(html2)
     print("stamp_counts: seededCount =", f"{count:,}")
+    # the A–Z archive page carries the same count from data/state.json
+    # (next_index minus 1) — stamped after every index rebuild
+    state = json.load(open(os.path.join(ROOT, "data/state.json")))
+    acount = state["next_index"] - 1
+    bp = os.path.join(ROOT, "browse.html")
+    bhtml = open(bp).read()
+    bnew = '<div class="n" id="browseCount">%s</div>' % f"{acount:,}"
+    bhtml2, bn = re.subn(r'<div class="n" id="browseCount">.*?</div>', bnew,
+                        bhtml, count=1)
+    if bn != 1:
+        print("stamp_counts: browseCount marker not found", file=sys.stderr)
+        return False
+    if bhtml2 != bhtml:
+        open(bp, "w").write(bhtml2)
+    print("stamp_counts: browseCount =", f"{acount:,}")
     return True
 
 

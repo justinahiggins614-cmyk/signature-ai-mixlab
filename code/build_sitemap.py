@@ -31,6 +31,16 @@ def build(idx):
         parts.append("</urlset>")
         with open(os.path.join(ROOT, name), "w") as f:
             f.write("\n".join(parts))
+    # core pages: the Mix Lab home + the A–Z hybrid archive page
+    core_name = "sitemap-core.xml"
+    core_parts = ['<?xml version="1.0" encoding="UTF-8"?>',
+                  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+                  "  <url><loc>%s</loc><lastmod>%s</lastmod></url>" % (BASE, TODAY),
+                  "  <url><loc>%sbrowse.html</loc><lastmod>%s</lastmod></url>" % (BASE, TODAY),
+                  "</urlset>"]
+    with open(os.path.join(ROOT, core_name), "w") as f:
+        f.write("\n".join(core_parts))
+    names = [core_name] + names
     index = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for name in names:
