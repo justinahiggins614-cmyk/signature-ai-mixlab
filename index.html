@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>try{var _jt=localStorage.getItem('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
+<script src="js/signin.js"></script>
+<script>window.PS=(function(){var s=(typeof JAHProfile!=='undefined')?JAHProfile.store:null;var l=null;try{l=localStorage}catch(_e){}return{get:function(k){try{return s?s.get(k):(l?l.getItem(k):null)}catch(e){return null}},set:function(k,v){try{if(s)s.set(k,v);else if(l)l.setItem(k,v)}catch(e){}},remove:function(k){try{if(s)s.remove(k);else if(l)l.removeItem(k)}catch(e){}},keys:function(){try{return s?s.keys():[]}catch(e){return[]}}}})();</script>
+<script>try{var _jt=PS.get('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Signature AI Mix Lab — Forge 1,000,000 AI Hybrids</title>
 <meta name="description" content="The Signature AI Mix Lab: a deterministic forge blending every Signature AI into 1,000,000 hybrids (JAH-MIX-######). Read aloud, copy, download, dial, and ask each hybrid anything. Sister site of the Signature AI Phone Book and AI Olympics.">
@@ -385,9 +387,9 @@ var APICACHE="mixlab_api_cache";
 async function ensureApi(){
  if(!APIINFO){
   try{APIINFO=JSON.parse(await (await fetch("api.json")).text());APIINFO._live=true;
-   try{localStorage.setItem(APICACHE,JSON.stringify({at:Date.now(),counts:APIINFO.counts}))}catch(e){}}
+   try{PS.set(APICACHE,JSON.stringify({at:Date.now(),counts:APIINFO.counts}))}catch(e){}}
   catch(e){
-   var cached=null;try{cached=JSON.parse(localStorage.getItem(APICACHE)||"null")}catch(e2){}
+   var cached=null;try{cached=JSON.parse(PS.get(APICACHE)||"null")}catch(e2){}
    if(cached&&cached.counts){APIINFO={counts:cached.counts,_live:false,_cachedAt:cached.at}}
    else{APIINFO={counts:{seeded_hybrids:0},_live:false,_unavailable:true}}
   }
@@ -644,7 +646,8 @@ function talkIntent(q,r){
  var t=String(q||"").toLowerCase().trim(),prof=hybridProfile(r);
  /* v2.1: one cached chat session per hybrid record — conversation memory
     (pronouns, ordinals, "tell me more") shared by the Q&A box and dial. */
- var ses=window.JAHtalk.chatFor(prof,'ai:'+(prof.id||prof.name));
+ var _ck=(typeof JAHProfile!=='undefined')?JAHProfile.chatKey('ai:'+(prof.id||prof.name)):('ai:'+(prof.id||prof.name));
+ var ses=window.JAHtalk.chatFor(prof,_ck);
  if(/^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b/.test(t)||(t.length<=4&&t.indexOf("hi")>=0))return ses.reply(t);
  if(/what are your duties|your duties|what is your duty|your job|your role|what do you do|what can you do|what are you for|explain your duties|duties/.test(t))return JAHtalk.duties(prof);
  if(/who are you|your name|what is your name|introduce yourself|about yourself/.test(t))return ses.reply(t);
@@ -713,7 +716,7 @@ function dialReply(q){
 }
 function hangup(){if(DIAL)dlog("sys","*click* — line closed. The forge is always hot.");DIAL=null}
 /* ============ forge fresh hybrids ============ */
-function bumpForged(n){try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10)+n;localStorage.setItem("mixlab_forged",String(c));var e=document.getElementById("yourCount");if(e)e.textContent=c.toLocaleString()}catch(e){}}
+function bumpForged(n){try{var c=parseInt(PS.get("mixlab_forged")||"0",10)+n;PS.set("mixlab_forged",String(c));var e=document.getElementById("yourCount");if(e)e.textContent=c.toLocaleString()}catch(e){}}
 /* FIX-18 follow-up: rich forge-result cards — parents, permanent ID, seed, talk/download/share */
 /* mix-determinism/1: formal seed — MIX-{N:06d}-V{variant}-FORGE1 (mirrors engine.formal_seed) */
 function seedOf(r){return "MIX-"+String(r.n).padStart(6,"0")+"-V"+r.variant+"-FORGE1"}
@@ -791,7 +794,7 @@ async function forgeBatch(start,count,srcLabel){
  for(var k=0;k<count;k++){try{var r=makeHybrid(start+k);r._status=(start+k<=seeded)?"ARCHIVED":"COMPUTED-ON-DEMAND";html+=cardHTML(r)}catch(e){}}
  await new Promise(function(r){setTimeout(r,350)});
  box.innerHTML=html;bumpForged(count);LASTFORGE=start;
- try{localStorage.setItem("mixlab_lastforge",String(start))}catch(e){}
+ try{PS.set("mixlab_lastforge",String(start))}catch(e){}
  var meta=document.getElementById("forgemeta");
  var inArchive=(seeded>0&&start+count-1<=seeded);
  if(meta)meta.innerHTML='Pairs '+start.toLocaleString()+'–'+(start+count-1).toLocaleString()+' · '+esc(srcLabel)+
@@ -946,12 +949,12 @@ async function refreshCounts(){
 }
 async function apiRetry(){APIINFO=null;refreshCounts()}
 /* device-local forge counter: counts hybrids forged via the forge panel ON THIS DEVICE ONLY */
-function resetForged(){try{localStorage.removeItem("mixlab_forged")}catch(e){}var e=document.getElementById("yourCount");if(e)e.textContent="0"}
+function resetForged(){try{PS.remove("mixlab_forged")}catch(e){}var e=document.getElementById("yourCount");if(e)e.textContent="0"}
 async function boot(){
  collapseStatsMobile();
  forgeAccordion();
  var sc=document.getElementById("scrim");if(sc)sc.onclick=closeFile;
- try{var c=parseInt(localStorage.getItem("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
+ try{var c=parseInt(PS.get("mixlab_forged")||"0",10);document.getElementById("yourCount").textContent=c.toLocaleString()}catch(e){}
  refreshCounts();
  forgeInputChanged();
  buildAZ();
@@ -967,8 +970,8 @@ document.addEventListener("DOMContentLoaded",boot);
 /* UX PASS: dark-mode toggle + session restore (localStorage only, nothing leaves this device) */
 (function(){
 'use strict';
-function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
-function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsGet(k){try{return PS.get(k);}catch(e){return null;}}
+function lsSet(k,v){try{PS.set(k,v);}catch(e){}}
 /* dark-mode toggle */
 var tb=document.getElementById('jahThemeToggle');
 function paintToggle(){ if(tb) tb.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '◑' : '◐'; }
@@ -1004,16 +1007,27 @@ window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) re
 var KEY='jah-tour-seen-mixlab';
 function el(id){return document.getElementById(id)}
 function welcomeShow(force){
- if(!force){try{if(localStorage.getItem(KEY))return}catch(e){return}}
+ if(!force){try{if(PS.get(KEY))return}catch(e){return}}
  var m=el('welcomemodal');if(!m)return;
  m.classList.add('on');
  var ok=el('welcomegotit');if(ok)try{ok.focus({preventScroll:true})}catch(e){}
 }
-function welcomeDone(){try{localStorage.setItem(KEY,'1')}catch(e){}var m=el('welcomemodal');if(m)m.classList.remove('on')}
+function welcomeDone(){try{PS.set(KEY,'1')}catch(e){}var m=el('welcomemodal');if(m)m.classList.remove('on')}
 window.welcomeShow=welcomeShow;
 var ok=el('welcomegotit');if(ok)ok.onclick=function(){welcomeDone()};
 var m0=el('welcomemodal');if(m0)m0.addEventListener('click',function(e){if(e.target===m0)welcomeDone()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=el('welcomemodal');if(m&&m.classList.contains('on'))welcomeDone()}});
+})();
+</script>
+<script>
+(function () {
+  /* mount into the header; falls back gracefully when the header markup differs */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
 })();
 </script>
 </body>
