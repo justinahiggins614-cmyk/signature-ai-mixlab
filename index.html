@@ -625,11 +625,14 @@ function dlHybrid(kind){
  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=CUR.stamp+(kind==="json"?".json":".txt");a.click();
  setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
 }
-/* ============ JAHtalk shared conversational module (wired) ============
+/* ============ JAHtalk shared conversational module (wired, v2.1) ============
    The shared human-voice module sits under the live Q&A engine:
    greet/duties/identity/thanks/bye/feeling intents are answered straight
    from the canon-shaped hybrid profile, every final reply passes through
-   JAHtalk.guard so a stat dump can never reach the visitor. */
+   JAHtalk.guard so a stat dump can never reach the visitor.
+   v2.1: talkIntent answers via a cached chatFor() session per hybrid
+   record, so follow-ups ("tell me more about it", "the second one")
+   resolve with conversation memory. */
 function hybridProfile(r){
  var prof={name:r.name,id:r.stamp,description:r.mentality,abilities:r.abilities||[],
   domain:"AI fusion",kind:"hybrid",
@@ -639,12 +642,15 @@ function hybridProfile(r){
 function talkIntent(q,r){
  if(!window.JAHtalk||!r)return null;
  var t=String(q||"").toLowerCase().trim(),prof=hybridProfile(r);
- if(/^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b/.test(t)||(t.length<=4&&t.indexOf("hi")>=0))return JAHtalk.reply(prof,t);
+ /* v2.1: one cached chat session per hybrid record — conversation memory
+    (pronouns, ordinals, "tell me more") shared by the Q&A box and dial. */
+ var ses=window.JAHtalk.chatFor(prof,'ai:'+(prof.id||prof.name));
+ if(/^(hi|hii+|hey|hello|yo|howdy|good\s?(morning|afternoon|evening|day)|greetings|sup|hiya)\b/.test(t)||(t.length<=4&&t.indexOf("hi")>=0))return ses.reply(t);
  if(/what are your duties|your duties|what is your duty|your job|your role|what do you do|what can you do|what are you for|explain your duties|duties/.test(t))return JAHtalk.duties(prof);
- if(/who are you|your name|what is your name|introduce yourself|about yourself/.test(t))return JAHtalk.reply(prof,t);
- if(/thank/.test(t)||t==="thx"||t==="ty")return JAHtalk.reply(prof,t);
- if(/^(bye|goodbye|good night|see you|later|gtg)\b/.test(t))return JAHtalk.reply(prof,t);
- if(/how are you|how's it going|how do you feel/.test(t))return JAHtalk.reply(prof,t);
+ if(/who are you|your name|what is your name|introduce yourself|about yourself/.test(t))return ses.reply(t);
+ if(/thank/.test(t)||t==="thx"||t==="ty")return ses.reply(t);
+ if(/^(bye|goodbye|good night|see you|later|gtg)\b/.test(t))return ses.reply(t);
+ if(/how are you|how's it going|how do you feel/.test(t))return ses.reply(t);
  return null;
 }
 function talkGuarded(text,r){
