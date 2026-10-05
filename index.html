@@ -179,47 +179,63 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 .jtabbar a.jtab.on{background:#f5c518;border-color:#f5c518;color:#191919;font-weight:700}
 </style>
 <nav class="jtabbar" aria-label="Site sections">
-<a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki Leaks</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a>
-<a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mix and Match Generator</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a>
-<span class="here">16 The Signature AI Mix Lab · YOU ARE HERE</span>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI to Robot Matcher</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-earth/">26 Signature Earth</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-flight-school/">27 The Signature Flight School</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-game-store/">28 The Signature Game Store</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-website-creator/">29 The Signature Website Creator</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-antivirus/">30 The Signature Antivirus</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-os-updater/">31 The Signature OS Updater</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-space-mapping/">32 Signature Space Mapping</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-cookbook/">33 The Signature Cookbook</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-spell-check/">34 Spell Check</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-image-grid-measure/">35 Grid Measure</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">36 The Signature Cyber Mega-Mall</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">37 The Signature 3D Print Mega Mall</a>
 <a class="jtab on" href="index.html">🏠 Front Door</a>
 <a class="jtab" href="browse.html">📚 1 Million Archive</a>
 <a class="jtab" href="mixes.html">Mixes</a>
-<a href="browse.html" style="display:inline-block;background:var(--panel);border:2px solid var(--molten);border-radius:10px;padding:10px 22px;font-size:1.05em;font-weight:bold;text-decoration:none">&#128214; Open the full A&ndash;Z hybrid archive</a><span class="here">16 The Signature AI Mix Lab — YOU ARE HERE</span></nav>
+</nav>
+
+<div class="panel" id="forgepanel">
+  <h2>Forge fresh hybrids</h2>
+  <p style="color:var(--dim)">Pick a hybrid number (1–1,000,000). The forge computes it on demand — no waiting, no storage.</p>
+  <details class="facc" open><summary>&#9312; Inputs</summary>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px">
+    <input type="number" id="forgenum" min="1" max="1000000" placeholder="Hybrid # (e.g. 424242)" aria-label="Hybrid number" oninput="forgeInputChanged()">
+    <button class="ghost" id="surprisebtn" onclick="forgeRandom()">&#127922; Surprise me</button>
+  </div></details>
+  <details class="facc" open><summary>&#9313; Blend</summary>
+  <div style="margin-top:8px">
+    <button id="forgebtn" onclick="forgeFresh()">&#128293; Forge</button>
+    <div class="tick" id="forgeerr" style="display:none;color:var(--amber)" aria-live="polite"></div>
+    <div class="tick" id="forgetick" style="display:none" aria-live="polite"></div>
+  </div></details>
+  <details class="facc" open><summary>&#9314; Output</summary>
+  <div id="forgemeta" style="margin-top:8px;color:var(--dim);font-size:.9em"></div>
+  <div class="cards" id="forgecards" style="margin-top:8px"></div>
+  <p class="badgelegend" style="text-align:left"><span class="recbadge archived mini">ARCHIVED</span> = stored in the archive · <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live — identical every time</p></details>
+</div>
+<div class="panel" id="comparepanel">
+  <h2>Compare two hybrids</h2>
+  <p style="color:var(--dim)">Two hybrid numbers, side by side — parents, variant, seed, mentality.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input type="number" id="cmpa" min="1" max="1000000" placeholder="First # (e.g. 12)" aria-label="First hybrid number">
+    <input type="number" id="cmpb" min="1" max="1000000" placeholder="Second # (e.g. 424242)" aria-label="Second hybrid number">
+    <button onclick="compareHybrids()">Compare</button>
+  </div>
+  <div class="tick" id="cmperr" style="display:none;color:var(--amber)" aria-live="polite"></div>
+  <div class="cards" id="cmpcards" style="margin-top:8px"></div>
+</div>
+<div class="panel">
+  <h2>Browse the forged archive</h2>
+  <p style="text-align:center;margin:6px 0 12px"><a href="browse.html" style="display:inline-block;background:var(--panel);border:2px solid var(--molten);border-radius:10px;padding:10px 22px;font-size:1.05em;font-weight:bold;text-decoration:none">&#128214; Open the full A&ndash;Z hybrid archive</a><br><small style="color:var(--dim)">every stored hybrid, A&ndash;Z collapsible lists + live search</small></p>
+</div>
+<div class="panel" id="fileview" aria-live="polite"></div>
+<details class="facc guide" id="guidepanel">
+<summary>❓ First-time user guide — what everything does</summary>
+<div style="margin-top:8px;font-size:.93em">
+<p><b>Forge fresh hybrids.</b> Type a hybrid number (1–1,000,000) and tap <b>Forge</b> — the forge computes 12 hybrids on demand, live in your browser, nothing stored. <b>Surprise me</b> draws a random dozen. <b>⟳ Regenerate</b> re-forges the same pairs to prove determinism: same pair, same hybrid, every time.</p>
+<p><b>Stored vs on demand.</b> <span class="recbadge archived mini">ARCHIVED</span> = the hybrid is stored in the archive (the count at the top of this page, growing with every drip). <span class="recbadge ondemand mini">COMPUTED ON DEMAND</span> = forged live in your browser — identical every time, nothing stored.</p>
+<p><b>Hybrid file (Open file).</b> The full record: mentality, abilities, both parents with links, lineage, forge seed, and a SHA-256 content hash with a <b>Verify Record</b> button. <b>⚠ Report record problem</b> builds a copy-ready report.</p>
+<p><b>Ask &amp; dial.</b> <b>Ask</b> answers from the hybrid's file only — it never invents. <b>📞 Dial this hybrid</b> opens a live session with the hybrid in its fused voice.</p>
+<p><b>Compare two hybrids.</b> Two numbers, side by side: parents, variant, seed, mentality.</p>
+<p><b>Browse the forged archive.</b> Open the <b>full A–Z hybrid archive</b> (the Browse tab): search stored hybrids by name or parent, filter pills, and the A–Z bar. Typing a JAH-MIX-###### ID jumps straight to it.</p>
+<p><b>Copy, download, share.</b> Copy the record text, download <b>.txt</b> or <b>.json</b>, or <b>Share</b> a link like <code>?mix=JAH-MIX-000042</code> — the link opens the same hybrid on any device, and survives a refresh.</p>
+<p><b>Read aloud.</b> The 🔊 button reads any hybrid file with tiered audio failover.</p>
+<p><b>Site statistics.</b> The top counter shows hybrids stored in the archive (live from the manifest); the second counts hybrids forged on this device only — <b>reset</b> clears it.</p>
+<p><button class="ghost" onclick="welcomeShow(true)">▶ Replay the 1-minute guided tour</button></p>
+</div>
+</details>
+</main>
+
 <div class="sig-stamp" style="text-align:center;margin:18px 8px 6px"><img src="assets/signature-stamp.jpg" alt="Official Signature stamp of Justin Addam Higgins" style="width:150px;max-width:40%;height:auto;border-radius:8px" loading="lazy"><div style="font-size:.72em;opacity:.75">Official Signature stamp</div></div>
 <footer>
   <p>The forge is deterministic: hybrid <b>JAH-MIX-######</b> is always the same fusion of the same two parents, on any device, forever. Seeded hybrids are stored in lazy-loaded chunks; unseeded hybrids compute on demand.</p>
@@ -953,5 +969,43 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=el('w
 
 })();
 </script>
+
+<nav class="jahnet" role="navigation" aria-label="JAH Network Global Ecosystem"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki Leaks</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a>
+<a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a>
+<a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mix and Match Generator</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a>
+<span class="here">16 The Signature AI Mix Lab · YOU ARE HERE</span>
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI to Robot Matcher</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-earth/">26 Signature Earth</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-flight-school/">27 The Signature Flight School</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-game-store/">28 The Signature Game Store</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-website-creator/">29 The Signature Website Creator</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-antivirus/">30 The Signature Antivirus</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-os-updater/">31 The Signature OS Updater</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-space-mapping/">32 Signature Space Mapping</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-cookbook/">33 The Signature Cookbook</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-spell-check/">34 Spell Check</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-image-grid-measure/">35 Grid Measure</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">36 The Signature Cyber Mega-Mall</a>
+<a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">37 The Signature 3D Print Mega Mall</a><span class="here">16 The Signature AI Mix Lab — YOU ARE HERE</span></nav>
 </body>
 </html>
